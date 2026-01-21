@@ -1,0 +1,23 @@
+﻿<Project Sdk="MSTest.Sdk/3.10.5">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<LangVersion>latest</LangVersion>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<UseVSTest>true</UseVSTest>
+		<RootNamespace>SDM.AbstractionsTests</RootNamespace>
+		<SonarQubeExclude>true</SonarQubeExclude>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="FluentAssertions" Version="7.2.0" />
+		<PackageReference Include="PublicApiGenerator" Version="11.4.6" />
+		<PackageReference Include="Verify.MSTest" Version="30.15.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\SDM.Abstractions\SDM.Abstractions.csproj" />
+	</ItemGroup>
+
+</Project>
