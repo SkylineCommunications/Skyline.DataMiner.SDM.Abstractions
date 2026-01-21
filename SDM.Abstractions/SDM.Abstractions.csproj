@@ -3,13 +3,13 @@
 	<PropertyGroup>
 		<!-- As soon as the dev packs are available for .Net Standard we can move back -->
 		<!--<TargetFramework>netstandard2.0</TargetFramework>-->
-		<TargetFrameworks>net48;net471;net462;netstandard2.0</TargetFrameworks>
+		<TargetFrameworks>net48;netstandard2.0</TargetFrameworks>
 		<PlatformTarget>AnyCpu</PlatformTarget>
 		<ImplicitUsings>disable</ImplicitUsings>
 		<Nullable>disable</Nullable>
 		<AssemblyName>Skyline.DataMiner.Dev.Utils.SDM.Abstractions</AssemblyName>
 		<RootNamespace>Skyline.DataMiner.SDM</RootNamespace>
-		<Version>0.3.0-B016</Version>
+		<Version>0.3.0-B018</Version>
 		<PackageTags>Skyline;DataMiner</PackageTags>
 		<PackageProjectUrl>https://skyline.be</PackageProjectUrl>
 		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
@@ -25,14 +25,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<None Include="../README.md" Pack="true" PackagePath="" />
 		<None Include="../LICENSE.txt" Pack="true" PackagePath="" />
 		<None Include="nuget\Icon.png" Pack="true" PackagePath="" />
 	</ItemGroup>
 
-	<ItemGroup Condition="
-			   '$(TargetFramework)' == 'net48' Or
-			   '$(TargetFramework)' == 'net471' Or
-			   '$(TargetFramework)' == 'net462'">
+	<ItemGroup Condition="'$(TargetFramework)' == 'net48'">
 		<PackageReference Include="Skyline.DataMiner.Files.Skyline.DataMiner.Storage.Types" Version="10.4.12" />
 		<PackageReference Include="Skyline.DataMiner.Files.SLNetTypes" Version="10.4.12" />
 	</ItemGroup>

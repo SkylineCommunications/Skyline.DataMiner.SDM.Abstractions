@@ -1,4 +1,4 @@
-# Skyline.DataMiner.SDM.Abstractions
+# Skyline.DataMiner.Dev.Utils.Abstractions
 
 A library providing abstractions, interfaces, and utilities for building Standard Data Model (SDM) repositories in DataMiner. This package simplifies CRUD operations, enables middleware patterns, and provides extensibility through attributes and exposers.
 
@@ -68,7 +68,7 @@ public class ProductRepository : IRepository<Product>
     public Product Create(Product entity) { /* Implementation */ }
     public Product Read(string id) { /* Implementation */ }
     public Product Update(Product entity) { /* Implementation */ }
-    public void Delete(string id) { /* Implementation */ }
+    public void Delete(Product entity) { /* Implementation */ }
     public PagedResult<Product> ReadPage(PageDescriptor pageDescriptor) { /* Implementation */ }
     public long Count(FilterElement<Product> filter) { /* Implementation */ }
 }
@@ -84,14 +84,16 @@ var product = new Product { Name = "Widget", Price = 29.99m, Stock = 100 };
 var created = repository.Create(product);
 
 // Read
-var retrieved = repository.Read(created.Identifier);
+var retrieved = repository
+    .Read(ProductExposers.Identifier.Equal(created.Identifier))
+    .First();
 
 // Update
 retrieved.Price = 24.99m;
-repository.Update(retrieved);
+var updated = repository.Update(retrieved);
 
 // Delete
-repository.Delete(retrieved.Identifier);
+repository.Delete(updated);
 ```
 
 ## Repository Interfaces
@@ -207,12 +209,11 @@ var product = wrappedRepo.Create(new Product { Name = "Test" });
 Contains both the data and paging metadata:
 
 ```csharp
-public interface IPageResult<T>
+public interface IPageResult<T> : IReadOnlyList<T>
+    where T : class
 {
-    IReadOnlyCollection<T> Items { get; }
-    long TotalCount { get; }
-    int PageSize { get; }
     int PageNumber { get; }
+    bool HasNextPage { get; }
 }
 ```
 
