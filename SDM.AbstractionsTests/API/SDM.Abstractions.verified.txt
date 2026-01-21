@@ -3,11 +3,6 @@
 [assembly: System.Runtime.Versioning.TargetFramework(".NETStandard,Version=v2.0", FrameworkDisplayName=".NET Standard 2.0")]
 namespace Skyline.DataMiner.SDM
 {
-    [System.AttributeUsage(System.AttributeTargets.Interface, AllowMultiple=false, Inherited=false)]
-    public sealed class AllowSdmMiddlewareAttribute : System.Attribute
-    {
-        public AllowSdmMiddlewareAttribute() { }
-    }
     public static class ComparerExtensions
     {
         public static Skyline.DataMiner.Net.Messages.SLDataGateway.Comparer Invert(this Skyline.DataMiner.Net.Messages.SLDataGateway.Comparer comparer) { }
@@ -54,11 +49,6 @@ namespace Skyline.DataMiner.SDM
             where TFilter :  class { }
         public static Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, System.Collections.Generic.IEnumerable<TField>> NotEqual<TFilter, TField>(this Skyline.DataMiner.SDM.Exposers.CollectionExposer<TFilter, TField> exposer, TField value, System.StringComparison stringComparison)
             where TFilter :  class { }
-    }
-    [System.AttributeUsage(System.AttributeTargets.Class, AllowMultiple=false, Inherited=false)]
-    public sealed class GenerateExposersAttribute : System.Attribute
-    {
-        public GenerateExposersAttribute() { }
     }
     public interface IBulkCreatableMiddleware<T> : Skyline.DataMiner.SDM.ICreatableMiddleware<T>, Skyline.DataMiner.SDM.IMiddlewareMarker<T>
         where T :  class
@@ -269,17 +259,6 @@ namespace Skyline.DataMiner.SDM
         public SdmCrudException(T item, string message, System.Exception innerException) { }
         public T Object { get; }
     }
-    [System.AttributeUsage(System.AttributeTargets.Class | System.AttributeTargets.Struct | System.AttributeTargets.Field, AllowMultiple=false, Inherited=false)]
-    public sealed class SdmDomMapperAttribute : System.Attribute
-    {
-        public SdmDomMapperAttribute() { }
-    }
-    [System.AttributeUsage(System.AttributeTargets.Class, AllowMultiple=false, Inherited=false)]
-    public sealed class SdmDomStorageAttribute : System.Attribute
-    {
-        public SdmDomStorageAttribute(string moduleId) { }
-        public string ModuleId { get; }
-    }
     [System.Serializable]
     public class SdmException : System.Exception
     {
@@ -287,11 +266,6 @@ namespace Skyline.DataMiner.SDM
         public SdmException(string message) { }
         protected SdmException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
         public SdmException(string message, System.Exception innerException) { }
-    }
-    [System.AttributeUsage(System.AttributeTargets.Property, AllowMultiple=false, Inherited=false)]
-    public sealed class SdmIgnoreAttribute : System.Attribute
-    {
-        public SdmIgnoreAttribute() { }
     }
     public readonly struct SdmObjectReference<T> : System.IEquatable<Skyline.DataMiner.SDM.SdmObjectReference<T>>
         where T : Skyline.DataMiner.SDM.SdmObject<T>
