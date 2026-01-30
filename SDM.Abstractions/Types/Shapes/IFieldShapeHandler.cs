@@ -1,7 +1,5 @@
 ﻿namespace Skyline.DataMiner.SDM.Types.Shapes
 {
-	using System;
-
 	using Skyline.DataMiner.Net.Messages.SLDataGateway;
 
 	internal interface IFieldShapeHandler

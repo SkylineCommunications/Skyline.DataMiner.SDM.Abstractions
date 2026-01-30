@@ -34,7 +34,7 @@
 		/// </exception>
 		public PagedResult(IEnumerable<T> items, int pageNumber, int pageSize, bool hasNext)
 		{
-			if(items is null)
+			if (items is null)
 			{
 				throw new ArgumentNullException(nameof(items));
 			}

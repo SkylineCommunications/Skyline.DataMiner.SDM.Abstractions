@@ -1,7 +1,6 @@
 ﻿namespace Skyline.DataMiner.SDM.Types.Shapes
 {
 	using System;
-	using System.Linq;
 
 	internal sealed class FieldTypeShape
 	{
@@ -23,13 +22,13 @@
 
 		public static FieldTypeShape Analyze(Type fieldType)
 		{
-			var isNullable =
-				fieldType.IsGenericType &&
-				fieldType.GetGenericTypeDefinition() == typeof(Nullable<>);
-
-			var nonNullableType = isNullable
-				? fieldType.GetGenericArguments()[0]
-				: fieldType;
+			var isNullable = true;
+			var nonNullableType = Nullable.GetUnderlyingType(fieldType);
+			if (nonNullableType is null)
+			{
+				isNullable = false;
+				nonNullableType = fieldType;
+			}
 
 			var isCollection =
 				nonNullableType != typeof(string) &&
@@ -43,7 +42,7 @@
 					isCollection);
 			}
 
-			var elementType = nonNullableType;
+			var elementType = default(Type);
 			if (nonNullableType.IsArray)
 			{
 				// Arrays
@@ -52,7 +51,7 @@
 			else
 			{
 				// IEnumerable<T>
-				elementType = nonNullableType.GetGenericArguments().First();
+				elementType = nonNullableType.GetGenericArguments()[0];
 			}
 
 			return new FieldTypeShape(

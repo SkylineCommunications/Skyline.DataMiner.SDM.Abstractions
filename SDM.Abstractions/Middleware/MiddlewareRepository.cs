@@ -1,14 +1,11 @@
 namespace Skyline.DataMiner.SDM.Middleware
 {
 	using System;
-	using System.Collections;
 	using System.Collections.Generic;
-	using System.Drawing.Printing;
 	using System.Linq;
 
 	using Skyline.DataMiner.Net.Messages.SLDataGateway;
 
-	using SLDataGateway.API.Querying;
 	using SLDataGateway.API.Types.Querying;
 
 	/// <summary>
@@ -32,7 +29,7 @@ namespace Skyline.DataMiner.SDM.Middleware
 		/// Initializes a new instance of the <see cref="MiddlewareRepository{TValue}"/> class.
 		/// </summary>
 		/// <param name="inner">The underlying repository instance to wrap.</param>
-		/// <exception cref="ArgumentNullException">Thrown when <paramref name="middleware"/> or <paramref name="inner"/> is <see langword="null"/>.</exception>
+		/// <exception cref="ArgumentNullException">Thrown when <paramref name="inner"/> is <see langword="null"/>.</exception>
 		internal MiddlewareRepository(
 			IRepositoryMarker<TValue> inner)
 		{
@@ -42,14 +39,14 @@ namespace Skyline.DataMiner.SDM.Middleware
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MiddlewareRepository{TValue}"/> class.
 		/// </summary>
-		/// <param name="middleware">The middleware container that holds all registered middleware components.</param>
 		/// <param name="inner">The underlying repository instance to wrap.</param>
-		/// <exception cref="ArgumentNullException">Thrown when <paramref name="middleware"/> or <paramref name="inner"/> is <see langword="null"/>.</exception>
+		/// <param name="middleware">The middleware container that holds all registered middleware components.</param>
+		/// <exception cref="ArgumentNullException">Thrown when <paramref name="inner"/> or <paramref name="middleware"/> is <see langword="null"/>.</exception>
 		internal MiddlewareRepository(
 			IRepositoryMarker<TValue> inner,
 			IMiddlewareMarker<TValue> middleware)
 		{
-			_middleware = middleware;
+			_middleware = middleware ?? throw new ArgumentNullException(nameof(middleware));
 			_inner = inner ?? throw new ArgumentNullException(nameof(inner));
 		}
 

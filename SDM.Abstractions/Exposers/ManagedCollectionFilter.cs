@@ -109,7 +109,7 @@
 		}
 
 		/// <summary>
-		/// Gets or sets the string comparison mode used when comparing string values.
+		/// Gets the string comparison mode used when comparing string values.
 		/// </summary>
 		public StringComparison StringComparison { get; internal set; } = StringComparison.OrdinalIgnoreCase;
 
