@@ -3,7 +3,8 @@
 	<PropertyGroup>
 		<!-- As soon as the dev packs are available for .Net Standard we can move back -->
 		<!--<TargetFramework>netstandard2.0</TargetFramework>-->
-		<TargetFrameworks>net48;netstandard2.0</TargetFrameworks>
+		<TargetFramework>net48</TargetFramework>
+		<!--<TargetFrameworks>net48;netstandard2.0</TargetFrameworks>-->
 		<PlatformTarget>AnyCpu</PlatformTarget>
 		<ImplicitUsings>disable</ImplicitUsings>
 		<Nullable>disable</Nullable>
@@ -35,9 +36,9 @@
 		<PackageReference Include="Skyline.DataMiner.Files.SLNetTypes" Version="10.4.12" />
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+	<!--<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
 		<PackageReference Include="Skyline.DataMiner.Internal.SLNetTypes" Version="10.5.2521-1292" />
-	</ItemGroup>
+	</ItemGroup>-->
 
 	<ItemGroup>
 		<InternalsVisibleTo Include="SDM.AbstractionsTests" />
@@ -46,6 +47,6 @@
 	<!-- Can be used to set the location of your local nuget store to copy to -->
 	<Import Project="../Directory.Build.props.user" Condition="Exists('../Directory.Build.props.user')" />
 	<Target Name="CopyNuGetPackage" AfterTargets="Pack" Condition="'$(NuGetStorePath)' != '' and '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-		<Copy SourceFiles="$(OutputPath)\$(PackageId).$(PackageVersion).nupkg" DestinationFolder="$(NuGetStorePath)\$(PackageId)" />
+		<Copy SourceFiles="$(OutputPath)..\$(PackageId).$(PackageVersion).nupkg" DestinationFolder="$(NuGetStorePath)\$(PackageId)" />
 	</Target>
 </Project>
