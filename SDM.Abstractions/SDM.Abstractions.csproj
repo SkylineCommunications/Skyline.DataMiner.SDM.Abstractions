@@ -20,8 +20,8 @@
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Authors>SkylineCommunications</Authors>
 		<Company>Skyline Communications</Company>
-		<Description>Contains classes to easily interact with SDM</Description>
-		<RepositoryUrl>https://github.com/SkylineCommunications/Skyline.DataMiner.SDM</RepositoryUrl>
+		<Description>Core abstractions and interfaces for the DataMiner SDM (Standard Data Model) framework</Description>
+		<RepositoryUrl>https://github.com/SkylineCommunications/Skyline.DataMiner.SDM.Abstractions</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 	</PropertyGroup>
 
