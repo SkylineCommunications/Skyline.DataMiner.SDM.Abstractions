@@ -29,7 +29,7 @@
 			var create = () => repository.Create(item);
 
 			// Assert Create
-			Assert.ThrowsException<Exception>(create);
+			Assert.ThrowsExactly<Exception>(create);
 		}
 	}
 
