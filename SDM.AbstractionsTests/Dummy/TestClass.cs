@@ -21,6 +21,10 @@
 
 		public bool IsActive { get; set; }
 
+		public int? OptionalAge { get; set; }
+
+		public string NickName { get; set; }
+
 		public Status Status { get; set; }
 
 		public List<string> Tags { get; set; }

@@ -294,5 +294,69 @@
 		{
 			return new ManagedCollectionFilter<TFilter, TField>(exposer, Comparer.GTE, value);
 		}
+
+		/// <summary>
+		/// Creates a filter that checks if the exposed nullable field has a value.
+		/// </summary>
+		/// <typeparam name="TFilter">The type of the filter.</typeparam>
+		/// <typeparam name="TField">The type of the nullable field. Must be a value type.</typeparam>
+		/// <param name="exposer">The exposer that identifies the field to filter on.</param>
+		/// <returns>A <see cref="ManagedFilter{TFilter, TField}"/> that matches when the field is not null.</returns>
+		public static ManagedFilter<TFilter, TField?> HasValue<TFilter, TField>(this Exposer<TFilter, TField?> exposer)
+			where TField : struct
+		{
+			return new ManagedFilter<TFilter, TField?>(
+				exposer,
+				Comparer.NotEquals,
+				null,
+				(obj) => !(exposer.internalFunc(obj) is null));
+		}
+
+		/// <summary>
+		/// Creates a filter that checks if the exposed nullable field has no value.
+		/// </summary>
+		/// <typeparam name="TFilter">The type of the filter.</typeparam>
+		/// <typeparam name="TField">The type of the nullable field. Must be a value type.</typeparam>
+		/// <param name="exposer">The exposer that identifies the field to filter on.</param>
+		/// <returns>A <see cref="ManagedFilter{TFilter, TField}"/> that matches when the field is null.</returns>
+		public static ManagedFilter<TFilter, TField?> HasNoValue<TFilter, TField>(this Exposer<TFilter, TField?> exposer)
+			where TField : struct
+		{
+			return new ManagedFilter<TFilter, TField?>(
+				exposer,
+				Comparer.Equals,
+				null,
+				(obj) => exposer.internalFunc(obj) is null);
+		}
+
+		/// <summary>
+		/// Creates a filter that checks if the exposed string field has a value (is not null).
+		/// </summary>
+		/// <typeparam name="TFilter">The type of the filter.</typeparam>
+		/// <param name="exposer">The exposer that identifies the string field to filter on.</param>
+		/// <returns>A <see cref="ManagedFilter{TFilter, String}"/> that matches when the field is not null.</returns>
+		public static ManagedFilter<TFilter, string> HasValue<TFilter>(this Exposer<TFilter, string> exposer)
+		{
+			return new ManagedFilter<TFilter, string>(
+				exposer,
+				Comparer.NotEquals,
+				null,
+				(obj) => !(exposer.internalFunc(obj) is null));
+		}
+
+		/// <summary>
+		/// Creates a filter that checks if the exposed string field has no value (is null).
+		/// </summary>
+		/// <typeparam name="TFilter">The type of the filter.</typeparam>
+		/// <param name="exposer">The exposer that identifies the string field to filter on.</param>
+		/// <returns>A <see cref="ManagedFilter{TFilter, String}"/> that matches when the field is null.</returns>
+		public static ManagedFilter<TFilter, string> HasNoValue<TFilter>(this Exposer<TFilter, string> exposer)
+		{
+			return new ManagedFilter<TFilter, string>(
+				exposer,
+				Comparer.Equals,
+				null,
+				(obj) => exposer.internalFunc(obj) is null);
+		}
 	}
 }

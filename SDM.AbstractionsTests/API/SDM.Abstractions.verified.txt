@@ -31,6 +31,12 @@ namespace Skyline.DataMiner.SDM
             where TField : System.Enum { }
         public static Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, System.Collections.Generic.IEnumerable<TField>> GreaterThanOrEqual<TFilter, TField>(this Skyline.DataMiner.SDM.Exposers.CollectionExposer<TFilter, TField> exposer, TField value)
             where TFilter :  class { }
+        public static Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, string> HasNoValue<TFilter>(this Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<TFilter, string> exposer) { }
+        public static Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, TField?> HasNoValue<TFilter, TField>(this Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<TFilter, TField?> exposer)
+            where TField :  struct { }
+        public static Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, string> HasValue<TFilter>(this Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<TFilter, string> exposer) { }
+        public static Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, TField?> HasValue<TFilter, TField>(this Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<TFilter, TField?> exposer)
+            where TField :  struct { }
         public static Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, TField> LessThan<TFilter, TField>(this Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<TFilter, TField> exposer, TField value)
             where TField : System.Enum { }
         public static Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, System.Collections.Generic.IEnumerable<TField>> LessThan<TFilter, TField>(this Skyline.DataMiner.SDM.Exposers.CollectionExposer<TFilter, TField> exposer, TField value)

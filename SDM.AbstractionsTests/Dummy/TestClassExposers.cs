@@ -17,6 +17,8 @@
 		public static readonly Exposer<TestClass, decimal> Score = new Exposer<TestClass, decimal>((obj) => obj.Score, "Score");
 		public static readonly Exposer<TestClass, float> Rating = new Exposer<TestClass, float>((obj) => obj.Rating, "Rating");
 		public static readonly Exposer<TestClass, bool> IsActive = new Exposer<TestClass, bool>((obj) => obj.IsActive, "IsActive");
+		public static readonly Exposer<TestClass, int?> OptionalAge = new Exposer<TestClass, int?>((obj) => obj.OptionalAge, "OptionalAge");
+		public static readonly Exposer<TestClass, string> NickName = new Exposer<TestClass, string>((obj) => obj.NickName, "NickName");
 		public static readonly Exposer<TestClass, Status> Status = new Exposer<TestClass, Status>((obj) => obj.Status, "Status");
 		public static readonly CollectionExposer<TestClass, string> Tags = new CollectionExposer<TestClass, string>((obj) => obj.Tags, "Tags");
 		public static readonly CollectionExposer<TestClass, Status> Statuses = new CollectionExposer<TestClass, Status>((obj) => obj.Statuses, "Statuses");
