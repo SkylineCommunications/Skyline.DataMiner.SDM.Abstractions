@@ -32,8 +32,8 @@
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net48'">
-		<PackageReference Include="Skyline.DataMiner.Files.Skyline.DataMiner.Storage.Types" Version="10.4.12" />
-		<PackageReference Include="Skyline.DataMiner.Files.SLNetTypes" Version="10.4.12" />
+		<PackageReference Include="Skyline.DataMiner.Files.Skyline.DataMiner.Storage.Types" />
+		<PackageReference Include="Skyline.DataMiner.Files.SLNetTypes" />
 	</ItemGroup>
 
 	<!--<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
