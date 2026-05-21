@@ -1,10 +1,10 @@
 # Proposal: Nullable Type Support for Exposers
 
 ## Status
-**Draft** - Under Discussion
+**Draft** - Decisions Recorded
 
 ## Summary
-This proposal defines nullable value type support (`T?`) for `Exposer<TFilter, TField>` filter extension methods, enabling filtering on optional properties.
+This proposal defines nullable value type support (`T?`) for `Exposer<TFilter, TField>` filter extension methods, enabling filtering on optional properties. Based on the team discussion, the initial scope is limited to nullable structs and introduces explicit null-check methods instead of supporting `Equal(null)`.
 
 ## Motivation
 
@@ -31,33 +31,46 @@ var hotDevices = filterHighTemp.ToQuery().ExecuteInMemory(data).ToArray();
 
 **Current State**: FilterExtensions only supports Enum types and collections. No nullable struct support exists.
 
-## Key Design Questions
+## Meeting Outcome
 
-### Null-Check API Design
+The following decisions were made during the design review:
 
-**Question:** Should we provide dedicated methods (`HasValue()`, `HasNoValue()`), allow `Equal(null)`, or both?
+- Nullable structs will support two new filter extensions:
+  - `HasValue()`
+  - `HasNoValue()`
+- `Equal(null)` will not be supported for nullable types.
+- Reference types such as `string` will not receive `HasValue()` / `HasNoValue()` support in the initial implementation.
+- Collection nullables are out of scope for the first phase.
+- Filtering and sorting behavior for nullable types will follow the default .NET behavior.
 
-**Option A: Dedicated methods only**
-- Pro: Explicit and unambiguous
-- Con: Cannot enforce for strings (SLDataGateway already allows `Equal(null)`)
-- Con: Inconsistent between string and nullable struct exposers
+## Rationale
 
-**Option B: Allow `Equal(null)` only**
-- Pro: Smaller API surface, familiar pattern
-- Con: Less discoverable, less self-documenting
+### Why explicit `HasValue()` / `HasNoValue()`?
 
-**Option C: Hybrid approach (provide both)**
-- Pro: Clarity (`HasValue()`) and flexibility (`Equal(null)`)
-- Pro: Consistent with SLDataGateway patterns
-- Con: Larger API surface
+- The intent is explicit and easy to understand at the call site.
+- It avoids ambiguity around what `Equal(null)` should mean.
+- It avoids encouraging an API shape that is known to behave poorly for reference types.
 
 ### Comparison Operator Behavior
 
 **Note:** Comparison operators (`LessThan`, `GreaterThan`, etc.) will naturally exclude NULL values. C# nullable operators return false when comparing null (e.g., `null < 5` → `false`), which matches SQL WHERE behavior.
 
+### Why not support `Equal(null)`?
+
+- For reference types such as `string`, in-memory filtering in the core platform can throw because of how string equality is implemented.
+- That behavior is not currently planned to be fixed in the platform.
+- In DOM, a string field with no value is typically represented as field-not-present rather than field-present-with-null, which creates different behavior between persisted data and in-memory evaluation.
+- Not supporting `Equal(null)` for nullable types avoids setting a misleading expectation that null equality is broadly supported.
+
+### Why no reference-type null support in the first phase?
+
+- The technical issues above apply primarily to reference types.
+- Supporting nullable structs already addresses the main use cases discussed in the meeting.
+- A custom managed filter for reference types could be explored later if a concrete use case appears.
+
 ## Proposed Approach
 
-Provide **both** explicit null checks and nullable comparisons (Option C):
+Implement explicit null checks for nullable structs, together with the existing comparison operators for nullable values.
 
 1. **Explicit Null Checks:**
    - `HasValue()` - Returns items where the nullable field is not null
@@ -65,9 +78,8 @@ Provide **both** explicit null checks and nullable comparisons (Option C):
 
 2. **Nullable Comparisons:**
    - `Equal(TField value)` - Compare against a non-nullable value
-   - `Equal(TField? value)` - Accepts nullable values, including `null`
-   - `NotEqual(TField? value)` - Not-equals comparison with nullable support
-   - `LessThan`, `GreaterThan`, `LessThanOrEqual`, `GreaterThanOrEqual` with nullable values
+   - `NotEqual(TField value)` or `NotEqual(TField? value)` may still be supported depending on the final API shape, but null equality is not part of the intended usage model
+   - `LessThan`, `GreaterThan`, `LessThanOrEqual`, `GreaterThanOrEqual` remain available for nullable structs
 
 ### Usage Examples
 
@@ -82,15 +94,6 @@ var noTemp = DeviceExposers.Temperature.HasNoValue();
 var lowTemp = DeviceExposers.Temperature.LessThan(0);
 var result = lowTemp.ToQuery().ExecuteInMemory(data).ToArray();
 // Returns only devices with Temperature < 0 (no NULLs)
-
-// To intentionally include NULLs (if desired)
-var lowOrNull = DeviceExposers.Temperature.LessThan(0)
-    .OR(DeviceExposers.Temperature.HasNoValue());
-var resultWithNulls = lowOrNull.ToQuery().ExecuteInMemory(data).ToArray();
-
-// Equal with null
-var nullFilter = DeviceExposers.Temperature.Equal(null);
-var devicesNoTemp = nullFilter.ToQuery().ExecuteInMemory(data).ToArray();
 ```
 
 ## Proposed API
@@ -108,8 +111,7 @@ HasNoValue<TFilter, TField>(this Exposer<TFilter, TField?> exposer)
 
 ```csharp
 Equal<TFilter, TField>(this Exposer<TFilter, TField?> exposer, TField value)
-Equal<TFilter, TField>(this Exposer<TFilter, TField?> exposer, TField? value)
-NotEqual<TFilter, TField>(this Exposer<TFilter, TField?> exposer, TField? value)
+NotEqual<TFilter, TField>(this Exposer<TFilter, TField?> exposer, TField value)
 ```
 
 ### Comparison Operators
@@ -123,24 +125,27 @@ GreaterThanOrEqual<TFilter, TField>(this Exposer<TFilter, TField?> exposer, TFie
 
 **Behavior:** Comparison operators naturally exclude NULL values from results (e.g., `null < 5` evaluates to `false`).
 
-## Discussion Points
+## Scope Boundaries
 
-1. **Null-Check API**: Should we provide both `HasValue()`/`HasNoValue()` AND `Equal(null)`, or choose one approach?
-   - Hybrid approach (both) offers flexibility but larger API
-   - Cannot enforce single approach due to SLDataGateway string behavior
+- Included in first phase:
+   - Nullable structs such as `int?`, `DateTime?`, `TimeSpan?`, etc.
+   - `HasValue()` and `HasNoValue()` extensions for those nullable structs
+   - Existing comparison operators for nullable structs
 
-1. **Comparison Operator Parameter Type**: Should comparison operators (`LessThan`, `GreaterThan`, etc.) accept nullable values?
-   - **Option A**: Accept `TField?` (nullable) - as shown in current implementation
-     - Pro: Consistent signature across all methods
-     - Con: Allows meaningless comparisons like `LessThan(null)` (always false)
-   - **Option B**: Accept only `TField` (non-nullable)
-     - Pro: Prevents meaningless null comparisons at compile time
-     - Pro: Forces users to be explicit about null checks
-     - Con: Slightly less consistent with `Equal` method signatures
+- Explicitly out of scope for first phase:
+   - Reference-type null filters such as `string.HasValue()` / `string.HasNoValue()`
+   - `Equal(null)` support for nullable types
+   - Collection nullables such as `IEnumerable<int?>`
 
-1. **Documentation Strategy**: If we provide both methods, which should we emphasize in examples and documentation?
+- For reference types in the initial implementation, null handling remains a manual concern in consumer code.
 
-## Open Questions
+## Future Considerations
 
-1. Add Roslyn analyzer to suggest `HasValue()` over `Equal(null)` for discoverability?
-1. Should `CollectionExposer<TFilter, TField?>` support nullable element types?
+- A custom managed filter for reference types may be considered later if a concrete use case arises.
+- Collection nullable support can be revisited in a later iteration if needed.
+
+## Notes
+
+- The chosen approach favors explicitness and predictable behavior over API flexibility.
+- The team considered this the clearest way to support nullable filtering without introducing inconsistent behavior between storage and in-memory evaluation.
+- The approach was also considered the safest way to add nullable support without introducing avoidable breaking changes in related APIs.
