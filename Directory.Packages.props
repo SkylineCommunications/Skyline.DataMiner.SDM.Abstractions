@@ -4,8 +4,8 @@
 		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageVersion Include="Skyline.DataMiner.Files.Skyline.DataMiner.Storage.Types" Version="10.4.12" />
-		<PackageVersion Include="Skyline.DataMiner.Files.SLNetTypes" Version="10.4.12" />
+		<PackageVersion Include="Skyline.DataMiner.Files.Skyline.DataMiner.Storage.Types" Version="10.5.9.2" />
+		<PackageVersion Include="Skyline.DataMiner.Files.SLNetTypes" Version="10.5.9.2" />
 
 		<PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.3.0" />
 		<PackageVersion Include="MSTest.TestAdapter" Version="4.1.0" />

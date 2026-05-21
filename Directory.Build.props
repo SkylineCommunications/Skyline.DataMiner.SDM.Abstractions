@@ -7,6 +7,7 @@
 		<DebugType>pdbonly</DebugType>
 		<CodeAnalysisRuleSet>..\Internal\Code Analysis\qaction-release.ruleset</CodeAnalysisRuleSet>
 	</PropertyGroup>
+
 	<ItemGroup>
 		<AdditionalFiles Include="..\Internal\Code Analysis\stylecop.json">
 			<Link>Properties\stylecop.json</Link>
@@ -18,10 +19,13 @@
 			<Link>Properties\allowed_words.dic</Link>
 		</AdditionalFiles>
 	</ItemGroup>
+
 	<ItemGroup>
 		<PackageReference Include="StyleCop.Analyzers">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 	</ItemGroup>
+
+	<Import Project="Directory.Build.props.user" Condition="Exists('Directory.Build.props.user')" />
 </Project>
