@@ -46,8 +46,12 @@
 	</ItemGroup>-->
 
 	<ItemGroup>
-		<InternalsVisibleTo Include="SDM.AbstractionsTests" />
+		<InternalsVisibleTo Include="SDM.Abstractions.Tests" />
 	</ItemGroup>
+
+	<Target Name="CopyDllToSetupContent" AfterTargets="Build">
+		<Copy SourceFiles="$(TargetPath)" DestinationFolder="$(PackageDir)\SetupContent\DevPack" />
+	</Target>
 
 	<!-- Can be used to set the location of your local nuget store to copy to -->
 	<Target Name="CopyNuGetPackage" AfterTargets="Pack" Condition="'$(NuGetStorePath)' != '' and '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
