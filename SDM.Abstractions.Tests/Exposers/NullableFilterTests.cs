@@ -23,11 +23,13 @@ namespace SDM.AbstractionsTests.Exposers
 			var filter = TestClassExposers.OptionalAge.HasValue();
 
 			// Act
-			var result = filter.ToQuery().ExecuteInMemory(data).ToArray();
+			var linqResult = data.Where(t => t.OptionalAge.HasValue).ToArray();
+			var filterResult = filter.ToQuery().ExecuteInMemory(data).ToArray();
 
 			// Assert
-			result.Should().NotBeNull();
-			result.Should().AllSatisfy(t => t.OptionalAge.Should().NotBeNull());
+			linqResult.Should().Equal(filterResult);
+			filterResult.Should().NotBeNull();
+			filterResult.Should().AllSatisfy(t => t.OptionalAge.Should().NotBeNull());
 		}
 
 		[TestMethod]
@@ -38,11 +40,13 @@ namespace SDM.AbstractionsTests.Exposers
 			var filter = TestClassExposers.OptionalAge.HasNoValue();
 
 			// Act
-			var result = filter.ToQuery().ExecuteInMemory(data).ToArray();
+			var linqResult = data.Where(t => !t.OptionalAge.HasValue).ToArray();
+			var filterResult = filter.ToQuery().ExecuteInMemory(data).ToArray();
 
 			// Assert
-			result.Should().NotBeNull();
-			result.Should().AllSatisfy(t => t.OptionalAge.Should().BeNull());
+			linqResult.Should().Equal(filterResult);
+			filterResult.Should().NotBeNull();
+			filterResult.Should().AllSatisfy(t => t.OptionalAge.Should().BeNull());
 		}
 
 		[TestMethod]
@@ -53,11 +57,13 @@ namespace SDM.AbstractionsTests.Exposers
 			var filter = TestClassExposers.NickName.HasValue();
 
 			// Act
-			var result = filter.ToQuery().ExecuteInMemory(data).ToArray();
+			var linqResult = data.Where(t => t.NickName != null).ToArray();
+			var filterResult = filter.ToQuery().ExecuteInMemory(data).ToArray();
 
 			// Assert
-			result.Should().NotBeNull();
-			result.Should().AllSatisfy(t => t.NickName.Should().NotBeNull());
+			linqResult.Should().Equal(filterResult);
+			filterResult.Should().NotBeNull();
+			filterResult.Should().AllSatisfy(t => t.NickName.Should().NotBeNull());
 		}
 
 		[TestMethod]
@@ -68,11 +74,85 @@ namespace SDM.AbstractionsTests.Exposers
 			var filter = TestClassExposers.NickName.HasNoValue();
 
 			// Act
-			var result = filter.ToQuery().ExecuteInMemory(data).ToArray();
+			var linqResult = data.Where(t => t.NickName == null).ToArray();
+			var filterResult = filter.ToQuery().ExecuteInMemory(data).ToArray();
 
 			// Assert
-			result.Should().NotBeNull();
-			result.Should().AllSatisfy(t => t.NickName.Should().BeNull());
+			linqResult.Should().Equal(filterResult);
+			filterResult.Should().NotBeNull();
+			filterResult.Should().AllSatisfy(t => t.NickName.Should().BeNull());
+		}
+
+		[TestMethod]
+		public void NullableIntFilter_LessThan()
+		{
+			// Arrange
+			var data = DummyData.GetDummyData();
+			var filter = TestClassExposers.OptionalAge.LessThan(30);
+
+			// Act
+			var linqResult = data.Where(t => t.OptionalAge < 30).ToArray();
+			var filterResult = filter.ToQuery().ExecuteInMemory(data).ToArray();
+
+			// Assert
+			linqResult.Should().Equal(filterResult);
+			filterResult.Should().NotBeNull();
+			filterResult.Should().HaveCount(1);
+			filterResult.Should().AllSatisfy(t => t.OptionalAge.Should().BeLessThan(30));
+		}
+
+		[TestMethod]
+		public void NullableIntFilter_LessThanOrEqual()
+		{
+			// Arrange
+			var data = DummyData.GetDummyData();
+			var filter = TestClassExposers.OptionalAge.LessThanOrEqual(25);
+
+			// Act
+			var linqResult = data.Where(t => t.OptionalAge <= 25).ToArray();
+			var filterResult = filter.ToQuery().ExecuteInMemory(data).ToArray();
+
+			// Assert
+			linqResult.Should().Equal(filterResult);
+			filterResult.Should().NotBeNull();
+			filterResult.Should().HaveCount(1);
+			filterResult.Should().AllSatisfy(t => t.OptionalAge.Should().BeLessThanOrEqualTo(25));
+		}
+
+		[TestMethod]
+		public void NullableIntFilter_GreaterThan()
+		{
+			// Arrange
+			var data = DummyData.GetDummyData();
+			var filter = TestClassExposers.OptionalAge.GreaterThan(25);
+
+			// Act
+			var linqResult = data.Where(t => t.OptionalAge > 25).ToArray();
+			var filterResult = filter.ToQuery().ExecuteInMemory(data).ToArray();
+
+			// Assert
+			linqResult.Should().Equal(filterResult);
+			filterResult.Should().NotBeNull();
+			filterResult.Should().HaveCount(1);
+			filterResult.Should().AllSatisfy(t => t.OptionalAge.Should().BeGreaterThan(25));
+		}
+
+		[TestMethod]
+		public void NullableIntFilter_GreaterThanOrEqual()
+		{
+			// Arrange
+			var data = DummyData.GetDummyData();
+			var filter = TestClassExposers.OptionalAge.GreaterThanOrEqual(35);
+
+			// Act
+			var linqResult = data.Where(t => t.OptionalAge >= 35).ToArray();
+			var filterResult = filter.ToQuery().ExecuteInMemory(data).ToArray();
+
+			// Assert
+			linqResult.Should().Equal(filterResult);
+			filterResult.Should().NotBeNull();
+			filterResult.Should().HaveCount(1);
+			filterResult.Should().AllSatisfy(t => t.OptionalAge.Should().BeGreaterThanOrEqualTo(35));
 		}
 	}
 }
