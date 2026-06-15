@@ -11,7 +11,7 @@ to several recurring pain points:
 - **No audit trail** — there is no easy way to record which fields changed, by how much, and when.
 - **Manual diffing** — developers write ad-hoc comparison code that is fragile, untested, and scattered
   across the codebase.
-- **Missed optimisations** — partial updates (e.g. patching only dirty columns) are impossible without
+- **Missed optimisations** — partial updates (e.g. patching only dirty properties) are impossible without
   knowing which properties are dirty.
 
 These problems compound as the number of entities and update paths grows.
@@ -50,11 +50,10 @@ public static class PersonExposers
 }
 
 // Usage — no reflection, no strings, refactor-safe
-PersonExposers.Name.Get(person);
-PersonExposers.Name.Set(person, "Alice");
+PersonExposers.Name.internalFunc(person);
 ```
 
-Change tracking is a natural next step: if we can already get and set properties in a typed way,
+Change tracking is a natural next step: if we can already get properties in a typed way,
 we can snapshot them and compare them later — entirely at compile time.
 
 > **Comments / conclusions:**
@@ -74,7 +73,7 @@ For an entity `Person`, the generator would emit:
 | `PersonChangeSet` | The result of a diff — per-property original/current values + `HasChanges` |
 | `PersonTracker` | Stateful wrapper — snapshot taken on `Track()`, exposes current diff at any time |
 
-These types rely on a small set of **shared non-generated infrastructure**:
+These types could rely on a small set of **shared non-generated infrastructure** that we could place in the abstractions:
 
 ```csharp
 TrackedProperty<TEntity, TValue>          // OriginalValue, CurrentValue, IsModified
@@ -90,75 +89,217 @@ The sections below describe the key design decisions that are still open for dis
 
 ## End-User API
 
-This is the most important part. Regardless of which options are chosen, the API the developer
-writes against should feel like this:
+This is the most important part. Regardless of which options are chosen, the API should feel easy and intuitive.
 
-### Scenario 1 — Stateful tracking
+To match the proposed approach, the API is split per generated type.
 
-Capture state at a point in time, compare on the way back in:
+### 1) `PersonSnapshot` API options
+
+Represents a point-in-time immutable copy of an entity.
+
+#### A) Static factory on snapshot type *(current lean)*
 
 ```csharp
-// Start tracking
-var tracked = person.Track();
+PersonSnapshot snapshot = PersonSnapshot.Capture(person);
+```
 
-// Mutate freely
-tracked.Entity.Name = "Alice";
-tracked.Entity.Age  = 30;
+**Pros:** Discoverable, explicit, easy to search for.  
+**Cons:** Slightly more verbose at call sites.
 
-// Check what changed
-ExampleChangeSet changes = tracked.GetChanges();
+#### B) Extension method on entity
+
+```csharp
+PersonSnapshot snapshot = person.ToSnapshot();
+```
+
+**Pros:** Fluent and short. Reads naturally in pipelines.  
+**Cons:** Less obvious where the method comes from.
+
+#### C) Snapshot via tracker baseline
+
+```csharp
+PersonTracker tracked = person.Track();
+PersonSnapshot snapshot = tracked.Original;
+```
+
+**Pros:** One entry point for stateful flows.  
+**Cons:** Indirect for stateless scenarios (tests, migrations, replay).
+
+### 2) `PersonDiffer` API options
+
+Stateless comparison logic. Suitable for auditing, testing, and middleware.
+
+#### A) Static `Diff` overloads *(current lean)*
+
+```csharp
+PersonChangeSet c1 = PersonDiffer.Diff(snapshot, person);
+PersonChangeSet c2 = PersonDiffer.Diff(personA, personB);
+PersonChangeSet c3 = PersonDiffer.Diff(snapshotA, snapshotB);
+```
+
+**Pros:** No allocations for differ instance, simple mental model.  
+**Cons:** Harder to inject custom options later.
+
+#### B) Instance differ with optional settings
+
+```csharp
+var differ = new PersonDiffer(new PersonDiffOptions
+{
+  IgnoreCaseForStrings = true,
+});
+
+PersonChangeSet changes = differ.Diff(original, current);
+```
+
+**Pros:** Extensible for future knobs without overload explosion.  
+**Cons:** More ceremony for the common case.
+
+#### C) Try-pattern for low-allocation call sites
+
+```csharp
+if (PersonDiffer.TryDiff(original, current, out PersonChangeSet changes))
+{
+  // Only enters when there are actual changes.
+}
+```
+
+**Pros:** Fast path for unchanged entities, useful in hot middleware loops.  
+**Cons:** Additional API surface and branch-style usage.
+
+### 3) `PersonChangeSet` API options
+
+Represents diff results with per-property details and aggregate state.
+
+Example legend used below:
+
+- `changes`: the full diff result (`PersonChangeSet`) between two `Person` instances.
+- `changes.Name`: the diff node for the `Name` property (`TrackedProperty<Person, string>`).
+- `change`: one item from an enumerable of modified properties (`IPropertyChange`).
+
+#### A) Generated strongly typed property bag *(current lean)*
+
+Direct property access on the generated change set.
+
+```csharp
+PersonChangeSet changes = PersonDiffer.Diff(original, current);
 
 if (changes.HasChanges)
 {
-    Console.WriteLine($"Name: {changes.Name.OriginalValue} → {changes.Name.CurrentValue}");
-    Console.WriteLine($"Age:  {changes.Age.OriginalValue}  → {changes.Age.CurrentValue}");
+  Console.WriteLine(changes.Name.OriginalValue);
+  Console.WriteLine(changes.Name.CurrentValue);
+  Console.WriteLine(changes.Name.IsModified);
+}
+```
+
+Use when business logic checks known fields.
+
+**Pros:** Maximum type safety and IntelliSense.  
+**Cons:** Can feel verbose for generic logging.
+
+#### B) Typed + enumerable view
+
+Keep typed access and add a generic iterator for infrastructure scenarios.
+
+```csharp
+PersonChangeSet changes = PersonDiffer.Diff(original, current);
+
+foreach (IPropertyChange change in changes.GetModifiedProperties())
+{
+  Console.WriteLine($"{change.PropertyName}: {change.OriginalValue} -> {change.CurrentValue}");
+}
+```
+
+Use when you need both domain code and generic logging/audit processing.
+
+**Pros:** Great for logging/audit sinks and generic middleware.  
+**Cons:** Interface/object view may introduce boxing for value types unless carefully designed.
+
+#### C) Tiered shape: `HasChanges` + lazy property materialization
+
+Two-phase usage: cheap check first, detailed nodes only when requested.
+
+```csharp
+PersonChangeSet changes = PersonDiffer.Diff(original, current);
+
+if (!changes.HasChanges)
+{
+  return;
 }
 
-// Check a single property cheaply (no full diff)
-if (tracked.Name.IsModified) { }
+TrackedProperty<Person, string> name = changes.Name;
 ```
 
-### Scenario 2 — Stateless diffing
+Use when no-change is common and you want the fastest early-exit path.
 
-Useful for auditing, test assertions, migrations, or comparing two independently loaded instances:
+**Pros:** Keeps hot path cheap while preserving full detail on demand.  
+**Cons:** More complex implementation and generated code paths.
 
-```csharp
-var snapshot = PersonSnapshot.Capture(person);
+#### Practical recommendation
 
-// ... time passes, person is modified elsewhere ...
+If we optimize for clarity first, option A is the simplest API to teach and document.
+If we know audit/middleware scenarios are first-class from day one, option B gives the best balance.
+Option C is mostly a performance optimization and is best introduced only if profiling shows the need.
 
-PersonChangeSet changes = PersonDiffer.Diff(snapshot, person);
-
-// Or diff two live instances directly
-PersonChangeSet changes = PersonDiffer.Diff(personA, personB);
-
-// Or diff two snapshots (e.g. from audit log replay)
-PersonChangeSet changes = PersonDiffer.Diff(snapshotA, snapshotB);
-```
-
-### Scenario 3 — Collection property changes
-
-For entities that contain a list of child objects (e.g. `Person.Addresses`), the diff recurses:
+Collection properties would still expose recursive diffs when tracked:
 
 ```csharp
-var changes = PersonDiffer.Diff(original, current);
-
 CollectionChangeSet<Address, AddressChangeSet> addressChanges = changes.Addresses;
 
 foreach (Address added in addressChanges.Added) { }
-
 foreach (string removedId in addressChanges.Removed) { }
-
 foreach (ItemChange<Address, AddressChangeSet> modified in addressChanges.Modified)
 {
-    Console.WriteLine(modified.Changes.Street.OriginalValue);
-    Console.WriteLine(modified.Changes.Street.CurrentValue);
+  Console.WriteLine(modified.Changes.Street.OriginalValue);
+  Console.WriteLine(modified.Changes.Street.CurrentValue);
 }
 ```
 
-### Scenario 4 — Middleware integration (future)
+### 4) `PersonTracker` API options
 
-If change tracking is wired into the repository middleware, it becomes fully transparent:
+Stateful helper that captures original state and computes current changes.
+
+#### A) Entity-centric tracker *(current lean)*
+
+```csharp
+PersonTracker tracked = person.Track();
+
+tracked.Entity.Name = "Alice";
+
+PersonChangeSet changes = tracked.GetChanges();
+bool dirty = tracked.HasChanges;
+```
+
+**Pros:** Intuitive workflow for update pipelines.  
+**Cons:** Requires users to work through `tracked.Entity`.
+
+#### B) Tracker proxy exposing members directly
+
+```csharp
+PersonTracker tracked = person.Track();
+
+tracked.Name = "Alice";
+tracked.Age = 30;
+
+bool isNameDirty = tracked.NameChange.IsModified;
+```
+
+**Pros:** Convenient call-site ergonomics.  
+**Cons:** Larger generated surface and potential confusion between entity members and change metadata.
+
+#### C) Hybrid tracker + middleware hand-off
+
+```csharp
+PersonTracker tracked = person.Track();
+
+tracked.Entity.Name = "Bob";
+
+repo.Update(tracked); // Middleware can consume tracker directly
+```
+
+**Pros:** Smooth integration in repository flows; avoids re-snapshotting at write time.  
+**Cons:** Couples repository contracts to tracking concepts unless carefully abstracted.
+
+Future middleware integration remains possible for all options:
 
 ```csharp
 // The middleware snapshots entities on read automatically.
@@ -320,6 +461,27 @@ Report the collection as "changed" or "unchanged" as a whole, without per-item d
 **Pros:** Very simple to generate. No key matching required.  
 **Cons:** Not actionable — caller cannot tell what was added, removed or modified.
 
+#### D) Custom differ via attribute per collection
+
+Allow a collection property to point to a user-provided differ type.
+
+```csharp
+[CollectionDiffer(typeof(AddressCollectionDiffer))]
+public List<Address> Addresses { get; set; }
+```
+
+The differ type would implement a known contract, for example:
+
+```csharp
+public interface ICollectionDiffer<TItem, TChangeSet>
+{
+  CollectionChangeSet<TItem, TChangeSet> Diff(IReadOnlyList<TItem> original, IReadOnlyList<TItem> current);
+}
+```
+
+**Pros:** Supports domain-specific matching and change rules (composite keys, tolerance, reorder handling).  
+**Cons:** More complexity in generator validation and API surface. Requires clear constraints on allowed differ types.
+
 > **Comments / conclusions:**
 > 
 
@@ -345,6 +507,27 @@ public List<Address> Addresses { get; set; }
 
 **Pros:** Flexible. Works for non-SDM types or when `Identifier` is not the right match key.  
 **Cons:** More configuration. Generator must read and validate attribute arguments.
+
+#### C) Custom key selector via attribute type
+
+Allow a collection property to specify a user-provided key selector type.
+
+```csharp
+[CollectionKeySelector(typeof(AddressKeySelector))]
+public List<Address> Addresses { get; set; }
+```
+
+The selector type would implement a known contract, for example:
+
+```csharp
+public interface ICollectionKeySelector<TItem, TKey>
+{
+  TKey GetKey(TItem item);
+}
+```
+
+**Pros:** Supports advanced key strategies (composite keys, normalization, fallback keys) without hard-coding generator rules.  
+**Cons:** Adds another extension point to validate and document. Requires stable equality semantics for `TKey`.
 
 > **Comments / conclusions:**
 > 
