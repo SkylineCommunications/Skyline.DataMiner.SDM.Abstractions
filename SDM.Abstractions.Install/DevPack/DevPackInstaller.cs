@@ -63,21 +63,33 @@
 
 		public void DeployAllDevPacks()
 		{
-			var stoppedGqiService = StopDataMinerGQI();
-			var devPackNames = GetAvailableDevPacks();
-
-			foreach (var devPackName in devPackNames)
+			using (var stoppedGqiService = StopDataMinerGQI())
 			{
-				if (!IsValidDevPackName(devPackName))
+				try
 				{
-					Installer.Log($"DevPack {devPackName} has an invalid name and will be skipped. It must start with '{DevPackNamePrefix}'.");
-					continue;
+					var devPackNames = GetAvailableDevPacks();
+
+					foreach (var devPackName in devPackNames)
+					{
+						if (!IsValidDevPackName(devPackName))
+						{
+							Installer.Log($"DevPack {devPackName} has an invalid name and will be skipped. It must start with '{DevPackNamePrefix}'.");
+							continue;
+						}
+
+						DeployDevPack(devPackName);
+					}
 				}
-
-				DeployDevPack(devPackName);
+				catch (Exception ex)
+				{
+					Installer.Log($"An error occurred while deploying DevPacks: {ex}");
+				}
+				finally
+				{
+					Installer.Log("Ensuring DataMiner GQI service is running after DevPack installation.");
+					StartDataMinerGQI(stoppedGqiService);
+				}
 			}
-
-			StartDataMinerGQI(stoppedGqiService);
 		}
 
 		private static bool IsValidDevPackName(string devPackName)

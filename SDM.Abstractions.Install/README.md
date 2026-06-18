@@ -20,8 +20,8 @@ Granular, composable interfaces that let you expose only the capabilities your r
 | Interface | Description |
 |---|---|
 | `IRepository<T>` | Full CRUD composite: create, read, update, delete, count, page |
-| `ICreateableRepository<T>` | Single-entity create |
-| `IBulkCreateableRepository<T>` | Bulk create |
+| `ICreatableRepository<T>` | Single-entity create |
+| `IBulkCreatableRepository<T>` | Bulk create |
 | `IReadableRepository<T>` | Read by identifier |
 | `IBulkReadableRepository<T>` | Bulk read by identifiers |
 | `IUpdatableRepository<T>` | Single-entity update |

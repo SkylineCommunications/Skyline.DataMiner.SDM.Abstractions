@@ -76,7 +76,7 @@
 			return query.WithOrder(SLDataGateway.API.Querying.OrderBy.Default.SingleConcat(
 				OrderByElement.Default
 					.WithFieldExposer(exposer)
-					.WithSortOrder(SortOrder.Ascending)
+					.WithSortOrder(SortOrder.Descending)
 					.WithNaturalSort(naturalSort)));
 		}
 
