@@ -15,7 +15,6 @@
 		<PackageReference Include="MSTest.TestFramework" />
 		<PackageReference Include="FluentAssertions" />
 		<PackageReference Include="PublicApiGenerator" />
-		<PackageReference Include="System.Diagnostics.DiagnosticSource" />
 		<PackageReference Include="Verify.MSTest" />
 	</ItemGroup>
 

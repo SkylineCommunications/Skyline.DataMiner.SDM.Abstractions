@@ -1,4 +1,5 @@
-﻿namespace Skyline.DataMiner.SDM.Telemetry
+﻿#if !NETFRAMEWORK
+namespace Skyline.DataMiner.SDM.Telemetry
 {
 	using System.Diagnostics;
 	using System.Reflection;
@@ -12,3 +13,4 @@
 		internal static readonly ActivitySource ActivitySource = new ActivitySource(SourceName, SourceVersion);
 	}
 }
+#endif
