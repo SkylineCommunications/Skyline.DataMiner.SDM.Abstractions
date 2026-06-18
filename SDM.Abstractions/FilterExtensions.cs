@@ -204,7 +204,11 @@
 				exposer,
 				Comparer.LT,
 				value,
-				(obj) => exposer.internalFunc(obj).HasValue && exposer.internalFunc(obj).GetValueOrDefault().CompareTo(value) < 0);
+				(obj) =>
+				{
+					var field = exposer.internalFunc(obj);
+					return field.HasValue && field.GetValueOrDefault().CompareTo(value) < 0;
+				});
 		}
 
 		/// <summary>
@@ -255,7 +259,11 @@
 				exposer,
 				Comparer.LTE,
 				value,
-				(obj) => exposer.internalFunc(obj).HasValue && exposer.internalFunc(obj).GetValueOrDefault().CompareTo(value) <= 0);
+				(obj) =>
+				{
+					var field = exposer.internalFunc(obj);
+					return field.HasValue && field.GetValueOrDefault().CompareTo(value) <= 0;
+				});
 		}
 
 		/// <summary>
@@ -307,7 +315,11 @@
 				exposer,
 				Comparer.GT,
 				value,
-				(obj) => exposer.internalFunc(obj).HasValue && exposer.internalFunc(obj).GetValueOrDefault().CompareTo(value) > 0);
+				(obj) =>
+				{
+					var field = exposer.internalFunc(obj);
+					return field.HasValue && field.GetValueOrDefault().CompareTo(value) > 0;
+				});
 		}
 
 		/// <summary>
@@ -359,7 +371,11 @@
 				exposer,
 				Comparer.GTE,
 				value,
-				(obj) => exposer.internalFunc(obj).HasValue && exposer.internalFunc(obj).GetValueOrDefault().CompareTo(value) >= 0);
+				(obj) =>
+				{
+					var field = exposer.internalFunc(obj);
+					return field.HasValue && field.GetValueOrDefault().CompareTo(value) >= 0;
+				});
 		}
 
 		/// <summary>
@@ -391,7 +407,7 @@
 				exposer,
 				Comparer.NotEquals,
 				null,
-				(obj) => !(exposer.internalFunc(obj) is null));
+				(obj) => exposer.internalFunc(obj).HasValue);
 		}
 
 		/// <summary>
@@ -409,7 +425,7 @@
 				exposer,
 				Comparer.Equals,
 				null,
-				(obj) => exposer.internalFunc(obj) is null);
+				(obj) => !exposer.internalFunc(obj).HasValue);
 		}
 
 		/// <summary>
