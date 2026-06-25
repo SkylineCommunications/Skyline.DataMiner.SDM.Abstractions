@@ -7,6 +7,13 @@
 		<DebugType>pdbonly</DebugType>
 		<CodeAnalysisRuleSet>..\Internal\Code Analysis\qaction-release.ruleset</CodeAnalysisRuleSet>
 	</PropertyGroup>
+
+	<PropertyGroup>
+		<MinimumRequiredDmVersion>10.5.9.0 - 16293</MinimumRequiredDmVersion>
+		<RootDir>$(MSBuildThisFileDirectory)</RootDir>
+		<PackageDir>$(MSBuildThisFileDirectory)\SDM.Abstractions.Install</PackageDir>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<AdditionalFiles Include="..\Internal\Code Analysis\stylecop.json">
 			<Link>Properties\stylecop.json</Link>
@@ -18,10 +25,13 @@
 			<Link>Properties\allowed_words.dic</Link>
 		</AdditionalFiles>
 	</ItemGroup>
+
 	<ItemGroup>
-		<PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+		<PackageReference Include="StyleCop.Analyzers">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 	</ItemGroup>
+
+	<Import Project="Directory.Build.props.user" Condition="Exists('Directory.Build.props.user')" />
 </Project>

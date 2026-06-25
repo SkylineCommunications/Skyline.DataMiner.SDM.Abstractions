@@ -21,6 +21,7 @@
 		/// <returns>A <see cref="ManagedFilter{TFilter, TField}"/> configured for equality comparison.</returns>
 		public static ManagedFilter<TFilter, TField> Equal<TFilter, TField>(this Exposer<TFilter, TField> exposer, TField value)
 			where TField : Enum
+			where TFilter : class
 		{
 			return exposer.UncheckedEqual(value);
 		}
@@ -67,6 +68,7 @@
 		/// <returns>A <see cref="ManagedFilter{TFilter, TField}"/> configured for inequality comparison.</returns>
 		public static ManagedFilter<TFilter, TField> NotEqual<TFilter, TField>(this Exposer<TFilter, TField> exposer, TField value)
 			where TField : Enum
+			where TFilter : class
 		{
 			return exposer.UncheckedNotEqual(value);
 		}
@@ -177,12 +179,36 @@
 		/// <returns>A <see cref="ManagedFilter{TFilter, TField}"/> configured for less-than comparison.</returns>
 		public static ManagedFilter<TFilter, TField> LessThan<TFilter, TField>(this Exposer<TFilter, TField> exposer, TField value)
 			where TField : Enum
+			where TFilter : class
 		{
 			return new ManagedFilter<TFilter, TField>(
 				exposer,
-				Comparer.GTE,
+				Comparer.LT,
 				value,
 				(obj) => Convert.ToInt32(exposer.internalFunc(obj)).CompareTo(Convert.ToInt32(value)) < 0);
+		}
+
+		/// <summary>
+		/// Creates a filter that checks if the exposed field is less than the specified value.
+		/// </summary>
+		/// <typeparam name="TFilter">The type of the filter.</typeparam>
+		/// <typeparam name="TField">The non-nullable value type being compared. Must be a struct that implements IComparable&lt;TField&gt;.</typeparam>
+		/// <param name="exposer">The exposer that identifies the field to filter on.</param>
+		/// <param name="value">The value to compare against.</param>
+		/// <returns>A <see cref="ManagedFilter{TFilter, TField}"/> configured for less-than comparison.</returns>
+		public static ManagedFilter<TFilter, TField?> LessThan<TFilter, TField>(this Exposer<TFilter, TField?> exposer, TField value)
+			where TField : struct, IComparable<TField>
+			where TFilter : class
+		{
+			return new ManagedFilter<TFilter, TField?>(
+				exposer,
+				Comparer.LT,
+				value,
+				(obj) =>
+				{
+					var field = exposer.internalFunc(obj);
+					return field.HasValue && field.GetValueOrDefault().CompareTo(value) < 0;
+				});
 		}
 
 		/// <summary>
@@ -209,12 +235,36 @@
 		/// <returns>A <see cref="ManagedFilter{TFilter, TField}"/> configured for less-than-or-equal comparison.</returns>
 		public static ManagedFilter<TFilter, TField> LessThanOrEqual<TFilter, TField>(this Exposer<TFilter, TField> exposer, TField value)
 			where TField : Enum
+			where TFilter : class
 		{
 			return new ManagedFilter<TFilter, TField>(
 				exposer,
-				Comparer.GTE,
+				Comparer.LTE,
 				value,
 				(obj) => Convert.ToInt32(exposer.internalFunc(obj)).CompareTo(Convert.ToInt32(value)) <= 0);
+		}
+
+		/// <summary>
+		/// Creates a filter that checks if the exposed field is less than or equal to the specified value.
+		/// </summary>
+		/// <typeparam name="TFilter">The type of the filter.</typeparam>
+		/// <typeparam name="TField">The non-nullable value type being compared. Must be a struct that implements IComparable&lt;TField&gt;.</typeparam>
+		/// <param name="exposer">The exposer that identifies the field to filter on.</param>
+		/// <param name="value">The value to compare against.</param>
+		/// <returns>A <see cref="ManagedFilter{TFilter, TField}"/> configured for less-than-or-equal comparison.</returns>
+		public static ManagedFilter<TFilter, TField?> LessThanOrEqual<TFilter, TField>(this Exposer<TFilter, TField?> exposer, TField value)
+			where TField : struct, IComparable<TField>
+			where TFilter : class
+		{
+			return new ManagedFilter<TFilter, TField?>(
+				exposer,
+				Comparer.LTE,
+				value,
+				(obj) =>
+				{
+					var field = exposer.internalFunc(obj);
+					return field.HasValue && field.GetValueOrDefault().CompareTo(value) <= 0;
+				});
 		}
 
 		/// <summary>
@@ -241,12 +291,36 @@
 		/// <returns>A <see cref="ManagedFilter{TFilter, TField}"/> configured for greater-than comparison.</returns>
 		public static ManagedFilter<TFilter, TField> GreaterThan<TFilter, TField>(this Exposer<TFilter, TField> exposer, TField value)
 			where TField : Enum
+			where TFilter : class
 		{
 			return new ManagedFilter<TFilter, TField>(
 				exposer,
-				Comparer.GTE,
+				Comparer.GT,
 				value,
 				(obj) => Convert.ToInt32(exposer.internalFunc(obj)).CompareTo(Convert.ToInt32(value)) > 0);
+		}
+
+		/// <summary>
+		/// Creates a filter that checks if the exposed field is greater than the specified value.
+		/// </summary>
+		/// <typeparam name="TFilter">The type of the filter.</typeparam>
+		/// <typeparam name="TField">The non-nullable value type being compared. Must be a struct that implements IComparable&lt;TField&gt;.</typeparam>
+		/// <param name="exposer">The exposer that identifies the field to filter on.</param>
+		/// <param name="value">The value to compare against.</param>
+		/// <returns>A <see cref="ManagedFilter{TFilter, TField}"/> configured for greater-than comparison.</returns>
+		public static ManagedFilter<TFilter, TField?> GreaterThan<TFilter, TField>(this Exposer<TFilter, TField?> exposer, TField value)
+			where TField : struct, IComparable<TField>
+			where TFilter : class
+		{
+			return new ManagedFilter<TFilter, TField?>(
+				exposer,
+				Comparer.GT,
+				value,
+				(obj) =>
+				{
+					var field = exposer.internalFunc(obj);
+					return field.HasValue && field.GetValueOrDefault().CompareTo(value) > 0;
+				});
 		}
 
 		/// <summary>
@@ -273,12 +347,36 @@
 		/// <returns>A <see cref="ManagedFilter{TFilter, TField}"/> configured for greater-than-or-equal comparison.</returns>
 		public static ManagedFilter<TFilter, TField> GreaterThanOrEqual<TFilter, TField>(this Exposer<TFilter, TField> exposer, TField value)
 			where TField : Enum
+			where TFilter : class
 		{
 			return new ManagedFilter<TFilter, TField>(
 				exposer,
 				Comparer.GTE,
 				value,
 				(obj) => Convert.ToInt32(exposer.internalFunc(obj)).CompareTo(Convert.ToInt32(value)) >= 0);
+		}
+
+		/// <summary>
+		/// Creates a filter that checks if the exposed field is greater than or equal to the specified value.
+		/// </summary>
+		/// <typeparam name="TFilter">The type of the filter.</typeparam>
+		/// <typeparam name="TField">The non-nullable value type being compared. Must be a struct that implements IComparable&lt;TField&gt;.</typeparam>
+		/// <param name="exposer">The exposer that identifies the field to filter on.</param>
+		/// <param name="value">The value to compare against.</param>
+		/// <returns>A <see cref="ManagedFilter{TFilter, TField}"/> configured for greater-than-or-equal comparison.</returns>
+		public static ManagedFilter<TFilter, TField?> GreaterThanOrEqual<TFilter, TField>(this Exposer<TFilter, TField?> exposer, TField value)
+			where TField : struct, IComparable<TField>
+			where TFilter : class
+		{
+			return new ManagedFilter<TFilter, TField?>(
+				exposer,
+				Comparer.GTE,
+				value,
+				(obj) =>
+				{
+					var field = exposer.internalFunc(obj);
+					return field.HasValue && field.GetValueOrDefault().CompareTo(value) >= 0;
+				});
 		}
 
 		/// <summary>
@@ -293,6 +391,74 @@
 			where TFilter : class
 		{
 			return new ManagedCollectionFilter<TFilter, TField>(exposer, Comparer.GTE, value);
+		}
+
+		/// <summary>
+		/// Creates a filter that checks if the exposed nullable field has a value.
+		/// </summary>
+		/// <typeparam name="TFilter">The type of the filter.</typeparam>
+		/// <typeparam name="TField">The non-nullable value type being compared.</typeparam>
+		/// <param name="exposer">The exposer that identifies the field to filter on.</param>
+		/// <returns>A <see cref="ManagedFilter{TFilter, TField}"/> that matches when the field is not null.</returns>
+		public static ManagedFilter<TFilter, TField?> HasValue<TFilter, TField>(this Exposer<TFilter, TField?> exposer)
+			where TField : struct
+			where TFilter : class
+		{
+			return new ManagedFilter<TFilter, TField?>(
+				exposer,
+				Comparer.NotEquals,
+				null,
+				(obj) => exposer.internalFunc(obj).HasValue);
+		}
+
+		/// <summary>
+		/// Creates a filter that checks if the exposed nullable field has no value.
+		/// </summary>
+		/// <typeparam name="TFilter">The type of the filter.</typeparam>
+		/// <typeparam name="TField">The non-nullable value type being compared.</typeparam>
+		/// <param name="exposer">The exposer that identifies the field to filter on.</param>
+		/// <returns>A <see cref="ManagedFilter{TFilter, TField}"/> that matches when the field is null.</returns>
+		public static ManagedFilter<TFilter, TField?> HasNoValue<TFilter, TField>(this Exposer<TFilter, TField?> exposer)
+			where TField : struct
+			where TFilter : class
+		{
+			return new ManagedFilter<TFilter, TField?>(
+				exposer,
+				Comparer.Equals,
+				null,
+				(obj) => !exposer.internalFunc(obj).HasValue);
+		}
+
+		/// <summary>
+		/// Creates a filter that checks if the exposed string field has a value (is not null).
+		/// </summary>
+		/// <typeparam name="TFilter">The type of the filter.</typeparam>
+		/// <param name="exposer">The exposer that identifies the string field to filter on.</param>
+		/// <returns>A <see cref="ManagedFilter{TFilter, String}"/> that matches when the field is not null.</returns>
+		public static ManagedFilter<TFilter, string> HasValue<TFilter>(this Exposer<TFilter, string> exposer)
+			where TFilter : class
+		{
+			return new ManagedFilter<TFilter, string>(
+				exposer,
+				Comparer.NotEquals,
+				null,
+				(obj) => !(exposer.internalFunc(obj) is null));
+		}
+
+		/// <summary>
+		/// Creates a filter that checks if the exposed string field has no value (is null).
+		/// </summary>
+		/// <typeparam name="TFilter">The type of the filter.</typeparam>
+		/// <param name="exposer">The exposer that identifies the string field to filter on.</param>
+		/// <returns>A <see cref="ManagedFilter{TFilter, String}"/> that matches when the field is null.</returns>
+		public static ManagedFilter<TFilter, string> HasNoValue<TFilter>(this Exposer<TFilter, string> exposer)
+			where TFilter : class
+		{
+			return new ManagedFilter<TFilter, string>(
+				exposer,
+				Comparer.Equals,
+				null,
+				(obj) => exposer.internalFunc(obj) is null);
 		}
 	}
 }

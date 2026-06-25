@@ -18,3 +18,5 @@ _git2_*
 
 MigrationBackup
 *.user
+
+**/SetupContent/DevPack/*.dll

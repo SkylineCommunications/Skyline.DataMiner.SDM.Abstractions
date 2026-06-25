@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageVersion Include="Skyline.DataMiner.Files.Skyline.DataMiner.Storage.Types" Version="10.5.9.2" />
+    <PackageVersion Include="Skyline.DataMiner.Files.SLNetTypes" Version="10.5.9.2" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.5.1" />
+    <PackageVersion Include="MSTest.TestAdapter" Version="4.2.3" />
+    <PackageVersion Include="MSTest.TestFramework" Version="4.2.3" />
+    <PackageVersion Include="FluentAssertions" Version="7.2.2" />
+    <PackageVersion Include="PublicApiGenerator" Version="11.5.4" />
+    <PackageVersion Include="Skyline.DataMiner.Utils.SecureCoding" Version="2.2.3" />
+    <PackageVersion Include="System.Diagnostics.DiagnosticSource" Version="10.0.8" />
+    <PackageVersion Include="StyleCop.Analyzers" Version="1.1.118" />
+    <PackageVersion Include="Verify.MSTest" Version="31.16.3" />
+    <PackageVersion Include="Skyline.DataMiner.Core.AppPackageInstaller" Version="4.0.0" />
+    <PackageVersion Include="Skyline.DataMiner.Dev.Automation" Version="10.5.9.2" />
+  </ItemGroup>
+</Project>

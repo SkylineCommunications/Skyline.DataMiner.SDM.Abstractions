@@ -1,4 +1,5 @@
-﻿namespace SDM.AbstractionsTests
+﻿#if !NETFRAMEWORK
+namespace SDM.AbstractionsTests
 {
 	using System;
 	using System.Diagnostics;
@@ -131,3 +132,4 @@
 		}
 	}
 }
+#endif

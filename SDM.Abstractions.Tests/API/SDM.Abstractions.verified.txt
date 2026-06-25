@@ -1,5 +1,5 @@
 ﻿[assembly: System.Reflection.AssemblyMetadata("RepositoryUrl", "https://github.com/SkylineCommunications/Skyline.DataMiner.SDM.Abstractions")]
-[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("SDM.AbstractionsTests")]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("SDM.Abstractions.Tests")]
 [assembly: System.Runtime.Versioning.TargetFramework(".NETFramework,Version=v4.8", FrameworkDisplayName=".NET Framework 4.8")]
 namespace Skyline.DataMiner.SDM
 {
@@ -18,25 +18,52 @@ namespace Skyline.DataMiner.SDM
         public static Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, System.Collections.Generic.IEnumerable<TField>> Contains<TFilter, TField>(this Skyline.DataMiner.SDM.Exposers.CollectionExposer<TFilter, TField> exposer, TField value, System.StringComparison stringComparison)
             where TFilter :  class { }
         public static Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, TField> Equal<TFilter, TField>(this Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<TFilter, TField> exposer, TField value)
+            where TFilter :  class
             where TField : System.Enum { }
         public static Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, System.Collections.Generic.IEnumerable<TField>> Equal<TFilter, TField>(this Skyline.DataMiner.SDM.Exposers.CollectionExposer<TFilter, TField> exposer, TField value)
             where TFilter :  class { }
         public static Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, System.Collections.Generic.IEnumerable<TField>> Equal<TFilter, TField>(this Skyline.DataMiner.SDM.Exposers.CollectionExposer<TFilter, TField> exposer, TField value, System.StringComparison stringComparison)
             where TFilter :  class { }
         public static Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, TField> GreaterThan<TFilter, TField>(this Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<TFilter, TField> exposer, TField value)
+            where TFilter :  class
             where TField : System.Enum { }
+        public static Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, TField?> GreaterThan<TFilter, TField>(this Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<TFilter, TField?> exposer, TField value)
+            where TFilter :  class
+            where TField :  struct, System.IComparable<TField> { }
         public static Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, System.Collections.Generic.IEnumerable<TField>> GreaterThan<TFilter, TField>(this Skyline.DataMiner.SDM.Exposers.CollectionExposer<TFilter, TField> exposer, TField value)
             where TFilter :  class { }
         public static Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, TField> GreaterThanOrEqual<TFilter, TField>(this Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<TFilter, TField> exposer, TField value)
+            where TFilter :  class
             where TField : System.Enum { }
+        public static Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, TField?> GreaterThanOrEqual<TFilter, TField>(this Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<TFilter, TField?> exposer, TField value)
+            where TFilter :  class
+            where TField :  struct, System.IComparable<TField> { }
         public static Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, System.Collections.Generic.IEnumerable<TField>> GreaterThanOrEqual<TFilter, TField>(this Skyline.DataMiner.SDM.Exposers.CollectionExposer<TFilter, TField> exposer, TField value)
             where TFilter :  class { }
+        public static Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, string> HasNoValue<TFilter>(this Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<TFilter, string> exposer)
+            where TFilter :  class { }
+        public static Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, TField?> HasNoValue<TFilter, TField>(this Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<TFilter, TField?> exposer)
+            where TFilter :  class
+            where TField :  struct { }
+        public static Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, string> HasValue<TFilter>(this Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<TFilter, string> exposer)
+            where TFilter :  class { }
+        public static Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, TField?> HasValue<TFilter, TField>(this Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<TFilter, TField?> exposer)
+            where TFilter :  class
+            where TField :  struct { }
         public static Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, TField> LessThan<TFilter, TField>(this Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<TFilter, TField> exposer, TField value)
+            where TFilter :  class
             where TField : System.Enum { }
+        public static Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, TField?> LessThan<TFilter, TField>(this Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<TFilter, TField?> exposer, TField value)
+            where TFilter :  class
+            where TField :  struct, System.IComparable<TField> { }
         public static Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, System.Collections.Generic.IEnumerable<TField>> LessThan<TFilter, TField>(this Skyline.DataMiner.SDM.Exposers.CollectionExposer<TFilter, TField> exposer, TField value)
             where TFilter :  class { }
         public static Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, TField> LessThanOrEqual<TFilter, TField>(this Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<TFilter, TField> exposer, TField value)
+            where TFilter :  class
             where TField : System.Enum { }
+        public static Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, TField?> LessThanOrEqual<TFilter, TField>(this Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<TFilter, TField?> exposer, TField value)
+            where TFilter :  class
+            where TField :  struct, System.IComparable<TField> { }
         public static Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, System.Collections.Generic.IEnumerable<TField>> LessThanOrEqual<TFilter, TField>(this Skyline.DataMiner.SDM.Exposers.CollectionExposer<TFilter, TField> exposer, TField value)
             where TFilter :  class { }
         public static Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, System.Collections.Generic.IEnumerable<TField>> NotContains<TFilter, TField>(this Skyline.DataMiner.SDM.Exposers.CollectionExposer<TFilter, TField> exposer, TField value)
@@ -44,6 +71,7 @@ namespace Skyline.DataMiner.SDM
         public static Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, System.Collections.Generic.IEnumerable<TField>> NotContains<TFilter, TField>(this Skyline.DataMiner.SDM.Exposers.CollectionExposer<TFilter, TField> exposer, TField value, System.StringComparison stringComparison)
             where TFilter :  class { }
         public static Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, TField> NotEqual<TFilter, TField>(this Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<TFilter, TField> exposer, TField value)
+            where TFilter :  class
             where TField : System.Enum { }
         public static Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, System.Collections.Generic.IEnumerable<TField>> NotEqual<TFilter, TField>(this Skyline.DataMiner.SDM.Exposers.CollectionExposer<TFilter, TField> exposer, TField value)
             where TFilter :  class { }
@@ -215,15 +243,24 @@ namespace Skyline.DataMiner.SDM
     }
     public static class QueryExtensions
     {
-        public static SLDataGateway.API.Types.Querying.IQuery<T> Limit<T>(this SLDataGateway.API.Types.Querying.IQuery<T> query, int limit) { }
-        public static SLDataGateway.API.Types.Querying.IQuery<T> OrderBy<T>(this SLDataGateway.API.Types.Querying.IQuery<T> query, Skyline.DataMiner.Net.Messages.SLDataGateway.FieldExposer exposer) { }
-        public static SLDataGateway.API.Types.Querying.IQuery<T> OrderBy<T>(this SLDataGateway.API.Types.Querying.IQuery<T> query, Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<T, string> exposer, bool naturalSort) { }
-        public static SLDataGateway.API.Types.Querying.IQuery<T> OrderByDescending<T>(this SLDataGateway.API.Types.Querying.IQuery<T> query, Skyline.DataMiner.Net.Messages.SLDataGateway.FieldExposer exposer) { }
-        public static SLDataGateway.API.Types.Querying.IQuery<T> OrderByDescending<T>(this SLDataGateway.API.Types.Querying.IQuery<T> query, Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<T, string> exposer, bool naturalSort) { }
-        public static SLDataGateway.API.Types.Querying.IQuery<T> ThenBy<T>(this SLDataGateway.API.Types.Querying.IQuery<T> query, Skyline.DataMiner.Net.Messages.SLDataGateway.FieldExposer exposer) { }
-        public static SLDataGateway.API.Types.Querying.IQuery<T> ThenBy<T>(this SLDataGateway.API.Types.Querying.IQuery<T> query, Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<T, string> exposer, bool naturalSort) { }
-        public static SLDataGateway.API.Types.Querying.IQuery<T> ThenByDescending<T>(this SLDataGateway.API.Types.Querying.IQuery<T> query, Skyline.DataMiner.Net.Messages.SLDataGateway.FieldExposer exposer) { }
-        public static SLDataGateway.API.Types.Querying.IQuery<T> ThenByDescending<T>(this SLDataGateway.API.Types.Querying.IQuery<T> query, Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<T, string> exposer, bool naturalSort) { }
+        public static SLDataGateway.API.Types.Querying.IQuery<T> Limit<T>(this SLDataGateway.API.Types.Querying.IQuery<T> query, int limit)
+            where T :  class { }
+        public static SLDataGateway.API.Types.Querying.IQuery<T> OrderBy<T>(this SLDataGateway.API.Types.Querying.IQuery<T> query, Skyline.DataMiner.Net.Messages.SLDataGateway.FieldExposer exposer)
+            where T :  class { }
+        public static SLDataGateway.API.Types.Querying.IQuery<T> OrderBy<T>(this SLDataGateway.API.Types.Querying.IQuery<T> query, Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<T, string> exposer, bool naturalSort)
+            where T :  class { }
+        public static SLDataGateway.API.Types.Querying.IQuery<T> OrderByDescending<T>(this SLDataGateway.API.Types.Querying.IQuery<T> query, Skyline.DataMiner.Net.Messages.SLDataGateway.FieldExposer exposer)
+            where T :  class { }
+        public static SLDataGateway.API.Types.Querying.IQuery<T> OrderByDescending<T>(this SLDataGateway.API.Types.Querying.IQuery<T> query, Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<T, string> exposer, bool naturalSort)
+            where T :  class { }
+        public static SLDataGateway.API.Types.Querying.IQuery<T> ThenBy<T>(this SLDataGateway.API.Types.Querying.IQuery<T> query, Skyline.DataMiner.Net.Messages.SLDataGateway.FieldExposer exposer)
+            where T :  class { }
+        public static SLDataGateway.API.Types.Querying.IQuery<T> ThenBy<T>(this SLDataGateway.API.Types.Querying.IQuery<T> query, Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<T, string> exposer, bool naturalSort)
+            where T :  class { }
+        public static SLDataGateway.API.Types.Querying.IQuery<T> ThenByDescending<T>(this SLDataGateway.API.Types.Querying.IQuery<T> query, Skyline.DataMiner.Net.Messages.SLDataGateway.FieldExposer exposer)
+            where T :  class { }
+        public static SLDataGateway.API.Types.Querying.IQuery<T> ThenByDescending<T>(this SLDataGateway.API.Types.Querying.IQuery<T> query, Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<T, string> exposer, bool naturalSort)
+            where T :  class { }
     }
     [System.Serializable]
     public class SdmBulkCrudException<T> : Skyline.DataMiner.SDM.SdmException

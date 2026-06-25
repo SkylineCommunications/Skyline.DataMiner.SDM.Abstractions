@@ -1,4 +1,5 @@
-﻿namespace Skyline.DataMiner.SDM.Middleware
+﻿#if !NETFRAMEWORK
+namespace Skyline.DataMiner.SDM.Middleware
 {
 	using System;
 	using System.Collections.Generic;
@@ -459,3 +460,4 @@
 		}
 	}
 }
+#endif

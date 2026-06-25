@@ -1,17 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.3.11505.172 d18.3
+VisualStudioVersion = 18.3.11505.172
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SDM.Abstractions", "SDM.Abstractions\SDM.Abstractions.csproj", "{E128C94E-6D70-2BF5-11C3-982A76BC7C95}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SDM.AbstractionsTests", "SDM.AbstractionsTests\SDM.AbstractionsTests.csproj", "{CBF34F94-31F4-2B7A-A844-7209B31D454A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SDM.Abstractions.Tests", "SDM.Abstractions.Tests\SDM.Abstractions.Tests.csproj", "{CBF34F94-31F4-2B7A-A844-7209B31D454A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{191E581A-092D-46E4-970E-3D26FEBF2B91}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
 		CONTRIBUTING.md = CONTRIBUTING.md
 		Directory.Build.props = Directory.Build.props
+		Directory.Build.props.user = Directory.Build.props.user
+		Directory.Packages.props = Directory.Packages.props
 		LICENSE.txt = LICENSE.txt
 		README.md = README.md
 	EndProjectSection
@@ -35,6 +37,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ISSUE_TEMPLATE", "ISSUE_TEM
 		.github\ISSUE_TEMPLATE\feature_request.md = .github\ISSUE_TEMPLATE\feature_request.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SDM.Abstractions.Install", "SDM.Abstractions.Install\SDM.Abstractions.Install.csproj", "{CD07DF6B-5AE9-46BD-8D3B-B5275CA69C5A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +53,10 @@ Global
 		{CBF34F94-31F4-2B7A-A844-7209B31D454A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CBF34F94-31F4-2B7A-A844-7209B31D454A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CBF34F94-31F4-2B7A-A844-7209B31D454A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD07DF6B-5AE9-46BD-8D3B-B5275CA69C5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD07DF6B-5AE9-46BD-8D3B-B5275CA69C5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD07DF6B-5AE9-46BD-8D3B-B5275CA69C5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD07DF6B-5AE9-46BD-8D3B-B5275CA69C5A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

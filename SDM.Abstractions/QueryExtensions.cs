@@ -20,6 +20,7 @@
 		/// <param name="exposer">The field exposer to order by.</param>
 		/// <returns>A new query with the specified ordering applied.</returns>
 		public static IQuery<T> OrderBy<T>(this IQuery<T> query, FieldExposer exposer)
+			where T : class
 		{
 			return query.WithOrder(SLDataGateway.API.Querying.OrderBy.Default.SingleConcat(
 				OrderByElement.Default
@@ -36,6 +37,7 @@
 		/// <param name="naturalSort">Indicates whether to use natural sorting.</param>
 		/// <returns>A new query with the specified ordering applied.</returns>
 		public static IQuery<T> OrderBy<T>(this IQuery<T> query, Exposer<T, string> exposer, bool naturalSort)
+			where T : class
 		{
 			return query.WithOrder(SLDataGateway.API.Querying.OrderBy.Default.SingleConcat(
 				OrderByElement.Default
@@ -52,6 +54,7 @@
 		/// <param name="exposer">The field exposer to order by.</param>
 		/// <returns>A new query with the specified ordering applied.</returns>
 		public static IQuery<T> OrderByDescending<T>(this IQuery<T> query, FieldExposer exposer)
+			where T : class
 		{
 			return query.WithOrder(SLDataGateway.API.Querying.OrderBy.Default.SingleConcat(
 				OrderByElement.Default
@@ -68,11 +71,12 @@
 		/// <param name="naturalSort">Indicates whether to use natural sorting.</param>
 		/// <returns>A new query with the specified ordering applied.</returns>
 		public static IQuery<T> OrderByDescending<T>(this IQuery<T> query, Exposer<T, string> exposer, bool naturalSort)
+			where T : class
 		{
 			return query.WithOrder(SLDataGateway.API.Querying.OrderBy.Default.SingleConcat(
 				OrderByElement.Default
 					.WithFieldExposer(exposer)
-					.WithSortOrder(SortOrder.Ascending)
+					.WithSortOrder(SortOrder.Descending)
 					.WithNaturalSort(naturalSort)));
 		}
 
@@ -84,6 +88,7 @@
 		/// <param name="exposer">The field exposer to order by.</param>
 		/// <returns>A new query with the additional ordering applied.</returns>
 		public static IQuery<T> ThenBy<T>(this IQuery<T> query, FieldExposer exposer)
+			where T : class
 		{
 			return query.WithOrder(query.Order.SingleConcat(
 				OrderByElement.Default
@@ -100,6 +105,7 @@
 		/// <param name="naturalSort">Indicates whether to use natural sorting.</param>
 		/// <returns>A new query with the additional ordering applied.</returns>
 		public static IQuery<T> ThenBy<T>(this IQuery<T> query, Exposer<T, string> exposer, bool naturalSort)
+			where T : class
 		{
 			return query.WithOrder(query.Order.SingleConcat(
 				OrderByElement.Default
@@ -116,6 +122,7 @@
 		/// <param name="exposer">The field exposer to order by.</param>
 		/// <returns>A new query with the additional ordering applied.</returns>
 		public static IQuery<T> ThenByDescending<T>(this IQuery<T> query, FieldExposer exposer)
+			where T : class
 		{
 			return query.WithOrder(query.Order.SingleConcat(
 				OrderByElement.Default
@@ -132,6 +139,7 @@
 		/// <param name="naturalSort">Indicates whether to use natural sorting.</param>
 		/// <returns>A new query with the additional ordering applied.</returns>
 		public static IQuery<T> ThenByDescending<T>(this IQuery<T> query, Exposer<T, string> exposer, bool naturalSort)
+			where T : class
 		{
 			return query.WithOrder(query.Order.SingleConcat(
 				OrderByElement.Default
@@ -149,6 +157,7 @@
 		/// <returns>A new query with the specified limit applied.</returns>
 		/// <exception cref="ArgumentException">Thrown if the query already contains a limit.</exception>
 		public static IQuery<T> Limit<T>(this IQuery<T> query, int limit)
+			where T : class
 		{
 			if (!query.Limit.Equals(LimitBy.Default))
 			{
