@@ -31,6 +31,7 @@ Many solutions require the ability to react to changes in repository data, such 
    - Option B: Provide a standalone subscription manager/service.
      - *Pros:* Decouples subscription logic from repositories, reusable.
      - *Cons:* More indirection, may complicate usage.
+   - Comments: Most people agreed on option A
 
 2. **Filter Specification**
    - Option A: Use `FilterElement<T>` to specify interest.
@@ -39,6 +40,7 @@ Many solutions require the ability to react to changes in repository data, such 
    - Option B: Define a dedicated subscription filter type.
      - *Pros:* Tailored to subscription needs, can evolve independently.
      - *Cons:* More code to maintain, potential duplication.
+   - Comments:
 
 3. **Notification Granularity**
    - Option A: Notify on any change (add/update/delete).
@@ -47,11 +49,13 @@ Many solutions require the ability to react to changes in repository data, such 
    - Option B: Allow filtering by change type or state transition.
      - *Pros:* Reduces noise, more targeted.
      - *Cons:* More complex to implement and configure.
+   - Comments: Skip for now
 
 4. **Change Source Abstraction**
    - Option A: Abstract over transport (SLNet, NATS, etc.) so consumers are unaware of the source.
      - *Pros:* Decouples consumers, easier to swap backends.
      - *Cons:* May limit access to source-specific features.
+   - Comments:
 
 5. **Subscription Lifetime Management**
    - Option A: Subscriptions are disposable and must be explicitly disposed.
@@ -60,28 +64,115 @@ Many solutions require the ability to react to changes in repository data, such 
    - Option B: Support both short-lived and long-lived subscriptions, possibly with auto-expiry or weak references.
      - *Pros:* Flexible, safer for long-running apps.
      - *Cons:* More complex lifecycle management.
+   - Comments: Option A preferred
 
 6. **Thread Safety**
    - Option A: Require all subscription APIs to be thread-safe.
      - *Pros:* Safe for concurrent use.
      - *Cons:* May add implementation overhead.
+   - Comments:
 
 
 7. **Extensibility**
    - Option A: Design for future notification types (e.g., batch changes, custom events, or user-defined subscription objects).
      - *Pros:* Future-proof, adaptable, empowers advanced scenarios.
      - *Cons:* May require more abstraction upfront.
+   - Comments: Skip for now
 
 8. **Custom Subscription Objects**
    - Option A: Allow users to define their own subscription types (not just filters), e.g., subscribing to specific domain events or complex object relationships.
      - *Pros:* Enables advanced, domain-specific scenarios (e.g., state transitions, child object changes).
      - *Cons:* Increases API surface and complexity.
+   - Comments: Skip for now
 
 
 ## Usage Examples
-### Option 3: User-Defined Subscription Object
+
+### Decision Point 1: Subscription API Shape
+
+#### Option A: Repository Method
 ```csharp
-// Example: Custom subscription for state transitions
+var subscription = repository.Subscribe(
+  new FilterElement<Person>(p => p.Status == Status.Active),
+  OnPersonChanged);
+
+// Or
+
+var subscription = repository.Subscribe(new FilterElement<Person>(p => p.Status == Status.Active));
+subscription.OnChange += (sender, e) => // Some code ;
+```
+
+#### Option B: Standalone Subscription Service
+```csharp
+var subscription = subscriptionService.Subscribe(
+  repository,
+  new FilterElement<Person>(p => p.Status == Status.Active),
+  OnPersonChanged);
+```
+
+### Decision Point 3: Notification Granularity
+
+#### Option A: Notify on Any Change
+```csharp
+var anyChangeSubscription = repository.Subscribe(
+  new FilterElement<Person>(p => true),
+  OnPersonChanged);
+```
+
+#### Option B: Filter by Change Type or Transition
+```csharp
+var addDeleteSubscription = repository.Subscribe(
+  new ChangeTypeFilter(ChangeType.Added | ChangeType.Deleted),
+  OnPersonAddedOrDeleted);
+
+var statusTransitionSubscription = repository.Subscribe(
+  new StateTransitionFilter<Person, Status>(
+    oldStatus => oldStatus == Status.Active,
+    newStatus => newStatus == Status.Deprecated),
+  OnPersonStatusTransitioned);
+```
+
+### Decision Point 5: Subscription Lifetime Management
+
+#### Option A: Explicit Dispose
+```csharp
+var subscription = repository.Subscribe(
+  new FilterElement<Person>(p => p.Status == Status.Active),
+  OnPersonChanged);
+
+subscription.Dispose();
+```
+
+#### Option B: Short-Lived and Long-Lived Support
+```csharp
+var shortLivedSubscription = repository.Subscribe(
+  new FilterElement<Person>(p => p.Status == Status.Active),
+  OnPersonChanged,
+  new SubscriptionOptions { ExpiresAfter = TimeSpan.FromMinutes(10) });
+
+var longLivedSubscription = repository.Subscribe(
+  new FilterElement<Person>(p => p.Status == Status.Active),
+  OnPersonChanged,
+  new SubscriptionOptions { IsLongLived = true });
+```
+
+### Decision Point 7: Extensibility
+
+#### Option A: Future Notification Types
+```csharp
+var batchSubscription = repository.Subscribe(
+  new BatchChangeFilter<Person>(minimumBatchSize: 10),
+  OnPeopleBatchChanged);
+
+var customEventSubscription = repository.Subscribe(
+  new CustomEventFilter<Person>("PersonMerged"),
+  OnPersonMerged);
+```
+
+### Decision Point 8: Custom Subscription Objects
+
+#### Option A: User-Defined Subscription Type
+```csharp
 public class StateTransitionSubscription : ISubscription<Person>
 {
   public Status From { get; }
@@ -101,14 +192,12 @@ public class StateTransitionSubscription : ISubscription<Person>
   }
 }
 
-// Usage:
 var stateTransitionSubscription = repository.Subscribe(
   new StateTransitionSubscription(Status.Active, Status.Deprecated, (person, oldStatus, newStatus) =>
   {
-    // Custom logic for when a person transitions from Active to Deprecated
+    // Custom logic for when a person transitions from Active to Deprecated.
   }));
 
-// Example: Custom subscription for when a node is added to a job
 public class NodeAddedToJobSubscription : ISubscription<Job>
 {
   public Action<Job, Node> Callback { get; }
@@ -120,53 +209,18 @@ public class NodeAddedToJobSubscription : ISubscription<Job>
 
   public bool ShouldNotify(Job job, Node addedNode)
   {
-    // Custom logic to determine if notification should be sent
+    // Custom logic to determine if notification should be sent.
     return true;
   }
 }
 
-// Usage:
 var nodeAddedSubscription = repository.Subscribe(
   new NodeAddedToJobSubscription((job, node) =>
   {
-    // Custom logic for when a node is added to a job
+    // Custom logic for when a node is added to a job.
   }));
 ```
 
-### Option 1: Repository-Based Subscription (Interface Method)
-```csharp
-// Directly on the repository via a new interface
-var subscription = repository.Subscribe(
-  new FilterElement<Person>(p => p.Status == Status.Active),
-  OnPersonChanged);
-```
-
-### Option 2: Central Subscription Service
-```csharp
-// Using a standalone subscription manager/service
-var subscription = subscriptionService.Subscribe(
-  repository,
-  new FilterElement<Person>(p => p.Status == Status.Active),
-  OnPersonChanged);
-```
-
-// Both approaches return a disposable subscription object:
-subscription.Dispose();
-
-// Additional example: Filtering by change type
-```csharp
-// Only interested in added or deleted persons
-var addDeleteSubscription = repository.Subscribe(
-  new ChangeTypeFilter(ChangeType.Added | ChangeType.Deleted),
-  OnPersonAddedOrDeleted);
-```
-
-// Example: Subscribing to a property change
-```csharp
-var nameChangeSubscription = repository.Subscribe(
-  new PropertyChangedFilter<Person>(nameof(Person.Name)),
-  OnPersonNameChanged);
-```
 
 ## Discussion Points
 - Should the API support user-defined subscription objects for advanced scenarios?
