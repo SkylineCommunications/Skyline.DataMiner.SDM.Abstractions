@@ -27,6 +27,29 @@
 		}
 
 		/// <summary>
+		/// Creates a filter that checks if the exposed field equals the specified value.
+		/// </summary>
+		/// <typeparam name="TFilter">The type of the filter.</typeparam>
+		/// <typeparam name="TField">The type of the field being compared. Must be an Enum.</typeparam>
+		/// <param name="exposer">The exposer that identifies the field to filter on.</param>
+		/// <param name="value">The value to compare against.</param>
+		/// <returns>A <see cref="ManagedFilter{TFilter, TField}"/> configured for equality comparison.</returns>
+		public static ManagedFilter<TFilter, TField?> Equal<TFilter, TField>(this Exposer<TFilter, TField?> exposer, TField value)
+			where TField : struct, IEquatable<TField>
+			where TFilter : class
+		{
+			return new ManagedFilter<TFilter, TField?>(
+				exposer,
+				Comparer.Equals,
+				value,
+				(obj) =>
+				{
+					var field = exposer.internalFunc(obj);
+					return field.HasValue && field.GetValueOrDefault().Equals(value);
+				});
+		}
+
+		/// <summary>
 		/// Creates a filter that checks if the exposed collection contains an element equal to the specified value.
 		/// </summary>
 		/// <typeparam name="TFilter">The type of the filter. Must be a reference type.</typeparam>
@@ -71,6 +94,29 @@
 			where TFilter : class
 		{
 			return exposer.UncheckedNotEqual(value);
+		}
+
+		/// <summary>
+		/// Creates a filter that checks if the exposed field does not equal the specified value.
+		/// </summary>
+		/// <typeparam name="TFilter">The type of the filter.</typeparam>
+		/// <typeparam name="TField">The type of the field being compared. Must be an Enum.</typeparam>
+		/// <param name="exposer">The exposer that identifies the field to filter on.</param>
+		/// <param name="value">The value to compare against.</param>
+		/// <returns>A <see cref="ManagedFilter{TFilter, TField}"/> configured for inequality comparison.</returns>
+		public static ManagedFilter<TFilter, TField?> NotEqual<TFilter, TField>(this Exposer<TFilter, TField?> exposer, TField value)
+			where TField : struct, IEquatable<TField>
+			where TFilter : class
+		{
+			return new ManagedFilter<TFilter, TField?>(
+				exposer,
+				Comparer.NotEquals,
+				value,
+				(obj) =>
+				{
+					var field = exposer.internalFunc(obj);
+					return !(field.HasValue && field.GetValueOrDefault().Equals(value));
+				});
 		}
 
 		/// <summary>

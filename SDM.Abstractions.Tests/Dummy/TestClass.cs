@@ -21,7 +21,25 @@
 
 		public bool IsActive { get; set; }
 
+		public bool? OptionalIsActive { get; set; }
+
+		public sbyte SignedByte { get; set; }
+
+		public byte UnsignedByte { get; set; }
+
+		public short ShortNumber { get; set; }
+
+		public ushort UnsignedShort { get; set; }
+
 		public int? OptionalAge { get; set; }
+
+		public uint UnsignedInt { get; set; }
+
+		public long LongNumber { get; set; }
+
+		public ulong UnsignedLong { get; set; }
+
+		public double DoubleValue { get; set; }
 
 		public string NickName { get; set; }
 

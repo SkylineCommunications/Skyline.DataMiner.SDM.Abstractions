@@ -20,6 +20,9 @@ namespace Skyline.DataMiner.SDM
         public static Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, TField> Equal<TFilter, TField>(this Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<TFilter, TField> exposer, TField value)
             where TFilter :  class
             where TField : System.Enum { }
+        public static Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, TField?> Equal<TFilter, TField>(this Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<TFilter, TField?> exposer, TField value)
+            where TFilter :  class
+            where TField :  struct, System.IEquatable<TField> { }
         public static Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, System.Collections.Generic.IEnumerable<TField>> Equal<TFilter, TField>(this Skyline.DataMiner.SDM.Exposers.CollectionExposer<TFilter, TField> exposer, TField value)
             where TFilter :  class { }
         public static Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, System.Collections.Generic.IEnumerable<TField>> Equal<TFilter, TField>(this Skyline.DataMiner.SDM.Exposers.CollectionExposer<TFilter, TField> exposer, TField value, System.StringComparison stringComparison)
@@ -73,6 +76,9 @@ namespace Skyline.DataMiner.SDM
         public static Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, TField> NotEqual<TFilter, TField>(this Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<TFilter, TField> exposer, TField value)
             where TFilter :  class
             where TField : System.Enum { }
+        public static Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, TField?> NotEqual<TFilter, TField>(this Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<TFilter, TField?> exposer, TField value)
+            where TFilter :  class
+            where TField :  struct, System.IEquatable<TField> { }
         public static Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, System.Collections.Generic.IEnumerable<TField>> NotEqual<TFilter, TField>(this Skyline.DataMiner.SDM.Exposers.CollectionExposer<TFilter, TField> exposer, TField value)
             where TFilter :  class { }
         public static Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, System.Collections.Generic.IEnumerable<TField>> NotEqual<TFilter, TField>(this Skyline.DataMiner.SDM.Exposers.CollectionExposer<TFilter, TField> exposer, TField value, System.StringComparison stringComparison)

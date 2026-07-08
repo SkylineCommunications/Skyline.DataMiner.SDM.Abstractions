@@ -40,7 +40,24 @@
 
 		public FilterElement<T> BuildFilter<T>(FieldExposer exposer, Comparer comparer, object value, FieldTypeShape shape)
 		{
-			return new ScalarShapeHandler().BuildFilter<T>(exposer, comparer, value, FieldTypeShape.Analyze(shape.ElementType));
+			var filterType = typeof(ManagedFilter<,>).MakeGenericType(typeof(T), shape.OriginalType);
+			var createMethod = filterType.GetMethod(
+				"Create",
+				System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static,
+				null,
+				new[]
+				{
+					exposer.GetType(),
+					typeof(Comparer),
+					shape.ElementType,
+				},
+				null);
+			if (createMethod is null)
+			{
+				throw new InvalidOperationException($"Create method not found on {filterType}");
+			}
+
+			return (FilterElement<T>)createMethod.Invoke(null, new object[] { exposer, comparer, value });
 		}
 	}
 }
