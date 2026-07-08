@@ -84,6 +84,76 @@ namespace SDM.AbstractionsTests.Exposers
 		}
 
 		[TestMethod]
+		public void NullableBoolFilter_HasValue()
+		{
+			// Arrange
+			var data = DummyData.GetDummyData();
+			var filter = TestClassExposers.OptionalIsActive.HasValue();
+
+			// Act
+			var linqResult = data.Where(t => t.OptionalIsActive.HasValue).ToArray();
+			var filterResult = filter.ToQuery().ExecuteInMemory(data).ToArray();
+
+			// Assert
+			linqResult.Should().Equal(filterResult);
+			filterResult.Should().NotBeNull();
+			filterResult.Should().AllSatisfy(t => t.OptionalIsActive.Should().NotBeNull());
+		}
+
+		[TestMethod]
+		public void NullableBoolFilter_HasNoValue()
+		{
+			// Arrange
+			var data = DummyData.GetDummyData();
+			var filter = TestClassExposers.OptionalIsActive.HasNoValue();
+
+			// Act
+			var linqResult = data.Where(t => !t.OptionalIsActive.HasValue).ToArray();
+			var filterResult = filter.ToQuery().ExecuteInMemory(data).ToArray();
+
+			// Assert
+			linqResult.Should().Equal(filterResult);
+			filterResult.Should().NotBeNull();
+			filterResult.Should().AllSatisfy(t => t.OptionalIsActive.Should().BeNull());
+		}
+
+		[TestMethod]
+		[DataRow(35)]
+		public void NullableIntFilter_Equal(int age)
+		{
+			// Arrange
+			var data = DummyData.GetDummyData();
+			var filter = TestClassExposers.OptionalAge.Equal(age);
+
+			// Act
+			var linqResult = data.Where(t => t.OptionalAge == age).ToArray();
+			var filterResult = filter.ToQuery().ExecuteInMemory(data).ToArray();
+
+			// Assert
+			linqResult.Should().Equal(filterResult);
+			filterResult.Should().NotBeNull();
+			filterResult.Should().AllSatisfy(t => t.OptionalAge.Should().Be(age));
+		}
+
+		[TestMethod]
+		[DataRow(25)]
+		public void NullableIntFilter_NotEqual(int age)
+		{
+			// Arrange
+			var data = DummyData.GetDummyData();
+			var filter = TestClassExposers.OptionalAge.NotEqual(age);
+
+			// Act
+			var linqResult = data.Where(t => t.OptionalAge != age).ToArray();
+			var filterResult = filter.ToQuery().ExecuteInMemory(data).ToArray();
+
+			// Assert
+			linqResult.Should().Equal(filterResult);
+			filterResult.Should().NotBeNull();
+			filterResult.Should().AllSatisfy(t => t.OptionalAge.Should().NotBe(age));
+		}
+
+		[TestMethod]
 		public void NullableIntFilter_LessThan()
 		{
 			// Arrange

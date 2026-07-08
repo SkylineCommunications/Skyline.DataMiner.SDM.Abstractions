@@ -17,7 +17,16 @@
 		public static readonly Exposer<TestClass, decimal> Score = new Exposer<TestClass, decimal>((obj) => obj.Score, "Score");
 		public static readonly Exposer<TestClass, float> Rating = new Exposer<TestClass, float>((obj) => obj.Rating, "Rating");
 		public static readonly Exposer<TestClass, bool> IsActive = new Exposer<TestClass, bool>((obj) => obj.IsActive, "IsActive");
+		public static readonly Exposer<TestClass, bool?> OptionalIsActive = new Exposer<TestClass, bool?>((obj) => obj.OptionalIsActive, "OptionalIsActive");
+		public static readonly Exposer<TestClass, sbyte> SignedByte = new Exposer<TestClass, sbyte>((obj) => obj.SignedByte, "SignedByte");
+		public static readonly Exposer<TestClass, byte> UnsignedByte = new Exposer<TestClass, byte>((obj) => obj.UnsignedByte, "UnsignedByte");
+		public static readonly Exposer<TestClass, short> ShortNumber = new Exposer<TestClass, short>((obj) => obj.ShortNumber, "ShortNumber");
+		public static readonly Exposer<TestClass, ushort> UnsignedShort = new Exposer<TestClass, ushort>((obj) => obj.UnsignedShort, "UnsignedShort");
 		public static readonly Exposer<TestClass, int?> OptionalAge = new Exposer<TestClass, int?>((obj) => obj.OptionalAge, "OptionalAge");
+		public static readonly Exposer<TestClass, uint> UnsignedInt = new Exposer<TestClass, uint>((obj) => obj.UnsignedInt, "UnsignedInt");
+		public static readonly Exposer<TestClass, long> LongNumber = new Exposer<TestClass, long>((obj) => obj.LongNumber, "LongNumber");
+		public static readonly Exposer<TestClass, ulong> UnsignedLong = new Exposer<TestClass, ulong>((obj) => obj.UnsignedLong, "UnsignedLong");
+		public static readonly Exposer<TestClass, double> DoubleValue = new Exposer<TestClass, double>((obj) => obj.DoubleValue, "DoubleValue");
 		public static readonly Exposer<TestClass, string> NickName = new Exposer<TestClass, string>((obj) => obj.NickName, "NickName");
 		public static readonly Exposer<TestClass, Status> Status = new Exposer<TestClass, Status>((obj) => obj.Status, "Status");
 		public static readonly CollectionExposer<TestClass, string> Tags = new CollectionExposer<TestClass, string>((obj) => obj.Tags, "Tags");
