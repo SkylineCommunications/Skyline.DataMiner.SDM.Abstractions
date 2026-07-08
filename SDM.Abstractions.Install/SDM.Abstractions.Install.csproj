@@ -19,11 +19,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Reference Include="System.ServiceProcess" />
+		<Reference Include="System.ServiceProcess" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="CatalogInformation\Images\" />
-	  <Folder Include="SetupContent\DevPack\" />
+		<Folder Include="CatalogInformation\Images\" />
+		<Folder Include="SetupContent\DevPack\" />
 	</ItemGroup>
 </Project>
