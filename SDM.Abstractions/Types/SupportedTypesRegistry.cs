@@ -52,6 +52,12 @@
 					return new EnumFieldConverter(type);
 				}
 
+				if (type.IsGenericType &&
+					type.GetGenericTypeDefinition() == typeof(SdmObjectReference<>))
+				{
+					return new SdmObjectReferenceFieldConverter(type.GenericTypeArguments[0]);
+				}
+
 				return null;
 			}
 		}

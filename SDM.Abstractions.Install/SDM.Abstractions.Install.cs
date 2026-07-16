@@ -44,7 +44,7 @@ internal class Script
 			var registration = moduleHelper.ModuleSettings.Read(ModuleSettingsExposers.ModuleId.Equal(moduleId));
 			if (registration is null || !registration.Any())
 			{
-				// Stnadalone deployment, no need to set the version in the registry
+				// Standalone deployment, no need to set the version in the registry
 				return;
 			}
 

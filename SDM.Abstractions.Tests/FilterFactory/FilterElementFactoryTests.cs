@@ -233,6 +233,25 @@ namespace SDM.AbstractionsTests.FilterFactory
 		}
 
 		[TestMethod]
+		public void Create_SdmObjectReferenceCollectionFilter_ReturnsMatchingResults_SdmObjectReference()
+		{
+			AssertCollectionFilter(TestClassExposers.SubClasses.Reference, Comparer.Contains, new SdmObjectReference<TestClass>("1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d"), t => t.SubClasses.Any(x => x.Reference == "1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d"));
+		}
+
+		[TestMethod]
+		public void Create_SdmObjectReferenceCollectionFilter_ReturnsMatchingResults_String()
+		{
+			AssertCollectionFilter(TestClassExposers.SubClasses.Reference, Comparer.Contains, "1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d", t => t.SubClasses.Any(x => x.Reference == "1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d"));
+		}
+
+		[TestMethod]
+		public void Create_SdmObjectReferenceCollectionFilter_ReturnsMatchingResults_SdmObject()
+		{
+			var TestClass = new TestClass { Identifier = "7a8b9c0d-1e2f-3a4b-5c6d-7e8f9a0b1c2d" };
+			AssertCollectionFilter(TestClassExposers.SubClasses.Reference, Comparer.Contains, TestClass, t => t.SubClasses.Any(x => x.Reference == TestClass.Identifier));
+		}
+
+		[TestMethod]
 		public void Create_StringCollectionFilter_NotContains_ReturnsMatchingResults()
 		{
 			AssertCollectionFilter(TestClassExposers.Tags, Comparer.NotContains, "tag1", t => !t.Tags.Contains("tag1"));
