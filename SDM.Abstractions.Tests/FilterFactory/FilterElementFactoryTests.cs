@@ -247,8 +247,8 @@ namespace SDM.AbstractionsTests.FilterFactory
 		[TestMethod]
 		public void Create_SdmObjectReferenceCollectionFilter_ReturnsMatchingResults_SdmObject()
 		{
-			var TestClass = new TestClass { Identifier = "7a8b9c0d-1e2f-3a4b-5c6d-7e8f9a0b1c2d" };
-			AssertCollectionFilter(TestClassExposers.SubClasses.Reference, Comparer.Contains, TestClass, t => t.SubClasses.Any(x => x.Reference == TestClass.Identifier));
+			var testClass = new TestClass { Identifier = "7a8b9c0d-1e2f-3a4b-5c6d-7e8f9a0b1c2d" };
+			AssertCollectionFilter(TestClassExposers.SubClasses.Reference, Comparer.Contains, testClass, t => t.SubClasses.Any(x => x.Reference == testClass.Identifier));
 		}
 
 		[TestMethod]
