@@ -9,13 +9,19 @@
 
 		public SdmObjectReferenceFieldConverter(Type fieldType)
 		{
-			_convertMethod = typeof(SdmObjectReference<>).MakeGenericType(fieldType).GetMethod("Convert", BindingFlags.Public | BindingFlags.Static);
-			if (_convertMethod is null)
+			if (fieldType is null)
 			{
-				throw new InvalidOperationException($"Type SdmObjectReference<{fieldType.FullName}> does not have a static Convert method.");
+				throw new ArgumentNullException(nameof(fieldType));
 			}
 
-			FieldType = fieldType ?? throw new ArgumentNullException(nameof(fieldType));
+			var referenceType = typeof(SdmObjectReference<>).MakeGenericType(fieldType);
+			_convertMethod = referenceType.GetMethod("Convert", BindingFlags.Public | BindingFlags.Static);
+			if (_convertMethod is null)
+			{
+				throw new InvalidOperationException($"Type {referenceType.FullName} does not have a static Convert method.");
+			}
+
+			FieldType = referenceType;
 		}
 
 		public Type FieldType { get; }
