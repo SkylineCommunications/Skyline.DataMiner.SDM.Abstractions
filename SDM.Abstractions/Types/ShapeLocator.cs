@@ -11,7 +11,6 @@
 		{
 			new CollectionShapeHandler(),
 			new NullableShapeHandler(),
-			new SdmObjectReferenceShapeHandler(),
 			new StringShapeHandler(),
 			new ScalarShapeHandler(),
 		};
