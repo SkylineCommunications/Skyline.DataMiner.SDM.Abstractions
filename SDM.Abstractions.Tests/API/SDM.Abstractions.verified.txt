@@ -337,6 +337,13 @@ namespace Skyline.DataMiner.SDM
         public override int GetHashCode() { }
         public override string ToString() { }
     }
+    public static class TypeFilterExtensions
+    {
+        public static Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, TField> Equal<TFilter, TField>(this Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<TFilter, TField> exposer, TField value)
+            where TField : System.Type { }
+        public static Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, TField> NotEqual<TFilter, TField>(this Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<TFilter, TField> exposer, TField value)
+            where TField : System.Type { }
+    }
 }
 namespace Skyline.DataMiner.SDM.Exposers
 {

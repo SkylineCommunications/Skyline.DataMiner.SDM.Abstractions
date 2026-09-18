@@ -43,6 +43,8 @@
 
 		public string NickName { get; set; }
 
+		public Type Type { get; set; }
+
 		public Status Status { get; set; }
 
 		public List<string> Tags { get; set; }
