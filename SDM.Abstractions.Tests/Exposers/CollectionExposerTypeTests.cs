@@ -80,6 +80,25 @@
 		}
 
 		[TestMethod]
+		public void TypeFilter_Contains()
+		{
+			// Arrange
+			var data = new[]
+			{
+				new TestClass { Name = "StringAndInteger", Types = new[] { typeof(string), typeof(int) } },
+				new TestClass { Name = "Object", Types = new[] { typeof(object) } },
+			};
+			var filter = TestClassExposers.Types.Contains(typeof(string));
+
+			// Act
+			var result = filter.ToQuery().ExecuteInMemory(data).ToArray();
+
+			// Assert
+			result.Should().ContainSingle();
+			result.Single().Name.Should().Be("StringAndInteger");
+		}
+
+		[TestMethod]
 		public void DomInstanceFieldFilter_NotContains()
 		{
 			// Arrange

@@ -24,6 +24,57 @@ namespace SDM.AbstractionsTests.FilterFactory
 		}
 
 		[TestMethod]
+		public void Create_TypeFilter_ReturnsMatchingResults()
+		{
+			var data = GetTypeData();
+			var filter = FilterElementFactory.Create<TestClass>(TestClassExposers.Type, Comparer.Equals, typeof(string));
+
+			var result = filter.ToQuery().ExecuteInMemory(data).ToArray();
+
+			result.Should().ContainSingle();
+			result.Single().Name.Should().Be("String");
+		}
+
+		[TestMethod]
+		public void Create_TypeFilter_NotEqual_ReturnsMatchingResults()
+		{
+			var data = GetTypeData();
+			var filter = FilterElementFactory.Create<TestClass>(TestClassExposers.Type, Comparer.NotEquals, typeof(string));
+
+			var result = filter.ToQuery().ExecuteInMemory(data).ToArray();
+
+			result.Select(item => item.Name).Should().BeEquivalentTo("Integer", "Object");
+		}
+
+		[TestMethod]
+		public void Create_TypeFilter_Null_ReturnsMatchingResults()
+		{
+			var data = GetTypeData();
+			var filter = FilterElementFactory.Create<TestClass>(TestClassExposers.Type, Comparer.Equals, null);
+
+			var result = filter.ToQuery().ExecuteInMemory(data).ToArray();
+
+			result.Should().ContainSingle();
+			result.Single().Name.Should().Be("Null");
+		}
+
+		[TestMethod]
+		public void Create_TypeCollectionFilter_ReturnsMatchingResults()
+		{
+			var data = new[]
+			{
+				new TestClass { Name = "StringAndInteger", Types = new[] { typeof(string), typeof(int) } },
+				new TestClass { Name = "Object", Types = new[] { typeof(object) } },
+			};
+			var filter = FilterElementFactory.Create<TestClass>(TestClassExposers.Types, Comparer.Contains, typeof(string));
+
+			var result = filter.ToQuery().ExecuteInMemory(data).ToArray();
+
+			result.Should().ContainSingle();
+			result.Single().Name.Should().Be("StringAndInteger");
+		}
+
+		[TestMethod]
 		public void Create_StringFilter_Contains_ReturnsMatchingResults()
 		{
 			AssertFilter(TestClassExposers.Name, Comparer.Contains, "lic", t => t.Name.Contains("lic"));
@@ -301,6 +352,17 @@ namespace SDM.AbstractionsTests.FilterFactory
 
 			result.Should().Equal(data.Where(predicate));
 			result.Should().NotBeNull();
+		}
+
+		private static TestClass[] GetTypeData()
+		{
+			return new[]
+			{
+				new TestClass { Name = "String", Type = typeof(string) },
+				new TestClass { Name = "Integer", Type = typeof(int) },
+				new TestClass { Name = "Object", Type = typeof(object) },
+				new TestClass { Name = "Null", Type = null },
+			};
 		}
 	}
 }

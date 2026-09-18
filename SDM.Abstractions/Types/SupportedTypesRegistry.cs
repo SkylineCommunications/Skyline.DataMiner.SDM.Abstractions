@@ -30,6 +30,7 @@
 			[typeof(DateTime)] = new DateTimeFieldConverter(),
 			[typeof(TimeSpan)] = new TimeSpanFieldConverter(),
 			[typeof(Guid)] = new GuidFieldConverter(),
+			[typeof(Type)] = new TypeFieldConverter(),
 		};
 
 		private SupportedTypesRegistry()

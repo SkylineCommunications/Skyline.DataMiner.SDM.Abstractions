@@ -28,9 +28,11 @@
 		public static readonly Exposer<TestClass, ulong> UnsignedLong = new Exposer<TestClass, ulong>((obj) => obj.UnsignedLong, "UnsignedLong");
 		public static readonly Exposer<TestClass, double> DoubleValue = new Exposer<TestClass, double>((obj) => obj.DoubleValue, "DoubleValue");
 		public static readonly Exposer<TestClass, string> NickName = new Exposer<TestClass, string>((obj) => obj.NickName, "NickName");
+		public static readonly Exposer<TestClass, Type> Type = new Exposer<TestClass, Type>((obj) => obj.Type, "Type");
 		public static readonly Exposer<TestClass, Status> Status = new Exposer<TestClass, Status>((obj) => obj.Status, "Status");
 		public static readonly CollectionExposer<TestClass, string> Tags = new CollectionExposer<TestClass, string>((obj) => obj.Tags, "Tags");
 		public static readonly CollectionExposer<TestClass, Status> Statuses = new CollectionExposer<TestClass, Status>((obj) => obj.Statuses, "Statuses");
+		public static readonly CollectionExposer<TestClass, Type> Types = new CollectionExposer<TestClass, Type>((obj) => obj.Types, "Types");
 
 		public static class Sub
 		{

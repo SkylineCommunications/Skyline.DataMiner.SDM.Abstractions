@@ -43,11 +43,15 @@
 
 		public string NickName { get; set; }
 
+		public Type Type { get; set; }
+
 		public Status Status { get; set; }
 
 		public List<string> Tags { get; set; }
 
 		public ICollection<Status> Statuses { get; set; }
+
+		public ICollection<Type> Types { get; set; }
 
 		public SubClass Sub { get; set; }
 
