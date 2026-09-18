@@ -51,6 +51,8 @@
 
 		public ICollection<Status> Statuses { get; set; }
 
+		public ICollection<Type> Types { get; set; }
+
 		public SubClass Sub { get; set; }
 
 		public ICollection<SubClass> SubClasses { get; set; }

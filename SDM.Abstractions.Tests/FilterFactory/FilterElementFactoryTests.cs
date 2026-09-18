@@ -59,6 +59,22 @@ namespace SDM.AbstractionsTests.FilterFactory
 		}
 
 		[TestMethod]
+		public void Create_TypeCollectionFilter_ReturnsMatchingResults()
+		{
+			var data = new[]
+			{
+				new TestClass { Name = "StringAndInteger", Types = new[] { typeof(string), typeof(int) } },
+				new TestClass { Name = "Object", Types = new[] { typeof(object) } },
+			};
+			var filter = FilterElementFactory.Create<TestClass>(TestClassExposers.Types, Comparer.Contains, typeof(string));
+
+			var result = filter.ToQuery().ExecuteInMemory(data).ToArray();
+
+			result.Should().ContainSingle();
+			result.Single().Name.Should().Be("StringAndInteger");
+		}
+
+		[TestMethod]
 		public void Create_StringFilter_Contains_ReturnsMatchingResults()
 		{
 			AssertFilter(TestClassExposers.Name, Comparer.Contains, "lic", t => t.Name.Contains("lic"));

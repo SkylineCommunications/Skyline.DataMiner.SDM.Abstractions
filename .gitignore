@@ -20,3 +20,5 @@ MigrationBackup
 *.user
 
 **/SetupContent/DevPack/*.dll
+
+**/*.received.txt
