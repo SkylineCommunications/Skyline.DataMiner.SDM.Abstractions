@@ -22,6 +22,7 @@
 		/// <returns>A <see cref="ManagedFilter{TFilter, TField}"/> configured for equality comparison.</returns>
 		public static ManagedFilter<TFilter, TField> Equal<TFilter, TField>(this Exposer<TFilter, TField> exposer, TField value)
 			where TField : Type
+			where TFilter : class
 		{
 			return exposer.UncheckedEqual(value);
 		}
@@ -38,6 +39,7 @@
 		/// <returns>A <see cref="ManagedFilter{TFilter, TField}"/> configured for inequality comparison.</returns>
 		public static ManagedFilter<TFilter, TField> NotEqual<TFilter, TField>(this Exposer<TFilter, TField> exposer, TField value)
 			where TField : Type
+			where TFilter : class
 		{
 			return exposer.UncheckedNotEqual(value);
 		}
