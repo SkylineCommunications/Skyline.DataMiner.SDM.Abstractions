@@ -3,6 +3,16 @@
 ## Status
 **Draft** - Under Discussion
 
+## Direction from Latest Discussion
+
+The current preferences are:
+
+- Slight preference for representing field selection as `IPartialQuery<T>` rather than introducing a separately constructed field-selection object.
+- Slight preference for returning `PartialObject<T>`, with typed accessors for scalar and collection fields.
+- Slight preference for exposing regular and paged partial reads through separate capability interfaces, using `ReadPartial` and `ReadPagedPartial`.
+
+These are preferences, not final API decisions. The alternatives below are retained as context.
+
 ## Summary
 This proposal adds the ability to read only selected properties from objects instead of loading entire objects, reducing data transfer and improving performance when only a subset of fields is needed.
 
@@ -72,7 +82,7 @@ var partialQuery = query.WithFields(
 ```csharp
 PartialObject<Person> result = ...;
 string name = result.GetValue(PersonExposers.Name);
-int age = result.GetValue(PersonExposers.Age);
+IEnumerable<string> tags = result.GetValues(PersonExposers.Tags);
 ```
 
 **Option B: Dynamic projection**
@@ -179,12 +189,13 @@ FieldSelection.For<Person>()
 ```csharp
 public class PartialObject<T> where T : class
 {
-    // Type-safe value retrieval
-    public TField GetValue<TField>(Exposer<T, TField> exposer);
-    public bool TryGetValue<TField>(Exposer<T, TField> exposer, out TField value);
-    
-    // Check if field was selected
-    public bool HasField<TField>(Exposer<T, TField> exposer);
+    public F GetValue<F>(FieldExposer<T, F> exposer);
+    public IEnumerable<F> GetValues<F>(FieldExposer<T, IEnumerable<F>> collectionExposer);
+    public bool TryGetValue<F>(FieldExposer<T, F> exposer, out F value);
+    public bool TryGetValues<F>(
+        FieldExposer<T, IEnumerable<F>> collectionExposer,
+        out IEnumerable<F> values);
+    public bool Contains<F>(FieldExposer<T, F> exposer);
 }
 ```
 
@@ -209,14 +220,14 @@ public interface IPartialReadableRepository<T> : IReadableRepository<T> where T 
 public interface IPartialQuery<T>
 {
     IQuery<T> BaseQuery { get; }
-    IReadOnlyList<IExposer> SelectedFields { get; }
+    IReadOnlyList<FieldExposer> SelectedFields { get; }
 }
 
 public static class PartialQueryExtensions
 {
     public static IPartialQuery<T> WithFields<T>(
         this IQuery<T> query,
-        params IExposer[] selectedFields)
+        params FieldExposer[] selectedFields)
     {
         return new PartialQuery<T>(query, selectedFields);
     }
@@ -226,121 +237,89 @@ public interface IPartialReadableRepository<T> : IReadableRepository<T> where T 
 {
     IEnumerable<PartialObject<T>> ReadPartial(IPartialQuery<T> query);
 }
+
+public interface IPartialPageableRepository<T> : IPageableRepository<T> where T : class
+{
+    IEnumerable<IPagedResult<PartialObject<T>>> ReadPagedPartial(IPartialQuery<T> query);
+    IEnumerable<IPagedResult<PartialObject<T>>> ReadPagedPartial(IPartialQuery<T> query, int pageSize);
+}
 ```
 - Pro: Keeps `IQuery<T>` unchanged while supporting fluent query composition
 - Pro: Reuses exposers end-to-end and aligns with `WithFilter` style usage
 - Con: Introduces extra wrapper types/interfaces
 - Con: Requires explicit support in repository and middleware layers
+- Current preference: Slightly preferred over a separately constructed field-selection object.
 
 ### Repository Integration Options
 
+The current preference is to keep the regular and paged partial-read capabilities in separate interfaces. The following illustrates the direction; exact inheritance and overloads remain open.
+
 ```csharp
-// Option A: Add overloads on IReadableRepository
-public interface IReadableRepository<T> where T : class
+public interface IPartialReadableRepository<T> : IReadableRepository<T> where T : class
 {
-    IEnumerable<T> Read(FilterElement<T> filter);
-    IEnumerable<T> Read(IQuery<T> query);
-    
-    // New overloads for partial reads
-    IEnumerable<PartialObject<T>> Read(FilterElement<T> filter, FieldSelection<T> fields);
-    IEnumerable<PartialObject<T>> Read(IQuery<T> query, FieldSelection<T> fields);
+    IEnumerable<PartialObject<T>> ReadPartial(IPartialQuery<T> query);
 }
 ```
 
 ```csharp
-// Option A2: Capability interface to avoid breaking existing implementations
-public interface IPartialReadableRepository<T> : IReadableRepository<T> where T : class
+public interface IPartialPageableRepository<T> : IPageableRepository<T> where T : class
 {
-    IEnumerable<PartialObject<T>> ReadPartial(FilterElement<T> filter, FieldSelection<T> fields);
-    IEnumerable<PartialObject<T>> ReadPartial(IQuery<T> query, FieldSelection<T> fields);
+    IEnumerable<IPagedResult<PartialObject<T>>> ReadPagedPartial(IPartialQuery<T> query);
+    IEnumerable<IPagedResult<PartialObject<T>>> ReadPagedPartial(IPartialQuery<T> query, int pageSize);
 }
 ```
+
+The separate capability interfaces avoid adding partial-read members to existing repository interfaces. Whether the paged interface should also inherit `IPartialReadableRepository<T>` remains to be decided.
 
 ### Usage Example
 
 ```csharp
-// Candidate A: Exposer selection
-var fields = FieldSelection.For<Person>()
-    .Add(PersonExposers.Name)
-    .Add(PersonExposers.Age)
-    .Add(PersonExposers.Status);
-
 // Apply filter as usual
 var filter = PersonExposers.Status.Equal(Status.Active)
     .AND(PersonExposers.Age.GreaterThan(18));
 
-// Read partial objects
-var results = repository.Read(filter, fields);
-
-foreach (var person in results)
-{
-    // Access selected fields
-    var name = person.GetValue(PersonExposers.Name);
-    var age = person.GetValue(PersonExposers.Age);
-    var status = person.GetValue(PersonExposers.Status);
-    
-    // Trying to access non-selected field throws exception
-    // var email = person.GetValue(PersonExposers.Email); // InvalidOperationException
-}
-
-// Or with query
-var query = PersonExposers.Status.Equal(Status.Active)
-    .ToQuery()
+var query = filter.ToQuery()
     .OrderBy(PersonExposers.Name)
     .Limit(100);
 
-var results = repository.Read(query, fields);
-
-// Candidate B: Lambda projection to DTO
-var projected = partialRepository.ReadPartial(
-    query,
-    p => new PersonListItemDto
-    {
-        Name = p.Name,
-        Age = p.Age,
-        Status = p.Status,
-    });
-
-// Candidate C / Option C: IPartialQuery + WithFields
 var partialQuery = query.WithFields(
     PersonExposers.Name,
     PersonExposers.Age,
     PersonExposers.Status);
 
-var partialResults = partialRepository.ReadPartial(partialQuery);
+var results = partialRepository.ReadPartial(partialQuery);
+foreach (var person in results)
+{
+    var name = person.GetValue(PersonExposers.Name);
+    var age = person.GetValue(PersonExposers.Age);
+    var status = person.GetValue(PersonExposers.Status);
+
+    if (person.TryGetValues(PersonExposers.Tags, out var tags))
+    {
+        // The collection field was selected; tags may still be null.
+    }
+
+    bool hasEmail = person.Contains(PersonExposers.Email);
+}
+
+var pages = partialPageableRepository.ReadPagedPartial(partialQuery, pageSize: 100);
 ```
 
 ## Discussion Points
 
-1. **Field Selection Syntax**: Which approach feels most "C#-like" or "DataMiner-like"?
-   - Exposer-based (type-safe, consistent with DOM API)
-    - Lambda projection (very natural for end users, difficult to build. This could be included in the Linq package)
-    - Fluent query extension (`WithFields(...)`)
+1. **Field Selection Syntax**: The current slight preference is an `IPartialQuery<T>` created through `WithFields(...)`; the alternatives are a separate field-selection object and lambda projection.
 
-1. **Return Type**: Should we return `PartialObject<T>` or something else?
-   - Pro: Clear distinction from full objects, prevents accidental property access
-   - Con: Additional API surface, different programming model
-    - Alternative: Project directly to DTO using lambda for a more idiomatic consumer experience
+1. **Return Type**: The current slight preference is `PartialObject<T>` rather than projecting directly to a DTO.
 
-1. **API Integration**: How should partial reads be exposed?
-    - New overloads on IReadableRepository (clean for consumers, but breaking for implementers)
-    - New capability interface such as IPartialReadableRepository (non-breaking for existing implementers)
-    - IPartialQuery wrapper (keeps IQuery untouched, adds dedicated partial-query type)
-   - Extension methods with wrapper types (flexible but more complex)
-   - Builder pattern (different execution model)
+1. **API Integration**: The current slight preference is for separate interfaces for regular and paged partial reads, with `ReadPartial` and `ReadPagedPartial` method names.
 
-1. **Error Handling**: What happens when accessing non-selected fields?
-   - Throw exception (fail-fast, explicit)
-   - Return default value (silent, could hide bugs)
-   - Return Option<T> or nullable (explicit optionality)
+1. **Accessor Semantics**: Confirm how `GetValue`/`GetValues` behave when a field was not selected. `TryGetValue`/`TryGetValues` and `Contains` provide ways to test selection without retrieving the value. A selected field whose value is null must remain distinguishable from a field that was not selected.
 
 1. **Middleware Support**: How should `IReadableMiddleware<T>` handle partial reads?
    - New OnRead overload with FieldSelection parameter?
    - Middleware sees PartialObject instead of T?
 
-1. **Collection Fields**: Should we support selecting collection exposers?
-   - `PersonExposers.Tags` (collection of strings)
-   - Could be expensive, might defeat purpose of partial reads
+1. **Collection Fields**: The proposed `GetValues`/`TryGetValues` methods support collection exposers such as `PersonExposers.Tags`. Their retrieval and performance semantics still need to be specified.
 
 1. **Projection Limits**: If lambda projection is supported, which expression patterns are guaranteed?
     - Simple member projections only?
@@ -354,12 +333,10 @@ var partialResults = partialRepository.ReadPartial(partialQuery);
 
 ## Open Questions
 
-1. Should `PartialObject<T>` be convertible to `T` if all fields are selected?
 1. Should we support selecting nested properties (e.g., `Person.Address.City`)?
-1. What's the behavior for fields that are null vs fields that weren't selected?
-1. Should FieldSelection be immutable (functional style) or mutable (builder style)?
+1. Should `IPartialPageableRepository<T>` also inherit `IPartialReadableRepository<T>`?
+1. Should `IPartialQuery<T>` support construction from a filter directly, or should filters be converted to `IQuery<T>`?
 1. How to handle versioning if additional Exposer metadata is needed?
-1. If lambda projection is chosen, should unsupported expressions fail at compile-time (analyzers) or runtime?
 
 ## References
 
@@ -367,3 +344,7 @@ var partialResults = partialRepository.ReadPartial(partialQuery);
 - DomInstance SelectedFields implementation (other system)
 - [C# Select Projection](https://learn.microsoft.com/en-us/dotnet/api/system.linq.enumerable.select)
 - Entity Framework Select patterns
+
+## Conclusion
+
+The latest discussion establishes a direction, not a finalized API: prefer `IPartialQuery<T>` for carrying the query and selected fields, `PartialObject<T>` for results (including typed scalar and collection accessors), and two distinct repository capabilities for `ReadPartial` and `ReadPagedPartial`. Detailed signatures and edge-case behavior remain open.
