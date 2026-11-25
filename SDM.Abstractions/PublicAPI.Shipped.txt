@@ -1,0 +1,285 @@
+﻿#nullable enable
+~override Skyline.DataMiner.SDM.Exposers.ManagedCollectionFilter<TFilter, TField>.Equals(object obj) -> bool
+~override Skyline.DataMiner.SDM.Exposers.ManagedCollectionFilter<TFilter, TField>.GetObjectData(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) -> void
+~override Skyline.DataMiner.SDM.Exposers.ManagedCollectionFilter<TFilter, TField>.getValue() -> object
+~override Skyline.DataMiner.SDM.Exposers.ManagedCollectionFilter<TFilter, TField>.getValueString() -> string
+~override Skyline.DataMiner.SDM.Exposers.ManagedCollectionFilter<TFilter, TField>.invert() -> Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilterIdentifier
+~override Skyline.DataMiner.SDM.Exposers.ManagedCollectionFilter<TFilter, TField>.ToString() -> string
+~override Skyline.DataMiner.SDM.SdmObject<T>.Equals(object obj) -> bool
+~override Skyline.DataMiner.SDM.SdmObject<T>.ToString() -> string
+~override Skyline.DataMiner.SDM.SdmObjectReference<T>.Equals(object obj) -> bool
+~override Skyline.DataMiner.SDM.SdmObjectReference<T>.ToString() -> string
+~Skyline.DataMiner.SDM.ExposerCollection<T>
+~Skyline.DataMiner.SDM.ExposerCollection<T>.Add<TField>(Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<T, TField> exposer) -> bool
+~Skyline.DataMiner.SDM.ExposerCollection<T>.Contains(Skyline.DataMiner.Net.Messages.SLDataGateway.FieldExposer exposer) -> bool
+~Skyline.DataMiner.SDM.ExposerCollection<T>.Contains<TField>(Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<T, TField> exposer) -> bool
+~Skyline.DataMiner.SDM.ExposerCollection<T>.GetEnumerator() -> System.Collections.Generic.IEnumerator<Skyline.DataMiner.Net.Messages.SLDataGateway.FieldExposer>
+~Skyline.DataMiner.SDM.Exposers.CollectionExposer<TFilter, TField>
+~Skyline.DataMiner.SDM.Exposers.CollectionExposer<TFilter, TField>.CollectionExposer(Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<TFilter, System.Collections.Generic.IEnumerable<TField>> exposer) -> void
+~Skyline.DataMiner.SDM.Exposers.CollectionExposer<TFilter, TField>.CollectionExposer(System.Func<TFilter, System.Collections.Generic.IEnumerable<TField>> accessFunc, string name) -> void
+~Skyline.DataMiner.SDM.Exposers.CollectionExposer<TFilter, TField>.ElementType.get -> System.Type
+~Skyline.DataMiner.SDM.Exposers.ManagedCollectionFilter<TFilter, TField>
+~Skyline.DataMiner.SDM.Exposers.ManagedCollectionFilter<TFilter, TField>.Equals(Skyline.DataMiner.SDM.Exposers.ManagedCollectionFilter<TFilter, TField> other) -> bool
+~Skyline.DataMiner.SDM.Exposers.ManagedCollectionFilter<TFilter, TField>.ManagedCollectionFilter(Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<TFilter, System.Collections.Generic.IEnumerable<TField>> exposer, Skyline.DataMiner.Net.Messages.SLDataGateway.Comparer comp, TField value) -> void
+~Skyline.DataMiner.SDM.Exposers.ManagedCollectionFilter<TFilter, TField>.ManagedCollectionFilter(Skyline.DataMiner.SDM.Exposers.CollectionExposer<TFilter, TField> exposer, Skyline.DataMiner.Net.Messages.SLDataGateway.Comparer comp, TField value) -> void
+~Skyline.DataMiner.SDM.Exposers.SerializableCollectionExposer<TFilter, TField>
+~Skyline.DataMiner.SDM.Exposers.SerializableCollectionExposer<TFilter, TField>.Exposer.get -> Skyline.DataMiner.SDM.Exposers.CollectionExposer<TFilter, TField>
+~Skyline.DataMiner.SDM.Exposers.SerializableCollectionExposer<TFilter, TField>.Exposer.set -> void
+~Skyline.DataMiner.SDM.Exposers.SerializableCollectionExposer<TFilter, TField>.SerializableCollectionExposer(Skyline.DataMiner.SDM.Exposers.CollectionExposer<TFilter, TField> exposer) -> void
+~Skyline.DataMiner.SDM.Exposers.SerializableCollectionExposer<TFilter, TField>.SerializableCollectionExposer(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) -> void
+~Skyline.DataMiner.SDM.IBulkCreatableMiddleware<T>
+~Skyline.DataMiner.SDM.IBulkCreatableMiddleware<T>.OnCreate(System.Collections.Generic.IEnumerable<T> oToCreate, System.Func<System.Collections.Generic.IEnumerable<T>, System.Collections.Generic.IReadOnlyCollection<T>> next) -> System.Collections.Generic.IReadOnlyCollection<T>
+~Skyline.DataMiner.SDM.IBulkCreatableRepository<T>
+~Skyline.DataMiner.SDM.IBulkCreatableRepository<T>.Create(System.Collections.Generic.IEnumerable<T> oToCreate) -> System.Collections.Generic.IReadOnlyCollection<T>
+~Skyline.DataMiner.SDM.IBulkDeletableMiddleware<T>
+~Skyline.DataMiner.SDM.IBulkDeletableMiddleware<T>.OnDelete(System.Collections.Generic.IEnumerable<T> oToDelete, System.Action<System.Collections.Generic.IEnumerable<T>> next) -> void
+~Skyline.DataMiner.SDM.IBulkDeletableRepository<T>
+~Skyline.DataMiner.SDM.IBulkDeletableRepository<T>.Delete(System.Collections.Generic.IEnumerable<T> oToDelete) -> void
+~Skyline.DataMiner.SDM.IBulkRepository<T>
+~Skyline.DataMiner.SDM.IBulkRepository<T>.CreateOrUpdate(System.Collections.Generic.IEnumerable<T> oToCreateOrUpdate) -> System.Collections.Generic.IReadOnlyCollection<T>
+~Skyline.DataMiner.SDM.IBulkRepositoryMiddleware<T>
+~Skyline.DataMiner.SDM.IBulkRepositoryMiddleware<T>.OnCreateOrUpdate(System.Collections.Generic.IEnumerable<T> oToCreateOrUpdate, System.Func<System.Collections.Generic.IEnumerable<T>, System.Collections.Generic.IReadOnlyCollection<T>> next) -> System.Collections.Generic.IReadOnlyCollection<T>
+~Skyline.DataMiner.SDM.IBulkUpdatableMiddleware<T>
+~Skyline.DataMiner.SDM.IBulkUpdatableMiddleware<T>.OnUpdate(System.Collections.Generic.IEnumerable<T> oToUpdate, System.Func<System.Collections.Generic.IEnumerable<T>, System.Collections.Generic.IReadOnlyCollection<T>> next) -> System.Collections.Generic.IReadOnlyCollection<T>
+~Skyline.DataMiner.SDM.IBulkUpdatableRepository<T>
+~Skyline.DataMiner.SDM.IBulkUpdatableRepository<T>.Update(System.Collections.Generic.IEnumerable<T> oToUpdate) -> System.Collections.Generic.IReadOnlyCollection<T>
+~Skyline.DataMiner.SDM.ICountableMiddleware<T>
+~Skyline.DataMiner.SDM.ICountableMiddleware<T>.OnCount(Skyline.DataMiner.Net.Messages.SLDataGateway.FilterElement<T> filter, System.Func<Skyline.DataMiner.Net.Messages.SLDataGateway.FilterElement<T>, long> next) -> long
+~Skyline.DataMiner.SDM.ICountableMiddleware<T>.OnCount(SLDataGateway.API.Types.Querying.IQuery<T> query, System.Func<SLDataGateway.API.Types.Querying.IQuery<T>, long> next) -> long
+~Skyline.DataMiner.SDM.ICountableRepository<T>
+~Skyline.DataMiner.SDM.ICountableRepository<T>.Count(Skyline.DataMiner.Net.Messages.SLDataGateway.FilterElement<T> filter) -> long
+~Skyline.DataMiner.SDM.ICountableRepository<T>.Count(SLDataGateway.API.Types.Querying.IQuery<T> query) -> long
+~Skyline.DataMiner.SDM.ICreatableMiddleware<T>
+~Skyline.DataMiner.SDM.ICreatableMiddleware<T>.OnCreate(T oToCreate, System.Func<T, T> next) -> T
+~Skyline.DataMiner.SDM.ICreatableRepository<T>
+~Skyline.DataMiner.SDM.ICreatableRepository<T>.Create(T oToCreate) -> T
+~Skyline.DataMiner.SDM.IDeletableMiddleware<T>
+~Skyline.DataMiner.SDM.IDeletableMiddleware<T>.OnDelete(T oToDelete, System.Action<T> next) -> void
+~Skyline.DataMiner.SDM.IDeletableRepository<T>
+~Skyline.DataMiner.SDM.IDeletableRepository<T>.Delete(T oToDelete) -> void
+~Skyline.DataMiner.SDM.IExposerCollection<T>
+~Skyline.DataMiner.SDM.IExposerCollection<T>.Add<TField>(Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<T, TField> exposer) -> bool
+~Skyline.DataMiner.SDM.IMiddlewareMarker<T>
+~Skyline.DataMiner.SDM.IPageableMiddleware<T>
+~Skyline.DataMiner.SDM.IPageableMiddleware<T>.OnReadPaged(Skyline.DataMiner.Net.Messages.SLDataGateway.FilterElement<T> filter, int pageSize, System.Func<Skyline.DataMiner.Net.Messages.SLDataGateway.FilterElement<T>, int, System.Collections.Generic.IEnumerable<Skyline.DataMiner.SDM.IPagedResult<T>>> next) -> System.Collections.Generic.IEnumerable<Skyline.DataMiner.SDM.IPagedResult<T>>
+~Skyline.DataMiner.SDM.IPageableMiddleware<T>.OnReadPaged(Skyline.DataMiner.Net.Messages.SLDataGateway.FilterElement<T> filter, System.Func<Skyline.DataMiner.Net.Messages.SLDataGateway.FilterElement<T>, System.Collections.Generic.IEnumerable<Skyline.DataMiner.SDM.IPagedResult<T>>> next) -> System.Collections.Generic.IEnumerable<Skyline.DataMiner.SDM.IPagedResult<T>>
+~Skyline.DataMiner.SDM.IPageableMiddleware<T>.OnReadPaged(SLDataGateway.API.Types.Querying.IQuery<T> query, int pageSize, System.Func<SLDataGateway.API.Types.Querying.IQuery<T>, int, System.Collections.Generic.IEnumerable<Skyline.DataMiner.SDM.IPagedResult<T>>> next) -> System.Collections.Generic.IEnumerable<Skyline.DataMiner.SDM.IPagedResult<T>>
+~Skyline.DataMiner.SDM.IPageableMiddleware<T>.OnReadPaged(SLDataGateway.API.Types.Querying.IQuery<T> query, System.Func<SLDataGateway.API.Types.Querying.IQuery<T>, System.Collections.Generic.IEnumerable<Skyline.DataMiner.SDM.IPagedResult<T>>> next) -> System.Collections.Generic.IEnumerable<Skyline.DataMiner.SDM.IPagedResult<T>>
+~Skyline.DataMiner.SDM.IPageableRepository<T>
+~Skyline.DataMiner.SDM.IPageableRepository<T>.ReadPaged(Skyline.DataMiner.Net.Messages.SLDataGateway.FilterElement<T> filter) -> System.Collections.Generic.IEnumerable<Skyline.DataMiner.SDM.IPagedResult<T>>
+~Skyline.DataMiner.SDM.IPageableRepository<T>.ReadPaged(Skyline.DataMiner.Net.Messages.SLDataGateway.FilterElement<T> filter, int pageSize) -> System.Collections.Generic.IEnumerable<Skyline.DataMiner.SDM.IPagedResult<T>>
+~Skyline.DataMiner.SDM.IPageableRepository<T>.ReadPaged(SLDataGateway.API.Types.Querying.IQuery<T> query) -> System.Collections.Generic.IEnumerable<Skyline.DataMiner.SDM.IPagedResult<T>>
+~Skyline.DataMiner.SDM.IPageableRepository<T>.ReadPaged(SLDataGateway.API.Types.Querying.IQuery<T> query, int pageSize) -> System.Collections.Generic.IEnumerable<Skyline.DataMiner.SDM.IPagedResult<T>>
+~Skyline.DataMiner.SDM.IPagedResult<T>
+~Skyline.DataMiner.SDM.IPartialPageableMiddleware<T>
+~Skyline.DataMiner.SDM.IPartialPageableMiddleware<T>.OnReadPartialPaged(Skyline.DataMiner.SDM.IPartialQuery<T> query, int pageSize, System.Func<Skyline.DataMiner.SDM.IPartialQuery<T>, int, System.Collections.Generic.IEnumerable<Skyline.DataMiner.SDM.IPagedResult<Skyline.DataMiner.SDM.PartialObject<T>>>> next) -> System.Collections.Generic.IEnumerable<Skyline.DataMiner.SDM.IPagedResult<Skyline.DataMiner.SDM.PartialObject<T>>>
+~Skyline.DataMiner.SDM.IPartialPageableMiddleware<T>.OnReadPartialPaged(Skyline.DataMiner.SDM.IPartialQuery<T> query, System.Func<Skyline.DataMiner.SDM.IPartialQuery<T>, System.Collections.Generic.IEnumerable<Skyline.DataMiner.SDM.IPagedResult<Skyline.DataMiner.SDM.PartialObject<T>>>> next) -> System.Collections.Generic.IEnumerable<Skyline.DataMiner.SDM.IPagedResult<Skyline.DataMiner.SDM.PartialObject<T>>>
+~Skyline.DataMiner.SDM.IPartialPageableRepository<T>
+~Skyline.DataMiner.SDM.IPartialPageableRepository<T>.ReadPartialPaged(Skyline.DataMiner.SDM.IPartialQuery<T> query) -> System.Collections.Generic.IEnumerable<Skyline.DataMiner.SDM.IPagedResult<Skyline.DataMiner.SDM.PartialObject<T>>>
+~Skyline.DataMiner.SDM.IPartialPageableRepository<T>.ReadPartialPaged(Skyline.DataMiner.SDM.IPartialQuery<T> query, int pageSize) -> System.Collections.Generic.IEnumerable<Skyline.DataMiner.SDM.IPagedResult<Skyline.DataMiner.SDM.PartialObject<T>>>
+~Skyline.DataMiner.SDM.IPartialQuery<T>
+~Skyline.DataMiner.SDM.IPartialQuery<T>.ExecuteInMemory(System.Collections.Generic.IEnumerable<T> items) -> System.Collections.Generic.IEnumerable<Skyline.DataMiner.SDM.PartialObject<T>>
+~Skyline.DataMiner.SDM.IPartialQuery<T>.Fields.get -> Skyline.DataMiner.SDM.IReadOnlyExposerCollection<T>
+~Skyline.DataMiner.SDM.IPartialQuery<T>.Query.get -> SLDataGateway.API.Types.Querying.IQuery<T>
+~Skyline.DataMiner.SDM.IPartialQuery<T>.WithFields(Skyline.DataMiner.SDM.IReadOnlyExposerCollection<T> fields) -> Skyline.DataMiner.SDM.IPartialQuery<T>
+~Skyline.DataMiner.SDM.IPartialQuery<T>.WithFilter(Skyline.DataMiner.Net.Messages.SLDataGateway.FilterElement<T> filter) -> Skyline.DataMiner.SDM.IPartialQuery<T>
+~Skyline.DataMiner.SDM.IPartialQuery<T>.WithLimit(SLDataGateway.API.Types.Querying.ILimitBy limit) -> Skyline.DataMiner.SDM.IPartialQuery<T>
+~Skyline.DataMiner.SDM.IPartialQuery<T>.WithOrder(SLDataGateway.API.Types.Querying.IOrderBy order) -> Skyline.DataMiner.SDM.IPartialQuery<T>
+~Skyline.DataMiner.SDM.IPartialQuery<T>.WithQuery(SLDataGateway.API.Types.Querying.IQuery<T> query) -> Skyline.DataMiner.SDM.IPartialQuery<T>
+~Skyline.DataMiner.SDM.IPartialReadableMiddleware<T>
+~Skyline.DataMiner.SDM.IPartialReadableMiddleware<T>.OnReadPartial(Skyline.DataMiner.SDM.IPartialQuery<T> query, System.Func<Skyline.DataMiner.SDM.IPartialQuery<T>, System.Collections.Generic.IEnumerable<Skyline.DataMiner.SDM.PartialObject<T>>> next) -> System.Collections.Generic.IEnumerable<Skyline.DataMiner.SDM.PartialObject<T>>
+~Skyline.DataMiner.SDM.IPartialReadableRepository<T>
+~Skyline.DataMiner.SDM.IPartialReadableRepository<T>.ReadPartial(Skyline.DataMiner.SDM.IPartialQuery<T> query) -> System.Collections.Generic.IEnumerable<Skyline.DataMiner.SDM.PartialObject<T>>
+~Skyline.DataMiner.SDM.IQueryableMiddleware<T>
+~Skyline.DataMiner.SDM.IQueryableMiddleware<T>.OnQuery(System.Func<System.Linq.IQueryable<T>> next) -> System.Linq.IQueryable<T>
+~Skyline.DataMiner.SDM.IQueryableRepository<T>
+~Skyline.DataMiner.SDM.IQueryableRepository<T>.Query() -> System.Linq.IQueryable<T>
+~Skyline.DataMiner.SDM.IReadableMiddleware<T>
+~Skyline.DataMiner.SDM.IReadableMiddleware<T>.OnRead(Skyline.DataMiner.Net.Messages.SLDataGateway.FilterElement<T> filter, System.Func<Skyline.DataMiner.Net.Messages.SLDataGateway.FilterElement<T>, System.Collections.Generic.IEnumerable<T>> next) -> System.Collections.Generic.IEnumerable<T>
+~Skyline.DataMiner.SDM.IReadableMiddleware<T>.OnRead(SLDataGateway.API.Types.Querying.IQuery<T> query, System.Func<SLDataGateway.API.Types.Querying.IQuery<T>, System.Collections.Generic.IEnumerable<T>> next) -> System.Collections.Generic.IEnumerable<T>
+~Skyline.DataMiner.SDM.IReadableRepository<T>
+~Skyline.DataMiner.SDM.IReadableRepository<T>.Read(Skyline.DataMiner.Net.Messages.SLDataGateway.FilterElement<T> filter) -> System.Collections.Generic.IEnumerable<T>
+~Skyline.DataMiner.SDM.IReadableRepository<T>.Read(SLDataGateway.API.Types.Querying.IQuery<T> query) -> System.Collections.Generic.IEnumerable<T>
+~Skyline.DataMiner.SDM.IReadOnlyExposerCollection<T>
+~Skyline.DataMiner.SDM.IReadOnlyExposerCollection<T>.Contains<TField>(Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<T, TField> exposer) -> bool
+~Skyline.DataMiner.SDM.IRepository<T>
+~Skyline.DataMiner.SDM.IRepositoryMarker<T>
+~Skyline.DataMiner.SDM.IRepositoryMiddleware<T>
+~Skyline.DataMiner.SDM.ISdmObject.Identifier.get -> string
+~Skyline.DataMiner.SDM.ISdmObject<T>
+~Skyline.DataMiner.SDM.IUpdatableMiddleware<T>
+~Skyline.DataMiner.SDM.IUpdatableMiddleware<T>.OnUpdate(T oToUpdate, System.Func<T, T> next) -> T
+~Skyline.DataMiner.SDM.IUpdatableRepository<T>
+~Skyline.DataMiner.SDM.IUpdatableRepository<T>.Update(T oToUpdate) -> T
+~Skyline.DataMiner.SDM.Middleware.MiddlewareRepository<TValue>
+~Skyline.DataMiner.SDM.Middleware.MiddlewareRepository<TValue>.Count(Skyline.DataMiner.Net.Messages.SLDataGateway.FilterElement<TValue> filter) -> long
+~Skyline.DataMiner.SDM.Middleware.MiddlewareRepository<TValue>.Count(SLDataGateway.API.Types.Querying.IQuery<TValue> query) -> long
+~Skyline.DataMiner.SDM.Middleware.MiddlewareRepository<TValue>.Create(System.Collections.Generic.IEnumerable<TValue> oToCreate) -> System.Collections.Generic.IReadOnlyCollection<TValue>
+~Skyline.DataMiner.SDM.Middleware.MiddlewareRepository<TValue>.Create(TValue oToCreate) -> TValue
+~Skyline.DataMiner.SDM.Middleware.MiddlewareRepository<TValue>.CreateOrUpdate(System.Collections.Generic.IEnumerable<TValue> oToCreateOrUpdate) -> System.Collections.Generic.IReadOnlyCollection<TValue>
+~Skyline.DataMiner.SDM.Middleware.MiddlewareRepository<TValue>.Delete(System.Collections.Generic.IEnumerable<TValue> oToDelete) -> void
+~Skyline.DataMiner.SDM.Middleware.MiddlewareRepository<TValue>.Delete(TValue oToDelete) -> void
+~Skyline.DataMiner.SDM.Middleware.MiddlewareRepository<TValue>.Query() -> System.Linq.IQueryable<TValue>
+~Skyline.DataMiner.SDM.Middleware.MiddlewareRepository<TValue>.Read(Skyline.DataMiner.Net.Messages.SLDataGateway.FilterElement<TValue> filter) -> System.Collections.Generic.IEnumerable<TValue>
+~Skyline.DataMiner.SDM.Middleware.MiddlewareRepository<TValue>.Read(SLDataGateway.API.Types.Querying.IQuery<TValue> query) -> System.Collections.Generic.IEnumerable<TValue>
+~Skyline.DataMiner.SDM.Middleware.MiddlewareRepository<TValue>.ReadPaged(Skyline.DataMiner.Net.Messages.SLDataGateway.FilterElement<TValue> filter) -> System.Collections.Generic.IEnumerable<Skyline.DataMiner.SDM.IPagedResult<TValue>>
+~Skyline.DataMiner.SDM.Middleware.MiddlewareRepository<TValue>.ReadPaged(Skyline.DataMiner.Net.Messages.SLDataGateway.FilterElement<TValue> filter, int pageSize) -> System.Collections.Generic.IEnumerable<Skyline.DataMiner.SDM.IPagedResult<TValue>>
+~Skyline.DataMiner.SDM.Middleware.MiddlewareRepository<TValue>.ReadPaged(SLDataGateway.API.Types.Querying.IQuery<TValue> query) -> System.Collections.Generic.IEnumerable<Skyline.DataMiner.SDM.IPagedResult<TValue>>
+~Skyline.DataMiner.SDM.Middleware.MiddlewareRepository<TValue>.ReadPaged(SLDataGateway.API.Types.Querying.IQuery<TValue> query, int pageSize) -> System.Collections.Generic.IEnumerable<Skyline.DataMiner.SDM.IPagedResult<TValue>>
+~Skyline.DataMiner.SDM.Middleware.MiddlewareRepository<TValue>.ReadPartial(Skyline.DataMiner.SDM.IPartialQuery<TValue> query) -> System.Collections.Generic.IEnumerable<Skyline.DataMiner.SDM.PartialObject<TValue>>
+~Skyline.DataMiner.SDM.Middleware.MiddlewareRepository<TValue>.ReadPartialPaged(Skyline.DataMiner.SDM.IPartialQuery<TValue> query) -> System.Collections.Generic.IEnumerable<Skyline.DataMiner.SDM.IPagedResult<Skyline.DataMiner.SDM.PartialObject<TValue>>>
+~Skyline.DataMiner.SDM.Middleware.MiddlewareRepository<TValue>.ReadPartialPaged(Skyline.DataMiner.SDM.IPartialQuery<TValue> query, int pageSize) -> System.Collections.Generic.IEnumerable<Skyline.DataMiner.SDM.IPagedResult<Skyline.DataMiner.SDM.PartialObject<TValue>>>
+~Skyline.DataMiner.SDM.Middleware.MiddlewareRepository<TValue>.Update(System.Collections.Generic.IEnumerable<TValue> oToUpdate) -> System.Collections.Generic.IReadOnlyCollection<TValue>
+~Skyline.DataMiner.SDM.Middleware.MiddlewareRepository<TValue>.Update(TValue oToUpdate) -> TValue
+~Skyline.DataMiner.SDM.PagedResult<T>
+~Skyline.DataMiner.SDM.PagedResult<T>.GetEnumerator() -> System.Collections.Generic.IEnumerator<T>
+~Skyline.DataMiner.SDM.PagedResult<T>.PagedResult(System.Collections.Generic.IEnumerable<T> items, int pageNumber, int pageSize, bool hasNext) -> void
+~Skyline.DataMiner.SDM.PagedResult<T>.this[int index].get -> T
+~Skyline.DataMiner.SDM.PartialObject<T>
+~Skyline.DataMiner.SDM.PartialObject<T>.Builder.Build() -> Skyline.DataMiner.SDM.PartialObject<T>
+~Skyline.DataMiner.SDM.PartialObject<T>.Builder.Include<TField>(Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<T, TField> exposer) -> Skyline.DataMiner.SDM.PartialObject<T>.Builder
+~Skyline.DataMiner.SDM.PartialObject<T>.GetValue<TField>(Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<T, TField> exposer) -> TField
+~Skyline.DataMiner.SDM.PartialObject<T>.GetValues<TField>(Skyline.DataMiner.SDM.Exposers.CollectionExposer<T, TField> exposer) -> System.Collections.Generic.IEnumerable<TField>
+~Skyline.DataMiner.SDM.PartialObject<T>.HasField(Skyline.DataMiner.Net.Messages.SLDataGateway.FieldExposer exposer) -> bool
+~Skyline.DataMiner.SDM.PartialObject<T>.HasField<TField>(Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<T, TField> exposer) -> bool
+~Skyline.DataMiner.SDM.PartialObject<T>.PartialObject(T object, Skyline.DataMiner.SDM.IReadOnlyExposerCollection<T> fields) -> void
+~Skyline.DataMiner.SDM.PartialObject<T>.TryGetValue<TField>(Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<T, TField> exposer, out TField value) -> bool
+~Skyline.DataMiner.SDM.PartialObject<T>.TryGetValues<TField>(Skyline.DataMiner.SDM.Exposers.CollectionExposer<T, TField> exposer, out System.Collections.Generic.IEnumerable<TField> value) -> bool
+~Skyline.DataMiner.SDM.PartialQuery<T>
+~Skyline.DataMiner.SDM.PartialQuery<T>.ExecuteInMemory(System.Collections.Generic.IEnumerable<T> items) -> System.Collections.Generic.IEnumerable<Skyline.DataMiner.SDM.PartialObject<T>>
+~Skyline.DataMiner.SDM.PartialQuery<T>.Fields.get -> Skyline.DataMiner.SDM.IReadOnlyExposerCollection<T>
+~Skyline.DataMiner.SDM.PartialQuery<T>.PartialQuery(SLDataGateway.API.Types.Querying.IQuery<T> query) -> void
+~Skyline.DataMiner.SDM.PartialQuery<T>.Query.get -> SLDataGateway.API.Types.Querying.IQuery<T>
+~Skyline.DataMiner.SDM.PartialQuery<T>.WithFields(Skyline.DataMiner.SDM.IReadOnlyExposerCollection<T> fields) -> Skyline.DataMiner.SDM.IPartialQuery<T>
+~Skyline.DataMiner.SDM.PartialQuery<T>.WithFilter(Skyline.DataMiner.Net.Messages.SLDataGateway.FilterElement<T> filter) -> Skyline.DataMiner.SDM.IPartialQuery<T>
+~Skyline.DataMiner.SDM.PartialQuery<T>.WithLimit(SLDataGateway.API.Types.Querying.ILimitBy limit) -> Skyline.DataMiner.SDM.IPartialQuery<T>
+~Skyline.DataMiner.SDM.PartialQuery<T>.WithOrder(SLDataGateway.API.Types.Querying.IOrderBy order) -> Skyline.DataMiner.SDM.IPartialQuery<T>
+~Skyline.DataMiner.SDM.PartialQuery<T>.WithQuery(SLDataGateway.API.Types.Querying.IQuery<T> query) -> Skyline.DataMiner.SDM.IPartialQuery<T>
+~Skyline.DataMiner.SDM.SdmBulkCrudException<T>
+~Skyline.DataMiner.SDM.SdmBulkCrudException<T>.Builder.AddFailed(T item, System.Exception exception) -> Skyline.DataMiner.SDM.SdmBulkCrudException<T>.Builder
+~Skyline.DataMiner.SDM.SdmBulkCrudException<T>.Builder.AddSuccessful(T item) -> Skyline.DataMiner.SDM.SdmBulkCrudException<T>.Builder
+~Skyline.DataMiner.SDM.SdmBulkCrudException<T>.Builder.Build() -> Skyline.DataMiner.SDM.SdmBulkCrudException<T>
+~Skyline.DataMiner.SDM.SdmBulkCrudException<T>.FailedCrudItem.Exception.get -> System.Exception
+~Skyline.DataMiner.SDM.SdmBulkCrudException<T>.FailedCrudItem.FailedCrudItem(T item, System.Exception ex) -> void
+~Skyline.DataMiner.SDM.SdmBulkCrudException<T>.FailedCrudItem.Item.get -> T
+~Skyline.DataMiner.SDM.SdmBulkCrudException<T>.FailedItems.get -> System.Collections.Generic.IReadOnlyCollection<Skyline.DataMiner.SDM.SdmBulkCrudException<T>.FailedCrudItem>
+~Skyline.DataMiner.SDM.SdmBulkCrudException<T>.SdmBulkCrudException(System.Collections.Generic.List<T> successful, System.Collections.Generic.List<Skyline.DataMiner.SDM.SdmBulkCrudException<T>.FailedCrudItem> failed) -> void
+~Skyline.DataMiner.SDM.SdmBulkCrudException<T>.SdmBulkCrudException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) -> void
+~Skyline.DataMiner.SDM.SdmBulkCrudException<T>.SuccessfulItems.get -> System.Collections.Generic.IReadOnlyCollection<T>
+~Skyline.DataMiner.SDM.SdmCrudException<T>
+~Skyline.DataMiner.SDM.SdmCrudException<T>.Object.get -> T
+~Skyline.DataMiner.SDM.SdmCrudException<T>.SdmCrudException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) -> void
+~Skyline.DataMiner.SDM.SdmCrudException<T>.SdmCrudException(T item) -> void
+~Skyline.DataMiner.SDM.SdmCrudException<T>.SdmCrudException(T item, string message) -> void
+~Skyline.DataMiner.SDM.SdmCrudException<T>.SdmCrudException(T item, string message, System.Exception innerException) -> void
+~Skyline.DataMiner.SDM.SdmException.SdmException(string message) -> void
+~Skyline.DataMiner.SDM.SdmException.SdmException(string message, System.Exception innerException) -> void
+~Skyline.DataMiner.SDM.SdmException.SdmException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) -> void
+~Skyline.DataMiner.SDM.SdmObject<T>
+~Skyline.DataMiner.SDM.SdmObject<T>.SdmObject(string identifier) -> void
+~Skyline.DataMiner.SDM.SdmObjectReference<T>
+~Skyline.DataMiner.SDM.SdmObjectReference<T>.Equals(Skyline.DataMiner.SDM.SdmObjectReference<T> other) -> bool
+~Skyline.DataMiner.SDM.SdmObjectReference<T>.Identifier.get -> string
+~Skyline.DataMiner.SDM.SdmObjectReference<T>.SdmObjectReference(string id) -> void
+~static readonly Skyline.DataMiner.SDM.PagedResult<T>.Empty -> Skyline.DataMiner.SDM.PagedResult<T>
+~static Skyline.DataMiner.SDM.FilterElementFactory.Create<T>(Skyline.DataMiner.Net.Messages.SLDataGateway.FieldExposer exposer, Skyline.DataMiner.Net.Messages.SLDataGateway.Comparer comparer, object value) -> Skyline.DataMiner.Net.Messages.SLDataGateway.FilterElement<T>
+~static Skyline.DataMiner.SDM.FilterExtensions.Contains<TFilter, TField>(this Skyline.DataMiner.SDM.Exposers.CollectionExposer<TFilter, TField> exposer, TField value) -> Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, System.Collections.Generic.IEnumerable<TField>>
+~static Skyline.DataMiner.SDM.FilterExtensions.Contains<TFilter, TField>(this Skyline.DataMiner.SDM.Exposers.CollectionExposer<TFilter, TField> exposer, TField value, System.StringComparison stringComparison) -> Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, System.Collections.Generic.IEnumerable<TField>>
+~static Skyline.DataMiner.SDM.FilterExtensions.Equal<TFilter, TField>(this Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<TFilter, TField?> exposer, TField value) -> Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, TField?>
+~static Skyline.DataMiner.SDM.FilterExtensions.Equal<TFilter, TField>(this Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<TFilter, TField> exposer, TField value) -> Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, TField>
+~static Skyline.DataMiner.SDM.FilterExtensions.Equal<TFilter, TField>(this Skyline.DataMiner.SDM.Exposers.CollectionExposer<TFilter, TField> exposer, TField value) -> Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, System.Collections.Generic.IEnumerable<TField>>
+~static Skyline.DataMiner.SDM.FilterExtensions.Equal<TFilter, TField>(this Skyline.DataMiner.SDM.Exposers.CollectionExposer<TFilter, TField> exposer, TField value, System.StringComparison stringComparison) -> Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, System.Collections.Generic.IEnumerable<TField>>
+~static Skyline.DataMiner.SDM.FilterExtensions.GreaterThan<TFilter, TField>(this Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<TFilter, TField?> exposer, TField value) -> Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, TField?>
+~static Skyline.DataMiner.SDM.FilterExtensions.GreaterThan<TFilter, TField>(this Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<TFilter, TField> exposer, TField value) -> Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, TField>
+~static Skyline.DataMiner.SDM.FilterExtensions.GreaterThan<TFilter, TField>(this Skyline.DataMiner.SDM.Exposers.CollectionExposer<TFilter, TField> exposer, TField value) -> Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, System.Collections.Generic.IEnumerable<TField>>
+~static Skyline.DataMiner.SDM.FilterExtensions.GreaterThanOrEqual<TFilter, TField>(this Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<TFilter, TField?> exposer, TField value) -> Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, TField?>
+~static Skyline.DataMiner.SDM.FilterExtensions.GreaterThanOrEqual<TFilter, TField>(this Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<TFilter, TField> exposer, TField value) -> Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, TField>
+~static Skyline.DataMiner.SDM.FilterExtensions.GreaterThanOrEqual<TFilter, TField>(this Skyline.DataMiner.SDM.Exposers.CollectionExposer<TFilter, TField> exposer, TField value) -> Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, System.Collections.Generic.IEnumerable<TField>>
+~static Skyline.DataMiner.SDM.FilterExtensions.HasNoValue<TFilter, TField>(this Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<TFilter, TField?> exposer) -> Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, TField?>
+~static Skyline.DataMiner.SDM.FilterExtensions.HasNoValue<TFilter>(this Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<TFilter, string> exposer) -> Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, string>
+~static Skyline.DataMiner.SDM.FilterExtensions.HasValue<TFilter, TField>(this Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<TFilter, TField?> exposer) -> Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, TField?>
+~static Skyline.DataMiner.SDM.FilterExtensions.HasValue<TFilter>(this Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<TFilter, string> exposer) -> Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, string>
+~static Skyline.DataMiner.SDM.FilterExtensions.LessThan<TFilter, TField>(this Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<TFilter, TField?> exposer, TField value) -> Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, TField?>
+~static Skyline.DataMiner.SDM.FilterExtensions.LessThan<TFilter, TField>(this Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<TFilter, TField> exposer, TField value) -> Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, TField>
+~static Skyline.DataMiner.SDM.FilterExtensions.LessThan<TFilter, TField>(this Skyline.DataMiner.SDM.Exposers.CollectionExposer<TFilter, TField> exposer, TField value) -> Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, System.Collections.Generic.IEnumerable<TField>>
+~static Skyline.DataMiner.SDM.FilterExtensions.LessThanOrEqual<TFilter, TField>(this Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<TFilter, TField?> exposer, TField value) -> Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, TField?>
+~static Skyline.DataMiner.SDM.FilterExtensions.LessThanOrEqual<TFilter, TField>(this Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<TFilter, TField> exposer, TField value) -> Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, TField>
+~static Skyline.DataMiner.SDM.FilterExtensions.LessThanOrEqual<TFilter, TField>(this Skyline.DataMiner.SDM.Exposers.CollectionExposer<TFilter, TField> exposer, TField value) -> Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, System.Collections.Generic.IEnumerable<TField>>
+~static Skyline.DataMiner.SDM.FilterExtensions.NotContains<TFilter, TField>(this Skyline.DataMiner.SDM.Exposers.CollectionExposer<TFilter, TField> exposer, TField value) -> Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, System.Collections.Generic.IEnumerable<TField>>
+~static Skyline.DataMiner.SDM.FilterExtensions.NotContains<TFilter, TField>(this Skyline.DataMiner.SDM.Exposers.CollectionExposer<TFilter, TField> exposer, TField value, System.StringComparison stringComparison) -> Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, System.Collections.Generic.IEnumerable<TField>>
+~static Skyline.DataMiner.SDM.FilterExtensions.NotEqual<TFilter, TField>(this Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<TFilter, TField?> exposer, TField value) -> Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, TField?>
+~static Skyline.DataMiner.SDM.FilterExtensions.NotEqual<TFilter, TField>(this Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<TFilter, TField> exposer, TField value) -> Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, TField>
+~static Skyline.DataMiner.SDM.FilterExtensions.NotEqual<TFilter, TField>(this Skyline.DataMiner.SDM.Exposers.CollectionExposer<TFilter, TField> exposer, TField value) -> Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, System.Collections.Generic.IEnumerable<TField>>
+~static Skyline.DataMiner.SDM.FilterExtensions.NotEqual<TFilter, TField>(this Skyline.DataMiner.SDM.Exposers.CollectionExposer<TFilter, TField> exposer, TField value, System.StringComparison stringComparison) -> Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, System.Collections.Generic.IEnumerable<TField>>
+~static Skyline.DataMiner.SDM.FilterExtensions.ToPartialQuery<T>(this Skyline.DataMiner.Net.Messages.SLDataGateway.FilterElement<T> filter) -> Skyline.DataMiner.SDM.IPartialQuery<T>
+~static Skyline.DataMiner.SDM.OrderByElementFactory.Create(Skyline.DataMiner.Net.Messages.SLDataGateway.FieldExposer exposer, SLDataGateway.API.Types.Querying.SortOrder sortOrder, bool naturalSort = false) -> SLDataGateway.API.Types.Querying.IOrderByElement
+~static Skyline.DataMiner.SDM.PagedResult<T>.Create(System.Collections.Generic.IEnumerable<T> items) -> Skyline.DataMiner.SDM.PagedResult<T>
+~static Skyline.DataMiner.SDM.PagedResult<T>.Create(System.Collections.Generic.IEnumerable<T> items, int pageSize) -> Skyline.DataMiner.SDM.PagedResult<T>
+~static Skyline.DataMiner.SDM.PagedResult<T>.Create(System.Collections.Generic.IEnumerable<T> items, int pageSize, int page) -> Skyline.DataMiner.SDM.PagedResult<T>
+~static Skyline.DataMiner.SDM.PartialObject<T>.CreateBuilder(T object) -> Skyline.DataMiner.SDM.PartialObject<T>.Builder
+~static Skyline.DataMiner.SDM.PartialQueryExtensions.Include<T, TField>(this Skyline.DataMiner.SDM.IPartialQuery<T> partial, Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<T, TField> exposer) -> Skyline.DataMiner.SDM.IPartialQuery<T>
+~static Skyline.DataMiner.SDM.PartialQueryExtensions.Limit<T>(this Skyline.DataMiner.SDM.IPartialQuery<T> partial, int limit) -> Skyline.DataMiner.SDM.IPartialQuery<T>
+~static Skyline.DataMiner.SDM.PartialQueryExtensions.OrderBy<T>(this Skyline.DataMiner.SDM.IPartialQuery<T> partial, Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<T, string> exposer, bool naturalSort) -> Skyline.DataMiner.SDM.IPartialQuery<T>
+~static Skyline.DataMiner.SDM.PartialQueryExtensions.OrderBy<T>(this Skyline.DataMiner.SDM.IPartialQuery<T> partial, Skyline.DataMiner.Net.Messages.SLDataGateway.FieldExposer exposer) -> Skyline.DataMiner.SDM.IPartialQuery<T>
+~static Skyline.DataMiner.SDM.PartialQueryExtensions.OrderByDescending<T>(this Skyline.DataMiner.SDM.IPartialQuery<T> partial, Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<T, string> exposer, bool naturalSort) -> Skyline.DataMiner.SDM.IPartialQuery<T>
+~static Skyline.DataMiner.SDM.PartialQueryExtensions.OrderByDescending<T>(this Skyline.DataMiner.SDM.IPartialQuery<T> partial, Skyline.DataMiner.Net.Messages.SLDataGateway.FieldExposer exposer) -> Skyline.DataMiner.SDM.IPartialQuery<T>
+~static Skyline.DataMiner.SDM.PartialQueryExtensions.ThenBy<T>(this Skyline.DataMiner.SDM.IPartialQuery<T> partial, Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<T, string> exposer, bool naturalSort) -> Skyline.DataMiner.SDM.IPartialQuery<T>
+~static Skyline.DataMiner.SDM.PartialQueryExtensions.ThenBy<T>(this Skyline.DataMiner.SDM.IPartialQuery<T> partial, Skyline.DataMiner.Net.Messages.SLDataGateway.FieldExposer exposer) -> Skyline.DataMiner.SDM.IPartialQuery<T>
+~static Skyline.DataMiner.SDM.PartialQueryExtensions.ThenByDescending<T>(this Skyline.DataMiner.SDM.IPartialQuery<T> partial, Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<T, string> exposer, bool naturalSort) -> Skyline.DataMiner.SDM.IPartialQuery<T>
+~static Skyline.DataMiner.SDM.PartialQueryExtensions.ThenByDescending<T>(this Skyline.DataMiner.SDM.IPartialQuery<T> partial, Skyline.DataMiner.Net.Messages.SLDataGateway.FieldExposer exposer) -> Skyline.DataMiner.SDM.IPartialQuery<T>
+~static Skyline.DataMiner.SDM.QueryExtensions.Limit<T>(this SLDataGateway.API.Types.Querying.IQuery<T> query, int limit) -> SLDataGateway.API.Types.Querying.IQuery<T>
+~static Skyline.DataMiner.SDM.QueryExtensions.OrderBy<T>(this SLDataGateway.API.Types.Querying.IQuery<T> query, Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<T, string> exposer, bool naturalSort) -> SLDataGateway.API.Types.Querying.IQuery<T>
+~static Skyline.DataMiner.SDM.QueryExtensions.OrderBy<T>(this SLDataGateway.API.Types.Querying.IQuery<T> query, Skyline.DataMiner.Net.Messages.SLDataGateway.FieldExposer exposer) -> SLDataGateway.API.Types.Querying.IQuery<T>
+~static Skyline.DataMiner.SDM.QueryExtensions.OrderByDescending<T>(this SLDataGateway.API.Types.Querying.IQuery<T> query, Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<T, string> exposer, bool naturalSort) -> SLDataGateway.API.Types.Querying.IQuery<T>
+~static Skyline.DataMiner.SDM.QueryExtensions.OrderByDescending<T>(this SLDataGateway.API.Types.Querying.IQuery<T> query, Skyline.DataMiner.Net.Messages.SLDataGateway.FieldExposer exposer) -> SLDataGateway.API.Types.Querying.IQuery<T>
+~static Skyline.DataMiner.SDM.QueryExtensions.ThenBy<T>(this SLDataGateway.API.Types.Querying.IQuery<T> query, Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<T, string> exposer, bool naturalSort) -> SLDataGateway.API.Types.Querying.IQuery<T>
+~static Skyline.DataMiner.SDM.QueryExtensions.ThenBy<T>(this SLDataGateway.API.Types.Querying.IQuery<T> query, Skyline.DataMiner.Net.Messages.SLDataGateway.FieldExposer exposer) -> SLDataGateway.API.Types.Querying.IQuery<T>
+~static Skyline.DataMiner.SDM.QueryExtensions.ThenByDescending<T>(this SLDataGateway.API.Types.Querying.IQuery<T> query, Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<T, string> exposer, bool naturalSort) -> SLDataGateway.API.Types.Querying.IQuery<T>
+~static Skyline.DataMiner.SDM.QueryExtensions.ThenByDescending<T>(this SLDataGateway.API.Types.Querying.IQuery<T> query, Skyline.DataMiner.Net.Messages.SLDataGateway.FieldExposer exposer) -> SLDataGateway.API.Types.Querying.IQuery<T>
+~static Skyline.DataMiner.SDM.QueryExtensions.ToPartial<T>(this SLDataGateway.API.Types.Querying.IQuery<T> query) -> Skyline.DataMiner.SDM.IPartialQuery<T>
+~static Skyline.DataMiner.SDM.SdmObjectReference<T>.Convert(object obj) -> Skyline.DataMiner.SDM.SdmObjectReference<T>
+~static Skyline.DataMiner.SDM.SdmObjectReference<T>.explicit operator Skyline.DataMiner.SDM.SdmObjectReference<T>(string id) -> Skyline.DataMiner.SDM.SdmObjectReference<T>
+~static Skyline.DataMiner.SDM.SdmObjectReference<T>.implicit operator Skyline.DataMiner.SDM.SdmObjectReference<T>(Skyline.DataMiner.SDM.SdmObject<T> sdmObject) -> Skyline.DataMiner.SDM.SdmObjectReference<T>
+~static Skyline.DataMiner.SDM.SdmObjectReference<T>.implicit operator string(Skyline.DataMiner.SDM.SdmObjectReference<T> id) -> string
+~static Skyline.DataMiner.SDM.SdmObjectReference<T>.operator !=(Skyline.DataMiner.SDM.SdmObjectReference<T> left, Skyline.DataMiner.SDM.SdmObjectReference<T> right) -> bool
+~static Skyline.DataMiner.SDM.SdmObjectReference<T>.operator ==(Skyline.DataMiner.SDM.SdmObjectReference<T> left, Skyline.DataMiner.SDM.SdmObjectReference<T> right) -> bool
+~static Skyline.DataMiner.SDM.TypeFilterExtensions.Equal<TFilter, TField>(this Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<TFilter, TField> exposer, TField value) -> Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, TField>
+~static Skyline.DataMiner.SDM.TypeFilterExtensions.NotEqual<TFilter, TField>(this Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<TFilter, TField> exposer, TField value) -> Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, TField>
+~virtual Skyline.DataMiner.SDM.Exposers.SerializableCollectionExposer<TFilter, TField>.GetObjectData(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) -> void
+~virtual Skyline.DataMiner.SDM.SdmObject<T>.Equals(Skyline.DataMiner.SDM.SdmObject<T> other) -> bool
+~virtual Skyline.DataMiner.SDM.SdmObject<T>.Identifier.get -> string
+~virtual Skyline.DataMiner.SDM.SdmObject<T>.Identifier.set -> void
+override Skyline.DataMiner.SDM.Exposers.ManagedCollectionFilter<TFilter, TField>.GetHashCode() -> int
+override Skyline.DataMiner.SDM.SdmObject<T>.GetHashCode() -> int
+override Skyline.DataMiner.SDM.SdmObjectReference<T>.GetHashCode() -> int
+Skyline.DataMiner.SDM.ComparerExtensions
+Skyline.DataMiner.SDM.ExposerCollection<T>.Count.get -> int
+Skyline.DataMiner.SDM.ExposerCollection<T>.ExposerCollection() -> void
+Skyline.DataMiner.SDM.Exposers.ManagedCollectionFilter<TFilter, TField>.StringComparison.get -> System.StringComparison
+Skyline.DataMiner.SDM.FilterElementFactory
+Skyline.DataMiner.SDM.FilterExtensions
+Skyline.DataMiner.SDM.IPagedResult<T>.HasNextPage.get -> bool
+Skyline.DataMiner.SDM.IPagedResult<T>.PageNumber.get -> int
+Skyline.DataMiner.SDM.ISdmObject
+Skyline.DataMiner.SDM.ObjectEventArgs<T>
+Skyline.DataMiner.SDM.ObjectEventArgs<T>.Object.get -> T
+Skyline.DataMiner.SDM.ObjectEventArgs<T>.ObjectEventArgs(T sdmObject) -> void
+Skyline.DataMiner.SDM.OrderByElementFactory
+Skyline.DataMiner.SDM.PagedResult<T>.Count.get -> int
+Skyline.DataMiner.SDM.PagedResult<T>.HasNextPage.get -> bool
+Skyline.DataMiner.SDM.PagedResult<T>.PageNumber.get -> int
+Skyline.DataMiner.SDM.PartialObject<T>.Builder
+Skyline.DataMiner.SDM.PartialObject<T>.PartialObject() -> void
+Skyline.DataMiner.SDM.PartialQueryExtensions
+Skyline.DataMiner.SDM.QueryExtensions
+Skyline.DataMiner.SDM.SdmBulkCrudException<T>.Builder
+Skyline.DataMiner.SDM.SdmBulkCrudException<T>.Builder.Builder() -> void
+Skyline.DataMiner.SDM.SdmBulkCrudException<T>.Builder.HasFailure.get -> bool
+Skyline.DataMiner.SDM.SdmBulkCrudException<T>.FailedCrudItem
+Skyline.DataMiner.SDM.SdmBulkCrudException<T>.HasFailures.get -> bool
+Skyline.DataMiner.SDM.SdmException
+Skyline.DataMiner.SDM.SdmException.SdmException() -> void
+Skyline.DataMiner.SDM.SdmObject<T>.SdmObject() -> void
+Skyline.DataMiner.SDM.SdmObjectReference<T>.SdmObjectReference() -> void
+Skyline.DataMiner.SDM.TypeFilterExtensions
+static Skyline.DataMiner.SDM.ComparerExtensions.Invert(this Skyline.DataMiner.Net.Messages.SLDataGateway.Comparer comparer) -> Skyline.DataMiner.Net.Messages.SLDataGateway.Comparer

@@ -1,5 +1,7 @@
 ﻿namespace Skyline.DataMiner.SDM
 {
+	using System;
+
 	using Skyline.DataMiner.Net.Messages.SLDataGateway;
 
 	using SLDataGateway.API.Querying;
