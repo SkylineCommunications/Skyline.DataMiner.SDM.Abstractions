@@ -11,7 +11,7 @@ The current preferences are:
 - Slight preference for returning `PartialObject<T>`, with typed accessors for scalar and collection fields.
 - Slight preference for exposing regular and paged partial reads through separate capability interfaces, using `ReadPartial` and `ReadPagedPartial`.
 
-These are preferences, not final API decisions. The alternatives below are retained as context.
+The alternatives below are retained as context.
 
 ## Summary
 This proposal adds the ability to read only selected properties from objects instead of loading entire objects, reducing data transfer and improving performance when only a subset of fields is needed.
@@ -344,7 +344,3 @@ var pages = partialPageableRepository.ReadPagedPartial(partialQuery, pageSize: 1
 - DomInstance SelectedFields implementation (other system)
 - [C# Select Projection](https://learn.microsoft.com/en-us/dotnet/api/system.linq.enumerable.select)
 - Entity Framework Select patterns
-
-## Conclusion
-
-The latest discussion establishes a direction, not a finalized API: prefer `IPartialQuery<T>` for carrying the query and selected fields, `PartialObject<T>` for results (including typed scalar and collection accessors), and two distinct repository capabilities for `ReadPartial` and `ReadPagedPartial`. Detailed signatures and edge-case behavior remain open.
