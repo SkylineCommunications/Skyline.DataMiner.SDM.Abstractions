@@ -180,6 +180,40 @@ namespace Skyline.DataMiner.SDM
         bool HasNextPage { get; }
         int PageNumber { get; }
     }
+    public interface IPartialQuery<T>
+        where T :  class
+    {
+        Skyline.DataMiner.SDM.IReadOnlyExposerCollection<T> Fields { get; }
+        SLDataGateway.API.Types.Querying.IQuery<T> Query { get; }
+        System.Collections.Generic.IEnumerable<Skyline.DataMiner.SDM.PartialObject<T>> ExecuteInMemory(System.Collections.Generic.IEnumerable<T> items);
+        Skyline.DataMiner.SDM.IPartialQuery<T> WithFields(Skyline.DataMiner.SDM.IReadOnlyExposerCollection<T> fields);
+        Skyline.DataMiner.SDM.IPartialQuery<T> WithFilter(Skyline.DataMiner.Net.Messages.SLDataGateway.FilterElement<T> filter);
+        Skyline.DataMiner.SDM.IPartialQuery<T> WithLimit(SLDataGateway.API.Types.Querying.ILimitBy limit);
+        Skyline.DataMiner.SDM.IPartialQuery<T> WithOrder(SLDataGateway.API.Types.Querying.IOrderBy order);
+        Skyline.DataMiner.SDM.IPartialQuery<T> WithQuery(SLDataGateway.API.Types.Querying.IQuery<T> query);
+    }
+    public interface IPartialReadableMiddleware<T> : Skyline.DataMiner.SDM.IMiddlewareMarker<T>
+        where T :  class
+    {
+        System.Collections.Generic.IEnumerable<Skyline.DataMiner.SDM.PartialObject<T>> OnReadPartial(Skyline.DataMiner.SDM.IPartialQuery<T> query, System.Func<Skyline.DataMiner.SDM.IPartialQuery<T>, System.Collections.Generic.IEnumerable<Skyline.DataMiner.SDM.PartialObject<T>>> next);
+    }
+    public interface IPartialReadableRepository<T> : Skyline.DataMiner.SDM.IRepositoryMarker<T>
+        where T :  class
+    {
+        System.Collections.Generic.IEnumerable<Skyline.DataMiner.SDM.PartialObject<T>> ReadPartial(Skyline.DataMiner.SDM.IPartialQuery<T> query);
+    }
+    public interface IPartialPageableMiddleware<T> : Skyline.DataMiner.SDM.IMiddlewareMarker<T>, Skyline.DataMiner.SDM.IPartialReadableMiddleware<T>
+        where T :  class
+    {
+        System.Collections.Generic.IEnumerable<Skyline.DataMiner.SDM.IPagedResult<Skyline.DataMiner.SDM.PartialObject<T>>> OnReadPartialPaged(Skyline.DataMiner.SDM.IPartialQuery<T> query, System.Func<Skyline.DataMiner.SDM.IPartialQuery<T>, System.Collections.Generic.IEnumerable<Skyline.DataMiner.SDM.IPagedResult<Skyline.DataMiner.SDM.PartialObject<T>>>> next);
+        System.Collections.Generic.IEnumerable<Skyline.DataMiner.SDM.IPagedResult<Skyline.DataMiner.SDM.PartialObject<T>>> OnReadPartialPaged(Skyline.DataMiner.SDM.IPartialQuery<T> query, int pageSize, System.Func<Skyline.DataMiner.SDM.IPartialQuery<T>, int, System.Collections.Generic.IEnumerable<Skyline.DataMiner.SDM.IPagedResult<Skyline.DataMiner.SDM.PartialObject<T>>>> next);
+    }
+    public interface IPartialPageableRepository<T> : Skyline.DataMiner.SDM.IPartialReadableRepository<T>, Skyline.DataMiner.SDM.IRepositoryMarker<T>
+        where T :  class
+    {
+        System.Collections.Generic.IEnumerable<Skyline.DataMiner.SDM.IPagedResult<Skyline.DataMiner.SDM.PartialObject<T>>> ReadPartialPaged(Skyline.DataMiner.SDM.IPartialQuery<T> query);
+        System.Collections.Generic.IEnumerable<Skyline.DataMiner.SDM.IPagedResult<Skyline.DataMiner.SDM.PartialObject<T>>> ReadPartialPaged(Skyline.DataMiner.SDM.IPartialQuery<T> query, int pageSize);
+    }
     public interface IQueryableMiddleware<T> : Skyline.DataMiner.SDM.IMiddlewareMarker<T>
         where T :  class
     {
@@ -246,6 +280,23 @@ namespace Skyline.DataMiner.SDM
         public static Skyline.DataMiner.SDM.PagedResult<T> Create(System.Collections.Generic.IEnumerable<T> items) { }
         public static Skyline.DataMiner.SDM.PagedResult<T> Create(System.Collections.Generic.IEnumerable<T> items, int pageSize) { }
         public static Skyline.DataMiner.SDM.PagedResult<T> Create(System.Collections.Generic.IEnumerable<T> items, int pageSize, int page) { }
+    }
+    public class PartialSdmObject<T>
+        where T :  class
+    {
+        public PartialSdmObject() { }
+        public TField GetValue<TField>(Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<T, TField> exposer) { }
+        public System.Collections.Generic.IEnumerable<TField> GetValues<TField>(Skyline.DataMiner.SDM.Exposers.CollectionExposer<T, TField> exposer) { }
+        public bool HasField(Skyline.DataMiner.Net.Messages.SLDataGateway.FieldExposer exposer) { }
+        public bool HasField<TField>(Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<T, TField> exposer) { }
+        public bool TryGetValue<TField>(Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<T, TField> exposer, out TField value) { }
+        public bool TryGetValues<TField>(Skyline.DataMiner.SDM.Exposers.CollectionExposer<T, TField> exposer, out System.Collections.Generic.IEnumerable<TField> value) { }
+        public static Skyline.DataMiner.SDM.PartialSdmObject<T>.Builder CreateBuilder(T @object) { }
+        public sealed class Builder
+        {
+            public Skyline.DataMiner.SDM.PartialSdmObject<T> Build() { }
+            public Skyline.DataMiner.SDM.PartialSdmObject<T>.Builder Include<TField>(Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<T, TField> exposer) { }
+        }
     }
     public static class QueryExtensions
     {
@@ -356,6 +407,26 @@ namespace Skyline.DataMiner.SDM.Exposers
         public CollectionExposer(System.Func<TFilter, System.Collections.Generic.IEnumerable<TField>> accessFunc, string name) { }
         public System.Type ElementType { get; }
     }
+    public sealed class ExposerCollection<T> : Skyline.DataMiner.SDM.Exposers.IExposerCollection<T>, Skyline.DataMiner.SDM.Exposers.IReadOnlyExposerCollection<T>, System.Collections.Generic.IEnumerable<Skyline.DataMiner.Net.Messages.SLDataGateway.FieldExposer>, System.Collections.Generic.IReadOnlyCollection<Skyline.DataMiner.Net.Messages.SLDataGateway.FieldExposer>, System.Collections.IEnumerable
+        where T :  class
+    {
+        public ExposerCollection() { }
+        public int Count { get; }
+        public bool Add<TField>(Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<T, TField> exposer) { }
+        public bool Contains(Skyline.DataMiner.Net.Messages.SLDataGateway.FieldExposer exposer) { }
+        public bool Contains<TField>(Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<T, TField> exposer) { }
+        public System.Collections.Generic.IEnumerator<Skyline.DataMiner.Net.Messages.SLDataGateway.FieldExposer> GetEnumerator() { }
+    }
+    public interface IExposerCollection<T> : Skyline.DataMiner.SDM.Exposers.IReadOnlyExposerCollection<T>, System.Collections.Generic.IEnumerable<Skyline.DataMiner.Net.Messages.SLDataGateway.FieldExposer>, System.Collections.Generic.IReadOnlyCollection<Skyline.DataMiner.Net.Messages.SLDataGateway.FieldExposer>, System.Collections.IEnumerable
+        where T :  class
+    {
+        bool Add<TField>(Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<T, TField> exposer);
+    }
+    public interface IReadOnlyExposerCollection<T> : System.Collections.Generic.IEnumerable<Skyline.DataMiner.Net.Messages.SLDataGateway.FieldExposer>, System.Collections.Generic.IReadOnlyCollection<Skyline.DataMiner.Net.Messages.SLDataGateway.FieldExposer>, System.Collections.IEnumerable
+        where T :  class
+    {
+        bool Contains<TField>(Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<T, TField> exposer);
+    }
     [System.Serializable]
     public sealed class ManagedCollectionFilter<TFilter, TField> : Skyline.DataMiner.Net.Messages.SLDataGateway.ManagedFilter<TFilter, System.Collections.Generic.IEnumerable<TField>>, Skyline.DataMiner.Net.Messages.SLDataGateway.IDynamicManagedListFilter, System.IEquatable<Skyline.DataMiner.SDM.Exposers.ManagedCollectionFilter<TFilter, TField>>, System.Runtime.Serialization.ISerializable
         where TFilter :  class
@@ -385,7 +456,7 @@ namespace Skyline.DataMiner.SDM.Exposers
 }
 namespace Skyline.DataMiner.SDM.Middleware
 {
-    public class MiddlewareRepository<TValue> : Skyline.DataMiner.SDM.IBulkCreatableRepository<TValue>, Skyline.DataMiner.SDM.IBulkDeletableRepository<TValue>, Skyline.DataMiner.SDM.IBulkRepository<TValue>, Skyline.DataMiner.SDM.IBulkUpdatableRepository<TValue>, Skyline.DataMiner.SDM.ICountableRepository<TValue>, Skyline.DataMiner.SDM.ICreatableRepository<TValue>, Skyline.DataMiner.SDM.IDeletableRepository<TValue>, Skyline.DataMiner.SDM.IPageableRepository<TValue>, Skyline.DataMiner.SDM.IQueryableRepository<TValue>, Skyline.DataMiner.SDM.IReadableRepository<TValue>, Skyline.DataMiner.SDM.IRepositoryMarker<TValue>, Skyline.DataMiner.SDM.IRepository<TValue>, Skyline.DataMiner.SDM.IUpdatableRepository<TValue>
+    public class MiddlewareRepository<TValue> : Skyline.DataMiner.SDM.IBulkCreatableRepository<TValue>, Skyline.DataMiner.SDM.IBulkDeletableRepository<TValue>, Skyline.DataMiner.SDM.IBulkRepository<TValue>, Skyline.DataMiner.SDM.IBulkUpdatableRepository<TValue>, Skyline.DataMiner.SDM.ICountableRepository<TValue>, Skyline.DataMiner.SDM.ICreatableRepository<TValue>, Skyline.DataMiner.SDM.IDeletableRepository<TValue>, Skyline.DataMiner.SDM.IPageableRepository<TValue>, Skyline.DataMiner.SDM.IPartialPageableRepository<TValue>, Skyline.DataMiner.SDM.IPartialReadableRepository<TValue>, Skyline.DataMiner.SDM.IQueryableRepository<TValue>, Skyline.DataMiner.SDM.IReadableRepository<TValue>, Skyline.DataMiner.SDM.IRepositoryMarker<TValue>, Skyline.DataMiner.SDM.IRepository<TValue>, Skyline.DataMiner.SDM.IUpdatableRepository<TValue>
         where TValue :  class
     {
         public long Count(SLDataGateway.API.Types.Querying.IQuery<TValue> query) { }
@@ -402,6 +473,9 @@ namespace Skyline.DataMiner.SDM.Middleware
         public System.Collections.Generic.IEnumerable<Skyline.DataMiner.SDM.IPagedResult<TValue>> ReadPaged(Skyline.DataMiner.Net.Messages.SLDataGateway.FilterElement<TValue> filter) { }
         public System.Collections.Generic.IEnumerable<Skyline.DataMiner.SDM.IPagedResult<TValue>> ReadPaged(SLDataGateway.API.Types.Querying.IQuery<TValue> query, int pageSize) { }
         public System.Collections.Generic.IEnumerable<Skyline.DataMiner.SDM.IPagedResult<TValue>> ReadPaged(Skyline.DataMiner.Net.Messages.SLDataGateway.FilterElement<TValue> filter, int pageSize) { }
+        public System.Collections.Generic.IEnumerable<Skyline.DataMiner.SDM.PartialObject<TValue>> ReadPartial(Skyline.DataMiner.SDM.IPartialQuery<TValue> query) { }
+        public System.Collections.Generic.IEnumerable<Skyline.DataMiner.SDM.IPagedResult<Skyline.DataMiner.SDM.PartialObject<TValue>>> ReadPartialPaged(Skyline.DataMiner.SDM.IPartialQuery<TValue> query) { }
+        public System.Collections.Generic.IEnumerable<Skyline.DataMiner.SDM.IPagedResult<Skyline.DataMiner.SDM.PartialObject<TValue>>> ReadPartialPaged(Skyline.DataMiner.SDM.IPartialQuery<TValue> query, int pageSize) { }
         public System.Collections.Generic.IReadOnlyCollection<TValue> Update(System.Collections.Generic.IEnumerable<TValue> oToUpdate) { }
         public TValue Update(TValue oToUpdate) { }
     }

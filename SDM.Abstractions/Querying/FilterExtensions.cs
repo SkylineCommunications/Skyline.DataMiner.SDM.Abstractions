@@ -6,6 +6,8 @@
 	using Skyline.DataMiner.Net.Messages.SLDataGateway;
 	using Skyline.DataMiner.SDM.Exposers;
 
+	using SLDataGateway.API.Querying;
+
 	/// <summary>
 	/// Provides extension methods for creating filters on exposers and collection exposers.
 	/// </summary>
@@ -505,6 +507,17 @@
 				Comparer.Equals,
 				null,
 				(obj) => exposer.internalFunc(obj) is null);
+		}
+		
+		/// Converts the specified filter element into a partial query.
+		/// </summary>
+		/// <typeparam name="T">The type of object the filter applies to. Must be a reference type.</typeparam>
+		/// <param name="filter">The filter element to convert.</param>
+		/// <returns>An <see cref="IPartialQuery{T}"/> representing the specified filter.</returns>
+		public static IPartialQuery<T> ToPartialQuery<T>(this FilterElement<T> filter)
+			where T : class
+		{
+			return new PartialQuery<T>(filter.ToQuery());
 		}
 	}
 }

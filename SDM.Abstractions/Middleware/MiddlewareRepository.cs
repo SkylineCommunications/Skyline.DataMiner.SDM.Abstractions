@@ -19,7 +19,7 @@ namespace Skyline.DataMiner.SDM.Middleware
 	/// requested operation and chains together registered middleware in reverse order before executing
 	/// the final repository method.
 	/// </remarks>
-	public class MiddlewareRepository<TValue> : IBulkRepository<TValue>, IQueryableRepository<TValue>
+	public class MiddlewareRepository<TValue> : IBulkRepository<TValue>, IQueryableRepository<TValue>, IPartialPageableRepository<TValue>
 		where TValue : class
 	{
 		private readonly IRepositoryMarker<TValue> _inner;
@@ -209,6 +209,57 @@ namespace Skyline.DataMiner.SDM.Middleware
 			{
 				return repository.Read(query);
 			}
+		}
+
+		/// <summary>
+		/// Reads partial entities matching the specified partial query by applying registered middleware.
+		/// </summary>
+		/// <param name="query">The partial query and fields to retrieve.</param>
+		/// <returns>An enumerable collection of partial entities that match the query.</returns>
+		/// <exception cref="NotSupportedException">Thrown when the underlying repository does not implement <see cref="IPartialReadableRepository{TValue}"/>.</exception>
+		public IEnumerable<PartialObject<TValue>> ReadPartial(IPartialQuery<TValue> query)
+		{
+			if (!(_inner is IPartialReadableRepository<TValue> repository))
+			{
+				throw new NotSupportedException($"The repository of type '{_inner.GetType().FullName}' does not support partial reading.");
+			}
+
+			if (_middleware is IPartialReadableMiddleware<TValue> middleware)
+			{
+				return middleware.OnReadPartial(query, repository.ReadPartial);
+			}
+
+			return repository.ReadPartial(query);
+		}
+
+		public IEnumerable<IPagedResult<PartialObject<TValue>>> ReadPartialPaged(IPartialQuery<TValue> query)
+		{
+			if (!(_inner is IPartialPageableRepository<TValue> repository))
+			{
+				throw new NotSupportedException($"The repository of type '{_inner.GetType().FullName}' does not support partial paged reading.");
+			}
+
+			if (_middleware is IPartialPageableMiddleware<TValue> middleware)
+			{
+				return middleware.OnReadPartialPaged(query, repository.ReadPartialPaged);
+			}
+
+			return repository.ReadPartialPaged(query);
+		}
+
+		public IEnumerable<IPagedResult<PartialObject<TValue>>> ReadPartialPaged(IPartialQuery<TValue> query, int pageSize)
+		{
+			if (!(_inner is IPartialPageableRepository<TValue> repository))
+			{
+				throw new NotSupportedException($"The repository of type '{_inner.GetType().FullName}' does not support partial paged reading.");
+			}
+
+			if (_middleware is IPartialPageableMiddleware<TValue> middleware)
+			{
+				return middleware.OnReadPartialPaged(query, pageSize, repository.ReadPartialPaged);
+			}
+
+			return repository.ReadPartialPaged(query, pageSize);
 		}
 
 		/// <summary>
