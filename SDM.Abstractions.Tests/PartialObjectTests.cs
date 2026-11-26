@@ -11,7 +11,7 @@ namespace SDM.AbstractionsTests
 	using Skyline.DataMiner.SDM.Exposers;
 
 	[TestClass]
-	public class PartialSdmObjectTests
+	public class PartialObjectTests
 	{
 		private static readonly Exposer<Example, int> Number = new Exposer<Example, int>(x => x.Number, nameof(Example.Number));
 		private static readonly Exposer<Example, int?> OptionalNumber = new Exposer<Example, int?>(x => x.OptionalNumber, nameof(Example.OptionalNumber));
@@ -25,13 +25,13 @@ namespace SDM.AbstractionsTests
 		public void SelectedFieldsReturnValuesIncludingNullAndDefault()
 		{
 			var instance = new Example { Number = 0, OptionalNumber = null, Text = null, Status = ExampleStatus.Active, Reference = new SdmObjectReference<Example>("other"), Items = new[] { "one", "two" } };
-			var partial = PartialObject<Example>.CreateBuilder(instance)
-				.Include(Number)
-				.Include(OptionalNumber)
-				.Include(Text)
-				.Include(Status)
-				.Include(Reference)
-				.Include(Items)
+			var partial = PartialObject<Example>.CreateBuilder()
+				.Include(Number, instance.Number)
+				.Include(OptionalNumber, instance.OptionalNumber)
+				.Include(Text, instance.Text)
+				.Include(Status, instance.Status)
+				.Include(Reference, instance.Reference)
+				.Include(Items, instance.Items)
 				.Build();
 
 			Assert.IsTrue(partial.HasField(Number));
@@ -54,11 +54,66 @@ namespace SDM.AbstractionsTests
 		}
 
 		[TestMethod]
+		public void BuilderPreservesNullAndEmptyCollectionValues()
+		{
+			IEnumerable<string> nullItems = null;
+			var nullCollection = PartialObject<Example>.CreateBuilder()
+				.Include(Items, nullItems)
+				.Build();
+			var emptyCollection = PartialObject<Example>.CreateBuilder()
+				.Include(Items, Array.Empty<string>())
+				.Build();
+
+			Assert.IsTrue(nullCollection.TryGetValues(Items, out var retrievedNullItems));
+			Assert.IsNull(retrievedNullItems);
+			Assert.IsTrue(emptyCollection.TryGetValues(Items, out var retrievedEmptyItems));
+			Assert.IsNotNull(retrievedEmptyItems);
+			Assert.IsFalse(retrievedEmptyItems.Any());
+		}
+
+		[TestMethod]
+		public void IncludingTheSameExposerUsesTheLastValue()
+		{
+			var partial = PartialObject<Example>.CreateBuilder()
+				.Include(Number, 1)
+				.Include(Number, 2)
+				.Build();
+
+			Assert.AreEqual(2, partial.GetValue(Number));
+		}
+
+		[TestMethod]
+		public void BuildCopiesTheSelectedValues()
+		{
+			var builder = PartialObject<Example>.CreateBuilder()
+				.Include(Number, 1);
+			var partial = builder.Build();
+
+			builder.Include(Text, "added later");
+
+			Assert.IsTrue(partial.HasField(Number));
+			Assert.IsFalse(partial.HasField(Text));
+		}
+
+		[TestMethod]
+		public void DerivedCollectionExposerIsHandledAsACollection()
+		{
+			var exposer = new DerivedItemsExposer();
+			var partial = PartialObject<Example>.CreateBuilder()
+				.Include(exposer, new List<string> { "one" })
+				.Build();
+
+			Assert.ThrowsExactly<InvalidOperationException>(() => partial.TryGetValue(exposer, out _));
+			Assert.IsTrue(partial.TryGetValues(exposer, out var values));
+			CollectionAssert.AreEqual(new[] { "one" }, values.ToArray());
+		}
+
+		[TestMethod]
 		public void NullableValueCanBePresentOrAbsentIndependentlyOfItsValue()
 		{
 			var instance = new Example { OptionalNumber = 42 };
-			var selected = PartialObject<Example>.CreateBuilder(instance)
-				.Include(OptionalNumber)
+			var selected = PartialObject<Example>.CreateBuilder()
+				.Include(OptionalNumber, instance.OptionalNumber)
 				.Build();
 			Assert.IsTrue(selected.TryGetValue(OptionalNumber, out var value));
 			Assert.AreEqual(42, value);
@@ -69,8 +124,8 @@ namespace SDM.AbstractionsTests
 		[TestMethod]
 		public void UnselectedFieldReturnsFalseAndDefault()
 		{
-			var partial = PartialObject<Example>.CreateBuilder(new Example { Number = 42, Text = "present" })
-				.Include(Text)
+			var partial = PartialObject<Example>.CreateBuilder()
+				.Include(Text, "present")
 				.Build();
 			Assert.IsFalse(partial.HasField(Number));
 			Assert.IsFalse(partial.TryGetValue(Number, out var number));
@@ -106,8 +161,8 @@ namespace SDM.AbstractionsTests
 		[TestMethod]
 		public void SelectionUsesExposerEquality()
 		{
-			var partial = PartialObject<Example>.CreateBuilder(new Example { Number = 7 })
-				.Include(Number)
+			var partial = PartialObject<Example>.CreateBuilder()
+				.Include(Number, 7)
 				.Build();
 			var anotherExposer = new Exposer<Example, int>(x => x.Number, nameof(Example.Number));
 			Assert.IsTrue(partial.HasField(Number));
@@ -120,9 +175,8 @@ namespace SDM.AbstractionsTests
 			var instance = new Example();
 			var empty = new PartialObject<Example>();
 			Assert.IsFalse(empty.HasField(Number));
-			Assert.ThrowsExactly<ArgumentNullException>(() => PartialObject<Example>.CreateBuilder(null!));
-			Assert.ThrowsExactly<ArgumentNullException>(() => PartialObject<Example>.CreateBuilder(instance).Include<int>(null!));
-			var withUnsupported = PartialObject<Example>.CreateBuilder(instance).Include(UnsupportedField).Build();
+			Assert.ThrowsExactly<ArgumentNullException>(() => PartialObject<Example>.CreateBuilder().Include<int>(null!, 0));
+			var withUnsupported = PartialObject<Example>.CreateBuilder().Include(UnsupportedField, instance.Unsupported).Build();
 			Assert.IsTrue(withUnsupported.TryGetValue(UnsupportedField, out var retrievedUnsupported));
 			Assert.IsNotNull(retrievedUnsupported);
 			var partial = new PartialObject<Example>();
@@ -135,6 +189,14 @@ namespace SDM.AbstractionsTests
 		public enum ExampleStatus { Active }
 
 		public sealed class Unsupported { }
+
+		private sealed class DerivedItemsExposer : CollectionExposer<Example, string>
+		{
+			public DerivedItemsExposer()
+				: base(x => x.Items, nameof(Example.Items))
+			{
+			}
+		}
 
 		public sealed class Example : SdmObject<Example>
 		{

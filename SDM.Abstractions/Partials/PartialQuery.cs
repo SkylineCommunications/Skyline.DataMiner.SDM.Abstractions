@@ -64,8 +64,42 @@
 
 			foreach (var item in Query.ExecuteInMemory(items))
 			{
-				yield return new PartialObject<T>(item, Fields);
+				var builder = PartialObject<T>.CreateBuilder();
+				foreach (var field in Fields)
+				{
+					AddFieldValue(builder, item, field);
+				}
+
+				yield return builder.Build();
 			}
+		}
+
+		private static void AddFieldValue(PartialObject<T>.Builder builder, T item, FieldExposer field)
+		{
+			var exposerType = field.GetType();
+			while (exposerType != null &&
+				(!exposerType.IsGenericType ||
+				 exposerType.GetGenericTypeDefinition() != typeof(Exposer<,>)))
+			{
+				exposerType = exposerType.BaseType;
+			}
+
+			if (exposerType is null)
+			{
+				throw new InvalidOperationException("The field is not a supported exposer.");
+			}
+
+			var valueType = exposerType.GetGenericArguments()[1];
+			var method = typeof(PartialQuery<T>).GetMethod(
+				nameof(AddTypedFieldValue),
+				System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic);
+			var genericMethod = method.MakeGenericMethod(valueType);
+			genericMethod.Invoke(null, new object[] { builder, item, field });
+		}
+
+		private static void AddTypedFieldValue<TField>(PartialObject<T>.Builder builder, T item, FieldExposer field)
+		{
+			builder.Include((Exposer<T, TField>)field, ((Exposer<T, TField>)field).internalFunc(item));
 		}
 	}
 }

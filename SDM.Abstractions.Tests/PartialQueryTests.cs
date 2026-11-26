@@ -95,6 +95,21 @@ namespace SDM.AbstractionsTests
 		}
 
 		[TestMethod]
+		public void ExecuteInMemory_WithNoSelectedFields_ReturnsEmptyPartialObjects()
+		{
+			var partial = new PartialQuery<TestClass>(new TRUEFilterElement<TestClass>().ToQuery());
+
+			var result = partial.ExecuteInMemory(DummyData.GetDummyData()).ToList();
+
+			result.Should().NotBeEmpty();
+			result.Should().AllSatisfy(item =>
+			{
+				item.HasField(TestClassExposers.Name).Should().BeFalse();
+				item.TryGetValue(TestClassExposers.Name, out _).Should().BeFalse();
+			});
+		}
+
+		[TestMethod]
 		public void ConstructorAndExecution_RejectNullArguments()
 		{
 			// Arrange

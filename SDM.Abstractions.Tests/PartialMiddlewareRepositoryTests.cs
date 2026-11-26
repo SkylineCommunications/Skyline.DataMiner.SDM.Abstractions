@@ -100,7 +100,9 @@ namespace SDM.AbstractionsTests
 				LastQuery = query;
 				return new[]
 				{
-					new PartialObject<ExampleObject>(new ExampleObject { Name = "Partial" }, query.Fields),
+					PartialObject<ExampleObject>.CreateBuilder()
+						.Include(ExampleObjectExposers.Name, "Partial")
+						.Build(),
 				};
 			}
 
@@ -121,7 +123,9 @@ namespace SDM.AbstractionsTests
 
 			private static IEnumerable<IPagedResult<PartialObject<ExampleObject>>> CreatePage(IPartialQuery<ExampleObject> query, int pageSize)
 			{
-				var item = new PartialObject<ExampleObject>(new ExampleObject { Name = "Partial" }, query.Fields);
+				var item = PartialObject<ExampleObject>.CreateBuilder()
+					.Include(ExampleObjectExposers.Name, "Partial")
+					.Build();
 				return new[]
 				{
 					new PagedResult<PartialObject<ExampleObject>>(new[] { item }, 0, pageSize, false),

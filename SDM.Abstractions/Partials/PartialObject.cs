@@ -1,8 +1,8 @@
-﻿namespace Skyline.DataMiner.SDM
+﻿#pragma warning disable SA1201 // Elements should appear in the correct order
+namespace Skyline.DataMiner.SDM
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Linq;
 
 	using Skyline.DataMiner.Net.Messages.SLDataGateway;
 	using Skyline.DataMiner.SDM.Exposers;
@@ -14,45 +14,28 @@
 	public class PartialObject<T>
 		where T : class
 	{
-		private readonly T _instance;
-		private readonly FieldExposer[] _fields;
+		private readonly Dictionary<FieldExposer, IFieldValue> _values;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PartialObject{T}"/> class with no selected fields.
 		/// </summary>
 		public PartialObject()
 		{
-			_fields = Array.Empty<FieldExposer>();
+			_values = new Dictionary<FieldExposer, IFieldValue>();
 		}
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="PartialObject{T}"/> class.
-		/// </summary>
-		/// <param name="object">The underlying object instance that this partial object wraps.</param>
-		/// <param name="fields">The collection of fields that were retrieved for the partial object.</param>
-		/// <exception cref="ArgumentNullException">Thrown when <paramref name="object"/> or <paramref name="fields"/> is <see langword="null"/>.</exception>
-		public PartialObject(T @object, IReadOnlyExposerCollection<T> fields)
+		private PartialObject(Dictionary<FieldExposer, IFieldValue> values)
 		{
-			_instance = @object ?? throw new ArgumentNullException(nameof(@object));
-			_fields = fields is null
-				? throw new ArgumentNullException(nameof(fields))
-				: fields.ToArray();
-		}
-
-		private PartialObject(T @object, FieldExposer[] fields)
-		{
-			_instance = @object ?? throw new ArgumentNullException(nameof(@object));
-			_fields = fields ?? throw new ArgumentNullException(nameof(fields));
+			_values = values ?? throw new ArgumentNullException(nameof(values));
 		}
 
 		/// <summary>
 		/// Creates a builder for a partial SDM object.
 		/// </summary>
-		/// <param name="object">The underlying object.</param>
 		/// <returns>A builder for adding the fields that were retrieved.</returns>
-		public static Builder CreateBuilder(T @object)
+		public static Builder CreateBuilder()
 		{
-			return new Builder(@object);
+			return new Builder();
 		}
 
 		/// <summary>
@@ -68,7 +51,7 @@
 				throw new ArgumentNullException(nameof(exposer));
 			}
 
-			return _fields.Any(field => field.Equals(exposer));
+			return _values.ContainsKey(exposer);
 		}
 
 		/// <summary>
@@ -163,13 +146,13 @@
 
 		private bool TryGetValueCore<TField>(Exposer<T, TField> exposer, out TField value)
 		{
-			if (!_fields.Any(field => field.Equals(exposer)))
+			if (!_values.TryGetValue(exposer, out var fieldValue) ||
+				!fieldValue.TryGetValue(out value))
 			{
 				value = default;
 				return false;
 			}
 
-			value = exposer.internalFunc(_instance);
 			return true;
 		}
 
@@ -192,16 +175,13 @@
 		/// </summary>
 		public sealed class Builder
 		{
-			private readonly T instance;
-			private readonly List<FieldExposer> fields = new List<FieldExposer>();
+			private readonly Dictionary<FieldExposer, IFieldValue> fields = new Dictionary<FieldExposer, IFieldValue>();
 
 			/// <summary>
 			/// Initializes a new instance of the <see cref="Builder"/> class.
 			/// </summary>
-			/// <param name="object">The underlying object.</param>
-			internal Builder(T @object)
+			internal Builder()
 			{
-				instance = @object ?? throw new ArgumentNullException(nameof(@object));
 			}
 
 			/// <summary>
@@ -209,16 +189,17 @@
 			/// </summary>
 			/// <typeparam name="TField">The field type.</typeparam>
 			/// <param name="exposer">The field exposer.</param>
+			/// <param name="value">The field's value.</param>
 			/// <returns>The current builder.</returns>
 			/// <exception cref="ArgumentNullException">The exposer is null.</exception>
-			public Builder Include<TField>(Exposer<T, TField> exposer)
+			public Builder Include<TField>(Exposer<T, TField> exposer, TField value)
 			{
 				if (exposer is null)
 				{
 					throw new ArgumentNullException(nameof(exposer));
 				}
 
-				fields.Add(exposer);
+				fields[exposer] = new FieldValue<TField>(value);
 				return this;
 			}
 
@@ -228,8 +209,44 @@
 			/// <returns>The constructed partial SDM object.</returns>
 			public PartialObject<T> Build()
 			{
-				return new PartialObject<T>(instance, fields.ToArray());
+				return new PartialObject<T>(new Dictionary<FieldExposer, IFieldValue>(fields));
+			}
+		}
+
+		private interface IFieldValue
+		{
+			bool TryGetValue<TField>(out TField value);
+		}
+
+		private sealed class FieldValue<TField> : IFieldValue
+		{
+			public FieldValue(TField value)
+			{
+				Value = value;
+			}
+
+			public TField Value { get; }
+
+			public bool TryGetValue<TRequestedField>(out TRequestedField value)
+			{
+#pragma warning disable S3060 // Intentional generic type discrimination for typed value retrieval
+				// Intentional type discrimination:
+				// values with different generic types are stored behind the common IFieldValue interface.
+				// FieldValue<TField> must verify that the requested generic type matches the stored closed generic type before returning it.
+				// Replacing this with polymorphism would require object casts, dynamic dispatch, or a more complex visitor pattern,
+				// so this check is required for type-safe retrieval.
+				if (this is FieldValue<TRequestedField> typedValue)
+				{
+					value = typedValue.Value;
+					return true;
+				}
+#pragma warning restore S3060
+
+				value = default;
+				return false;
 			}
 		}
 	}
 }
+
+#pragma warning restore SA1201 // Elements should appear in the correct order
