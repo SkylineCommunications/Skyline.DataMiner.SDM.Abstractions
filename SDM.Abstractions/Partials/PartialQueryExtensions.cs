@@ -33,12 +33,10 @@
 				throw new ArgumentNullException(nameof(exposer));
 			}
 
-			var fields = new ExposerCollection<T>(partial.Fields)
-			{
-				exposer,
-			};
+			var fields = new FieldSelection<T>(partial.Fields);
+			fields.Add(exposer);
 
-			return new PartialQuery<T>(partial.Query, fields);
+			return partial.WithFields(fields);
 		}
 
 		/// <summary>
@@ -58,7 +56,7 @@
 			}
 
 			var query = partial.Query.WithLimit(LimitBy.Default.WithLimit(limit));
-			return new PartialQuery<T>(query, partial.Fields);
+			return partial.WithQuery(query);
 		}
 
 		/// <summary>
@@ -83,7 +81,7 @@
 			}
 
 			var query = partial.Query.OrderBy(exposer);
-			return new PartialQuery<T>(query, partial.Fields);
+			return partial.WithQuery(query);
 		}
 
 		/// <summary>
@@ -109,7 +107,7 @@
 			}
 
 			var query = partial.Query.OrderBy(exposer, naturalSort);
-			return new PartialQuery<T>(query, partial.Fields);
+			return partial.WithQuery(query);
 		}
 
 		/// <summary>
@@ -134,7 +132,7 @@
 			}
 
 			var query = partial.Query.OrderByDescending(exposer);
-			return new PartialQuery<T>(query, partial.Fields);
+			return partial.WithQuery(query);
 		}
 
 		/// <summary>
@@ -160,7 +158,7 @@
 			}
 
 			var query = partial.Query.OrderByDescending(exposer, naturalSort);
-			return new PartialQuery<T>(query, partial.Fields);
+			return partial.WithQuery(query);
 		}
 
 		/// <summary>
@@ -185,7 +183,7 @@
 			}
 
 			var query = partial.Query.ThenBy(exposer);
-			return new PartialQuery<T>(query, partial.Fields);
+			return partial.WithQuery(query);
 		}
 
 		/// <summary>
@@ -211,7 +209,7 @@
 			}
 
 			var query = partial.Query.ThenBy(exposer, naturalSort);
-			return new PartialQuery<T>(query, partial.Fields);
+			return partial.WithQuery(query);
 		}
 
 		/// <summary>
@@ -236,7 +234,7 @@
 			}
 
 			var query = partial.Query.ThenByDescending(exposer);
-			return new PartialQuery<T>(query, partial.Fields);
+			return partial.WithQuery(query);
 		}
 
 		/// <summary>
@@ -262,7 +260,7 @@
 			}
 
 			var query = partial.Query.ThenByDescending(exposer, naturalSort);
-			return new PartialQuery<T>(query, partial.Fields);
+			return partial.WithQuery(query);
 		}
 	}
 }

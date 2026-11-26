@@ -49,10 +49,8 @@ namespace SDM.AbstractionsTests
 		public void WithFields_ReplacesSelectedFields_WhileOtherCompositionPreservesThem()
 		{
 			// Arrange
-			var fields = new ExposerCollection<TestClass>
-			{
-				TestClassExposers.Name,
-			};
+			var fields = new FieldSelection<TestClass>();
+			fields.Add(TestClassExposers.Name);
 			var partial = new PartialQuery<TestClass>(new TRUEFilterElement<TestClass>().ToQuery())
 				.Include(TestClassExposers.Age);
 
@@ -143,9 +141,38 @@ namespace SDM.AbstractionsTests
 
 			// Assert
 			result.Fields.Should().ContainSingle();
-			result.Fields.Should().Contain(TestClassExposers.Name);
+			result.Fields.Select(field => field.Exposer).Should().Contain(TestClassExposers.Name);
 			includeOnNull.Should().Throw<ArgumentNullException>();
 			includeNullExposer.Should().Throw<ArgumentNullException>();
+		}
+
+		[TestMethod]
+		public void Fields_ReturnsCopy_AndDoesNotMutateTheQuery()
+		{
+			// Arrange
+			var fields = new FieldSelection<TestClass>();
+			fields.Add(TestClassExposers.Name);
+			var partial = new PartialQuery<TestClass>(new TRUEFilterElement<TestClass>().ToQuery())
+				.WithFields(fields);
+
+			// Act
+			var result = partial.ExecuteInMemory(DummyData.GetDummyData()).ToList();
+			fields.Add(TestClassExposers.Age);
+			var updatedResult = partial.WithFields(fields)
+				.ExecuteInMemory(DummyData.GetDummyData())
+				.ToList();
+
+			// Assert
+			result.Should().AllSatisfy(item =>
+			{
+				item.HasField(TestClassExposers.Name).Should().BeTrue();
+				item.HasField(TestClassExposers.Age).Should().BeFalse();
+			});
+			updatedResult.Should().AllSatisfy(item =>
+			{
+				item.HasField(TestClassExposers.Name).Should().BeTrue();
+				item.HasField(TestClassExposers.Age).Should().BeTrue();
+			});
 		}
 	}
 }

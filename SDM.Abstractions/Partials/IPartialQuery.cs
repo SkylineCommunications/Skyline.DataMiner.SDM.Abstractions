@@ -21,14 +21,14 @@
 		/// <summary>
 		/// Gets the collection of fields that will be retrieved by this query.
 		/// </summary>
-		IReadOnlyExposerCollection<T> Fields { get; }
+		IReadOnlyFieldSelection<T> Fields { get; }
 
 		/// <summary>
 		/// Returns a new partial query with the specified fields.
 		/// </summary>
 		/// <param name="fields">The fields to retrieve.</param>
 		/// <returns>A new <see cref="IPartialQuery{T}"/> instance with the specified fields.</returns>
-		IPartialQuery<T> WithFields(IReadOnlyExposerCollection<T> fields);
+		IPartialQuery<T> WithFields(IReadOnlyFieldSelection<T> fields);
 
 		/// <summary>
 		/// Returns a new partial query with the specified underlying query.

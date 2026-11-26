@@ -508,7 +508,8 @@
 				null,
 				(obj) => exposer.internalFunc(obj) is null);
 		}
-		
+
+		/// <summary>
 		/// Converts the specified filter element into a partial query.
 		/// </summary>
 		/// <typeparam name="T">The type of object the filter applies to. Must be a reference type.</typeparam>

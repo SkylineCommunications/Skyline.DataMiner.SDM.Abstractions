@@ -138,27 +138,6 @@ namespace SDM.AbstractionsTests
 		}
 
 		[TestMethod]
-		public void ExposerCollectionDeduplicatesTypedExposers()
-		{
-			var fields = new ExposerCollection<Example>();
-
-			Assert.IsTrue(fields.Add(Number));
-			Assert.IsFalse(fields.Add(Number));
-			Assert.IsTrue(fields.Contains(Number));
-			Assert.AreEqual(1, fields.Count);
-			Assert.AreSame(Number, fields.First());
-		}
-
-		[TestMethod]
-		public void ExposerCollectionRejectsNullExposer()
-		{
-			var fields = new ExposerCollection<Example>();
-
-			Assert.ThrowsExactly<ArgumentNullException>(() => fields.Add<int>(null!));
-			Assert.ThrowsExactly<ArgumentNullException>(() => fields.Contains<int>(null!));
-		}
-
-		[TestMethod]
 		public void SelectionUsesExposerEquality()
 		{
 			var partial = PartialObject<Example>.CreateBuilder()
