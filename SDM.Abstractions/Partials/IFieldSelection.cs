@@ -16,5 +16,13 @@ namespace Skyline.DataMiner.SDM
 		/// <param name="exposer">The exposer to add.</param>
 		/// <returns><see langword="true"/> when the exposer was added; otherwise, <see langword="false"/>.</returns>
 		bool Add<TField>(Exposer<T, TField> exposer);
+
+		/// <summary>
+		/// Adds a dynamic list field to the selection when it is not already contained.
+		/// </summary>
+		/// <typeparam name="TField">The element type of the dynamic list.</typeparam>
+		/// <param name="exposer">The dynamic list exposer to add.</param>
+		/// <returns><see langword="true"/> when the exposer was added; otherwise, <see langword="false"/>.</returns>
+		bool Add<TField>(DynamicListExposer<T, TField> exposer);
 	}
 }

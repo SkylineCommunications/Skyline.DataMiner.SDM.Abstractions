@@ -34,7 +34,7 @@
 				throw new ArgumentNullException(nameof(fields));
 			}
 
-			_fields = new ReadOnlyFieldSelection<T>(fields);
+			_fields = new ReadOnlyFieldSelection<T>(new FieldSelection<T>(fields));
 		}
 
 		/// <inheritdoc />

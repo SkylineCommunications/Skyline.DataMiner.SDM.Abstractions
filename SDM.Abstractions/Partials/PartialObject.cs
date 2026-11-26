@@ -127,6 +127,31 @@ namespace Skyline.DataMiner.SDM
 		}
 
 		/// <summary>
+		/// Retrieves a selected dynamic list field from the underlying object.
+		/// </summary>
+		/// <typeparam name="TField">The element type of the dynamic list.</typeparam>
+		/// <param name="exposer">The dynamic list exposer used to select the field.</param>
+		/// <param name="value">The list value, or the default value when the field is not selected.</param>
+		/// <returns>True when the field was selected, including when its value is null or empty.</returns>
+		/// <exception cref="ArgumentNullException">The exposer is null.</exception>
+		public bool TryGetValues<TField>(DynamicListExposer<T, TField> exposer, out IEnumerable<TField> value)
+		{
+			if (exposer is null)
+			{
+				throw new ArgumentNullException(nameof(exposer));
+			}
+
+			if (!_values.TryGetValue(exposer, out var fieldValue) ||
+				!fieldValue.TryGetValue(out value))
+			{
+				value = default;
+				return false;
+			}
+
+			return true;
+		}
+
+		/// <summary>
 		/// Retrieves a selected collection field, throwing when the field was not retrieved.
 		/// </summary>
 		/// <typeparam name="TField">The element type of the collection.</typeparam>
@@ -135,6 +160,24 @@ namespace Skyline.DataMiner.SDM
 		/// <exception cref="ArgumentNullException">The exposer is null.</exception>
 		/// <exception cref="InvalidOperationException">The field was not retrieved.</exception>
 		public IEnumerable<TField> GetValues<TField>(CollectionExposer<T, TField> exposer)
+		{
+			if (!TryGetValues(exposer, out var value))
+			{
+				throw new InvalidOperationException("The requested field was not included in this partial object.");
+			}
+
+			return value;
+		}
+
+		/// <summary>
+		/// Retrieves a selected dynamic list field, throwing when the field was not retrieved.
+		/// </summary>
+		/// <typeparam name="TField">The element type of the dynamic list.</typeparam>
+		/// <param name="exposer">The dynamic list exposer used to select the field.</param>
+		/// <returns>The list value.</returns>
+		/// <exception cref="ArgumentNullException">The exposer is null.</exception>
+		/// <exception cref="InvalidOperationException">The field was not retrieved.</exception>
+		public IEnumerable<TField> GetValues<TField>(DynamicListExposer<T, TField> exposer)
 		{
 			if (!TryGetValues(exposer, out var value))
 			{
@@ -200,6 +243,25 @@ namespace Skyline.DataMiner.SDM
 				}
 
 				fields[exposer] = new FieldValue<TField>(value);
+				return this;
+			}
+
+			/// <summary>
+			/// Adds a dynamic list field that was retrieved.
+			/// </summary>
+			/// <typeparam name="TField">The element type of the dynamic list.</typeparam>
+			/// <param name="exposer">The dynamic list exposer.</param>
+			/// <param name="value">The list's value.</param>
+			/// <returns>The current builder.</returns>
+			/// <exception cref="ArgumentNullException">The exposer is null.</exception>
+			public Builder Include<TField>(DynamicListExposer<T, TField> exposer, IEnumerable<TField> value)
+			{
+				if (exposer is null)
+				{
+					throw new ArgumentNullException(nameof(exposer));
+				}
+
+				fields[exposer] = new FieldValue<IEnumerable<TField>>(value);
 				return this;
 			}
 

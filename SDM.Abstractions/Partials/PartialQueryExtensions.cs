@@ -40,6 +40,34 @@
 		}
 
 		/// <summary>
+		/// Includes the dynamic list field exposed by the specified <paramref name="exposer"/> in the partial query result.
+		/// </summary>
+		/// <typeparam name="T">The type being queried.</typeparam>
+		/// <typeparam name="TField">The element type of the dynamic list.</typeparam>
+		/// <param name="partial">The partial query to add the field to.</param>
+		/// <param name="exposer">The dynamic list exposer identifying the field to include.</param>
+		/// <returns>A new <see cref="IPartialQuery{T}"/> that includes the specified field.</returns>
+		/// <exception cref="ArgumentNullException"><paramref name="partial"/> or <paramref name="exposer"/> is <see langword="null"/>.</exception>
+		public static IPartialQuery<T> Include<T, TField>(this IPartialQuery<T> partial, DynamicListExposer<T, TField> exposer)
+			where T : class
+		{
+			if (partial is null)
+			{
+				throw new ArgumentNullException(nameof(partial));
+			}
+
+			if (exposer is null)
+			{
+				throw new ArgumentNullException(nameof(exposer));
+			}
+
+			var fields = new FieldSelection<T>(partial.Fields);
+			fields.Add(exposer);
+
+			return partial.WithFields(fields);
+		}
+
+		/// <summary>
 		/// Limits the number of results returned by the partial query.
 		/// </summary>
 		/// <typeparam name="T">The type being queried.</typeparam>

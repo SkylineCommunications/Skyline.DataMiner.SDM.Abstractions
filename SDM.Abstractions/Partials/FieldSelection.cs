@@ -62,6 +62,33 @@ namespace Skyline.DataMiner.SDM
 			return true;
 		}
 
+		/// <summary>
+		/// Adds a dynamic list field to the selection when it is not already contained.
+		/// </summary>
+		/// <typeparam name="TField">The element type of the dynamic list.</typeparam>
+		/// <param name="exposer">The dynamic list exposer to add.</param>
+		/// <returns><see langword="true"/> when the exposer was added; otherwise, <see langword="false"/>.</returns>
+		/// <exception cref="ArgumentNullException">The exposer is null.</exception>
+		public bool Add<TField>(DynamicListExposer<T, TField> exposer)
+		{
+			if (exposer is null)
+			{
+				throw new ArgumentNullException(nameof(exposer));
+			}
+
+			var fieldExposer = (FieldExposer)exposer;
+			foreach (var projection in projections)
+			{
+				if (projection.Exposer.Equals(fieldExposer))
+				{
+					return false;
+				}
+			}
+
+			projections.Add(new FieldProjection<T, TField>(exposer));
+			return true;
+		}
+
 		/// <inheritdoc />
 		public IEnumerator<IFieldProjection<T>> GetEnumerator()
 		{

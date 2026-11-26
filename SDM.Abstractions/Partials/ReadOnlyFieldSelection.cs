@@ -5,7 +5,7 @@ namespace Skyline.DataMiner.SDM
 	using System.Collections.Generic;
 
 	/// <summary>
-	/// Provides a read-only snapshot of a field selection.
+	/// Provides read-only access to a field selection.
 	/// </summary>
 	/// <typeparam name="T">The type being queried.</typeparam>
 	public class ReadOnlyFieldSelection<T> : IReadOnlyFieldSelection<T>

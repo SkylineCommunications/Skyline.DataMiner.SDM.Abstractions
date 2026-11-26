@@ -1,6 +1,7 @@
 namespace SDM.AbstractionsTests
 {
 	using System;
+	using System.Collections;
 	using System.Linq;
 
 	using FluentAssertions;
@@ -17,6 +18,10 @@ namespace SDM.AbstractionsTests
 	[TestClass]
 	public class PartialQueryTests
 	{
+		private static readonly DynamicListExposer<TestClass, string> DynamicTags =
+			DynamicListExposer<TestClass, string>.CreateFromListExposer(
+				new Exposer<TestClass, IEnumerable>(item => item.Tags, nameof(TestClass.Tags)));
+
 		[TestMethod]
 		public void ExecuteInMemory_AppliesFilterOrderAndLimitAndProjectsSelectedFields()
 		{
@@ -137,7 +142,9 @@ namespace SDM.AbstractionsTests
 				.Include(TestClassExposers.Name)
 				.Include(TestClassExposers.Name);
 			Action includeOnNull = () => PartialQueryExtensions.Include<TestClass, string>(null, TestClassExposers.Name);
-			Action includeNullExposer = () => PartialQueryExtensions.Include<TestClass, string>(partial, null);
+			Action includeNullExposer = () => PartialQueryExtensions.Include<TestClass, string>(
+				partial,
+				(Exposer<TestClass, string>)null);
 
 			// Assert
 			result.Fields.Should().ContainSingle();
@@ -156,8 +163,8 @@ namespace SDM.AbstractionsTests
 				.WithFields(fields);
 
 			// Act
-			var result = partial.ExecuteInMemory(DummyData.GetDummyData()).ToList();
 			fields.Add(TestClassExposers.Age);
+			var result = partial.ExecuteInMemory(DummyData.GetDummyData()).ToList();
 			var updatedResult = partial.WithFields(fields)
 				.ExecuteInMemory(DummyData.GetDummyData())
 				.ToList();
@@ -173,6 +180,43 @@ namespace SDM.AbstractionsTests
 				item.HasField(TestClassExposers.Name).Should().BeTrue();
 				item.HasField(TestClassExposers.Age).Should().BeTrue();
 			});
+		}
+
+		[TestMethod]
+		public void ExecuteInMemory_ProjectsDynamicListExposer()
+		{
+			// Arrange
+			var item = new TestClass { Tags = new System.Collections.Generic.List<string> { "one", "two" } };
+			var query = new PartialQuery<TestClass>(new TRUEFilterElement<TestClass>().ToQuery())
+				.Include(DynamicTags);
+
+			// Act
+			var result = query.ExecuteInMemory(new[] { item }).Single();
+			Action includeNullExposer = () => PartialQueryExtensions.Include<TestClass, string>(
+				query,
+				(DynamicListExposer<TestClass, string>)null);
+
+			// Assert
+			query.Fields.Should().ContainSingle();
+			result.HasField(DynamicTags).Should().BeTrue();
+			result.GetValues(DynamicTags).Should().Equal("one", "two");
+			includeNullExposer.Should().Throw<ArgumentNullException>();
+		}
+
+		[TestMethod]
+		public void ExecuteInMemory_PreservesNullDynamicListExposerValue()
+		{
+			// Arrange
+			var item = new TestClass { Tags = null };
+			var query = new PartialQuery<TestClass>(new TRUEFilterElement<TestClass>().ToQuery())
+				.Include(DynamicTags);
+
+			// Act
+			var result = query.ExecuteInMemory(new[] { item }).Single();
+
+			// Assert
+			result.TryGetValues(DynamicTags, out var values).Should().BeTrue();
+			values.Should().BeNull();
 		}
 	}
 }

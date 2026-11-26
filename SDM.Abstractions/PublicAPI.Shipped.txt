@@ -54,6 +54,7 @@
 ~Skyline.DataMiner.SDM.IDeletableRepository<T>.Delete(T oToDelete) -> void
 ~Skyline.DataMiner.SDM.IFieldSelection<T>
 ~Skyline.DataMiner.SDM.IFieldSelection<T>.Add<TField>(Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<T, TField> exposer) -> bool
+~Skyline.DataMiner.SDM.IFieldSelection<T>.Add<TField>(Skyline.DataMiner.Net.Messages.SLDataGateway.DynamicListExposer<T, TField> exposer) -> bool
 ~Skyline.DataMiner.SDM.IMiddlewareMarker<T>
 ~Skyline.DataMiner.SDM.IPageableMiddleware<T>
 ~Skyline.DataMiner.SDM.IPageableMiddleware<T>.OnReadPaged(Skyline.DataMiner.Net.Messages.SLDataGateway.FilterElement<T> filter, int pageSize, System.Func<Skyline.DataMiner.Net.Messages.SLDataGateway.FilterElement<T>, int, System.Collections.Generic.IEnumerable<Skyline.DataMiner.SDM.IPagedResult<T>>> next) -> System.Collections.Generic.IEnumerable<Skyline.DataMiner.SDM.IPagedResult<T>>
@@ -131,19 +132,24 @@
 ~Skyline.DataMiner.SDM.PagedResult<T>.this[int index].get -> T
 ~Skyline.DataMiner.SDM.PartialObject<T>
 ~Skyline.DataMiner.SDM.PartialObject<T>.Builder.Build() -> Skyline.DataMiner.SDM.PartialObject<T>
+~Skyline.DataMiner.SDM.PartialObject<T>.Builder.Include<TField>(Skyline.DataMiner.Net.Messages.SLDataGateway.DynamicListExposer<T, TField> exposer, System.Collections.Generic.IEnumerable<TField> value) -> Skyline.DataMiner.SDM.PartialObject<T>.Builder
 ~Skyline.DataMiner.SDM.PartialObject<T>.Builder.Include<TField>(Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<T, TField> exposer, TField value) -> Skyline.DataMiner.SDM.PartialObject<T>.Builder
 ~Skyline.DataMiner.SDM.PartialObject<T>.GetValue<TField>(Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<T, TField> exposer) -> TField
+~Skyline.DataMiner.SDM.PartialObject<T>.GetValues<TField>(Skyline.DataMiner.Net.Messages.SLDataGateway.DynamicListExposer<T, TField> exposer) -> System.Collections.Generic.IEnumerable<TField>
 ~Skyline.DataMiner.SDM.PartialObject<T>.GetValues<TField>(Skyline.DataMiner.SDM.Exposers.CollectionExposer<T, TField> exposer) -> System.Collections.Generic.IEnumerable<TField>
 ~Skyline.DataMiner.SDM.PartialObject<T>.HasField(Skyline.DataMiner.Net.Messages.SLDataGateway.FieldExposer exposer) -> bool
 ~Skyline.DataMiner.SDM.PartialObject<T>.HasField<TField>(Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<T, TField> exposer) -> bool
 ~Skyline.DataMiner.SDM.PartialObject<T>.TryGetValue<TField>(Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<T, TField> exposer, out TField value) -> bool
+~Skyline.DataMiner.SDM.PartialObject<T>.TryGetValues<TField>(Skyline.DataMiner.Net.Messages.SLDataGateway.DynamicListExposer<T, TField> exposer, out System.Collections.Generic.IEnumerable<TField> value) -> bool
 ~Skyline.DataMiner.SDM.PartialObject<T>.TryGetValues<TField>(Skyline.DataMiner.SDM.Exposers.CollectionExposer<T, TField> exposer, out System.Collections.Generic.IEnumerable<TField> value) -> bool
 ~Skyline.DataMiner.SDM.FieldSelection<T>
+~Skyline.DataMiner.SDM.FieldSelection<T>.Add<TField>(Skyline.DataMiner.Net.Messages.SLDataGateway.DynamicListExposer<T, TField> exposer) -> bool
 ~Skyline.DataMiner.SDM.FieldSelection<T>.Add<TField>(Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<T, TField> exposer) -> bool
 Skyline.DataMiner.SDM.FieldSelection<T>.Count.get -> int
 ~Skyline.DataMiner.SDM.FieldSelection<T>.GetEnumerator() -> System.Collections.Generic.IEnumerator<Skyline.DataMiner.SDM.IFieldProjection<T>>
 ~Skyline.DataMiner.SDM.FieldProjection<T, TField>
 ~Skyline.DataMiner.SDM.FieldProjection<T, TField>.Exposer.get -> Skyline.DataMiner.Net.Messages.SLDataGateway.FieldExposer
+~Skyline.DataMiner.SDM.FieldProjection<T, TField>.FieldProjection(Skyline.DataMiner.Net.Messages.SLDataGateway.DynamicListExposer<T, TField> exposer) -> void
 ~Skyline.DataMiner.SDM.FieldProjection<T, TField>.FieldProjection(Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<T, TField> exposer) -> void
 ~Skyline.DataMiner.SDM.FieldProjection<T, TField>.Populate(Skyline.DataMiner.SDM.PartialObject<T>.Builder builder, T item) -> void
 ~Skyline.DataMiner.SDM.IFieldProjection<T>
@@ -221,6 +227,7 @@ Skyline.DataMiner.SDM.FieldSelection<T>.Count.get -> int
 ~static Skyline.DataMiner.SDM.PagedResult<T>.Create(System.Collections.Generic.IEnumerable<T> items, int pageSize) -> Skyline.DataMiner.SDM.PagedResult<T>
 ~static Skyline.DataMiner.SDM.PagedResult<T>.Create(System.Collections.Generic.IEnumerable<T> items, int pageSize, int page) -> Skyline.DataMiner.SDM.PagedResult<T>
 ~static Skyline.DataMiner.SDM.PartialObject<T>.CreateBuilder() -> Skyline.DataMiner.SDM.PartialObject<T>.Builder
+~static Skyline.DataMiner.SDM.PartialQueryExtensions.Include<T, TField>(this Skyline.DataMiner.SDM.IPartialQuery<T> partial, Skyline.DataMiner.Net.Messages.SLDataGateway.DynamicListExposer<T, TField> exposer) -> Skyline.DataMiner.SDM.IPartialQuery<T>
 ~static Skyline.DataMiner.SDM.PartialQueryExtensions.Include<T, TField>(this Skyline.DataMiner.SDM.IPartialQuery<T> partial, Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<T, TField> exposer) -> Skyline.DataMiner.SDM.IPartialQuery<T>
 ~static Skyline.DataMiner.SDM.PartialQueryExtensions.Limit<T>(this Skyline.DataMiner.SDM.IPartialQuery<T> partial, int limit) -> Skyline.DataMiner.SDM.IPartialQuery<T>
 ~static Skyline.DataMiner.SDM.PartialQueryExtensions.OrderBy<T>(this Skyline.DataMiner.SDM.IPartialQuery<T> partial, Skyline.DataMiner.Net.Messages.SLDataGateway.Exposer<T, string> exposer, bool naturalSort) -> Skyline.DataMiner.SDM.IPartialQuery<T>
