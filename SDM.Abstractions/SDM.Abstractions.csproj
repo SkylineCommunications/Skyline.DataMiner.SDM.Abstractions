@@ -28,6 +28,8 @@
 		<Deterministic>false</Deterministic>
 		<ImplicitUsings>disable</ImplicitUsings>
 		<Nullable>disable</Nullable>
+		<NoWarn>$(NoWarn);RS0041</NoWarn>
+		<WarningsAsErrors>$(WarningsAsErrors);RS0016;RS0017;RS0024;RS0025;RS0048;RS0050</WarningsAsErrors>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -46,6 +48,7 @@
 	</ItemGroup>-->
 
 	<ItemGroup>
+		<PackageReference Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" PrivateAssets="all" />
 		<InternalsVisibleTo Include="SDM.Abstractions.Tests" />
 	</ItemGroup>
 

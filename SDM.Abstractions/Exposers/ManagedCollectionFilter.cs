@@ -328,7 +328,7 @@
 						return true;
 					}
 				}
-				else if (object.Equals(value, item))
+				else if (Object.Equals(value, item))
 				{
 					return true;
 				}
@@ -354,7 +354,7 @@
 						return true;
 					}
 				}
-				else if (object.Equals(value, item))
+				else if (Object.Equals(value, item))
 				{
 					return true;
 				}
@@ -400,7 +400,7 @@
 			}
 			catch (SerializationException)
 			{
-				value = default(TValue);
+				value = default;
 				return false;
 			}
 		}

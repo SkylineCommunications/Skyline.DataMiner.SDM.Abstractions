@@ -166,5 +166,17 @@
 
 			return query.WithLimit(LimitBy.Default.WithLimit(limit));
 		}
+
+		/// <summary>
+		/// Converts the query into a partial query, allowing selective retrieval of specific fields.
+		/// </summary>
+		/// <typeparam name="T">The type of the query result.</typeparam>
+		/// <param name="query">The query to convert.</param>
+		/// <returns>A new <see cref="IPartialQuery{T}"/> wrapping the specified query.</returns>
+		public static IPartialQuery<T> ToPartial<T>(this IQuery<T> query)
+			where T : class
+		{
+			return new PartialQuery<T>(query);
+		}
 	}
 }
